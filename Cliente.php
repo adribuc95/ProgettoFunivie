@@ -40,8 +40,6 @@ class Cliente {
             $this->commenti = htmlspecialchars($_POST["commenti"]);
         }
         
-        $data_nascita_assoluta = strtotime($this->data_nascita);
-        
         $servername = "localhost";
         $username = "onlinesales";
         $password = "Sale0nl1nE";
@@ -55,7 +53,7 @@ class Cliente {
         } 
 
         $sql = "INSERT INTO `Cliente` (`ID_cliente_riferimento`, `ID_cliente`, `titolo`, `nome`, `cognome`, `data_nascita`, `indirizzo`, `city`, `cap`, `provincia`, `telefono`, `fax`, `cellulare`, `email`, `sito`, `commenti`,`is_syncronised`, `is_exported`) "
-                 ."VALUES ('$this->ID_cliente_riferimento', '$this->ID_cliente', '$this->titolo', '$this->nome', '$this->cognome', '$data_nascita_assoluta', '$this->indirizzo', '$this->city', '$this->cap', '$this->provincia', '$this->telefono', '$this->fax', '$this->cellulare', '$this->email', '$this->sito', '$this->commenti', '1', '1');";
+                 ."VALUES ('$this->ID_cliente_riferimento', '$this->ID_cliente', '$this->titolo', '$this->nome', '$this->cognome', '$this->data_nascita', '$this->indirizzo', '$this->city', '$this->cap', '$this->provincia', '$this->telefono', '$this->fax', '$this->cellulare', '$this->email', '$this->sito', '$this->commenti', '1', '1');";
         
 
 
@@ -178,7 +176,7 @@ public function getNewIDCliente() {
               {
                   
                 $this->ID_cliente = $row['MAX(`ID_cliente`)'];
-                echo $this->ID_cliente;
+                
               }
               // liberazione delle risorse occupate dal risultato
               $result->close();
@@ -214,7 +212,7 @@ public function getNewIDCliente_Riferimento() {
               {
                   
                 $this->ID_cliente_riferimento = $row['MAX(`ID_cliente_riferimento`)'];
-                echo $this->ID_cliente_riferimento;
+                
               }
               // liberazione delle risorse occupate dal risultato
               $result->close();

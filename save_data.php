@@ -7,25 +7,27 @@ include "Ordine.php";
 $cliente1 = new Cliente();
 $ordine1 = new Ordine();
 $immagine = new Foto();
-//header("location: https://www.funiviemadonnacampiglio.it/onlinesale/");
+header("location: https://www.funiviemadonnacampiglio.it/onlinesale/");
 
 $ID_session = session_id();
 $new_ID_cliente = $cliente1->getNewIDCliente();
 $new_ID_cliente_riferimento = $cliente1->getNewIDCliente_Riferimento();
+$new_ID_ordine = $ordine1->getNewIDOrdine();
+
 $cliente1->setIDCliente_Riferimento($new_ID_cliente_riferimento);
 $cliente1->setIDCliente($new_ID_cliente);
 $cliente1->salvaDati();
-//$età = $cliente1->getBirthday($cliente1->data_nascita);
-
-
-
-
 $cliente1->mantieniDatiForm();
 $ID_cliente = $cliente1->getIDCliente();
+//$età = $cliente1->getBirthday($cliente1->data_nascita);
+
 $immagine->setIDCliente($ID_cliente);
-$ordine1->salvaDati();
 $immagine->setIDFoto($ID_session);
 $immagine->salvaDati();
+
+$ordine1->setIDCliente($ID_cliente);
+$ordine1->setIDOrdine($new_ID_ordine);
+$ordine1->salvaDati();
 //checkSkipass($ordine1, $età, $cliente1);
 distruggiSessione();
 

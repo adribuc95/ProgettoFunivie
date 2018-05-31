@@ -18,26 +18,7 @@ and open the template in the editor.
         <link href="css/CSS.css" rel="stylesheet" type="text/css">
         <link href="css/main.css" rel="stylesheet" type="text/css" />
         
-        <script>
-    navigator.getUserMedia = (navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia );
-    if (navigator.getUserMedia)
-    {
-        navigator.getUserMedia(
-            {
-                video:true,
-                audio:false
-            },
-            function(stream) { /* do-say something */ },
-            function(error) { alert('Something went wrong. (error code ' + error.code + ')');
-                return; }
-        );
-    }
-    else {
-        alert("Sorry, the browser you are using doesn't support the HTML5 webcam API");
-    }
-</script>
+        
     <style>
         .camcontent{
             display: block;
@@ -220,9 +201,13 @@ and open the template in the editor.
     return years;
 }
 function mostra(ID) {
-    if(document.getElementById(ID).style.display === 'none')
+    
         document.getElementById(ID).style.display = '';
-    else
+    
+    }
+    
+    function nascondi(ID) {
+    
         document.getElementById(ID).style.display = 'none';
     }
     </script>
@@ -538,8 +523,50 @@ function mostra(ID) {
         <li class="header">Foto</li>
     </ul>
         <p class="note">La foto deve rappresentare il soggetto che andrà ad utilizzare lo skipass in modo chiaro, centrata sul viso.</p>
-        <button onclick='mostra("mostra_camera")'> webcam</button>
-        <div id='mostra_camera' style='display:none;'>      
+        <button onclick='mostra("mostra_camera"); nascondi("mostra_camera2");' id="webcam"> Webcam</button>
+        <button onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica</button>
+        <center>
+        <div id='mostra_camera2' style='display: none; margin-top: 10px;'>
+        <input type='file' id="fileUpload"/>
+        <canvas id="canvas2" width="400" height="400"></canvas> 
+        <button id="upload2"> Upload </button>
+        </div>
+            
+        </center>
+        <script>
+        function el(id){return document.getElementById(id);} // Get elem by ID
+
+var canvas  = el("canvas2");
+var context = canvas.getContext("2d");
+
+function readImage() {
+    if ( this.files && this.files[0] ) {
+        var FR= new FileReader();
+        FR.onload = function(e) {
+           var img = new Image();
+           img.addEventListener("load", function() {
+             context.drawImage(img, 0, 0, 400, 400);
+           });
+           img.src = e.target.result;
+        };
+        FR.readAsDataURL( this.files[0] );
+    }
+}
+el("fileUpload").addEventListener("change", readImage, false);
+        </script>
+        <script>
+            document.getElementById("upload2").addEventListener("click", function(){
+            var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+            $.ajax({
+                type: "POST",
+                url: "caricamento_immagine.php",
+                data: {
+                    imgBase64: dataUrl
+                }
+            }
+            </script>
+        
+        <div id='mostra_camera' style='display:none; margin-top: 10px;'>      
 <div class="camcontent">
     <video id="video" autoplay></video>
     <canvas id="canvas" width="640" height="480"> </canvas>
@@ -567,8 +594,7 @@ function mostra(ID) {
             errBack = function(error) {
                 console.log("Video capture error: ", error.code);
             };
-
-
+   
         // Put video listeners into place
         if(navigator.getUserMedia) { // Standard
             navigator.getUserMedia(videoObj, function(stream) {
@@ -593,7 +619,7 @@ function mostra(ID) {
         // video.play();       these 2 lines must be repeated above 3 times
         // $("#snap").show();  rather than here once, to keep "capture" hidden
         //                     until after the webcam has been activated.
-
+    
         // Get-Save Snapshot - image
         document.getElementById("snap").addEventListener("click", function() {
             context.drawImage(video, 0, 0, 640, 480);
@@ -631,7 +657,7 @@ function mostra(ID) {
             });
         });
     }, false);
-
+    
 </script>
     
     

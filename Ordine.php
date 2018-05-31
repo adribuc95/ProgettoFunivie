@@ -16,7 +16,7 @@ class Ordine {
             $this->data_ordine = date ("Y/m/d");
         }
         
-        $data_attuale_assoluta = strtotime($this->data_ordine);
+        
         
         $servername = "localhost";
         $username = "onlinesales";
@@ -31,7 +31,7 @@ class Ordine {
         } 
 
         $sql = " INSERT INTO `Ordine` (`ID_ordine`, `ID_tessera`, `ID_articolo`, `ID_cliente`, `data_ordine`)"
-        ."VALUES ('0', '$this->ID_tessera', '0', '$this->ID_cliente', '$data_attuale_assoluta' );";
+        ."VALUES ('$this->ID_ordine', '$this->ID_tessera', '0', '$this->ID_cliente', '$this->data_ordine' );";
 
 
         if (($conn->query($sql) === TRUE)) {
@@ -43,9 +43,15 @@ class Ordine {
         $conn->close();
     }
     
+    public function setIDOrdine($ID_ordine) {
+        $this->ID_ordine = $ID_ordine;
+    }
+    
     public function setIDCliente($ID_cliente) {
         $this->ID_cliente = $ID_cliente;
     }
+    
+  
     
     public function eliminaDaDB($ID) {
         $servername = "localhost";
@@ -59,7 +65,7 @@ class Ordine {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $query = "DELETE FROM `Ordine` WHERE `ID_Ordine` = '$ID'";
+        $query = "DELETE FROM `Ordine` WHERE `ID_ordine` = '$ID'";
         if (!$result = $conn->query($query)) {
             echo "Errore della query: ".$conn->error.".";
             exit();
@@ -69,8 +75,41 @@ class Ordine {
         $conn->close();
         return $this->ID_cliente;
         }
+        
+        public function getNewIDOrdine() {
+        $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT MAX(`ID_ordine`) FROM `Ordine`";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $this->ID_ordine = $row['MAX(`ID_Ordine`)'];
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+    }
+// chiusura della connessione
+        $conn->close();
+        return $this->ID_ordine+1;
+}
     }
     
-    
-
-
