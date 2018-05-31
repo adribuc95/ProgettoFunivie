@@ -539,7 +539,6 @@ function mostra(ID) {
     </ul>
         <p class="note">La foto deve rappresentare il soggetto che andrà ad utilizzare lo skipass in modo chiaro, centrata sul viso.</p>
         <button onclick='mostra("mostra_camera")'> webcam</button>
-        <input id="image" type="image" alt="Login">
         <div id='mostra_camera' style='display:none;'>      
 <div class="camcontent">
     <video id="video" autoplay></video>
