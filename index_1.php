@@ -19,7 +19,24 @@ and open the template in the editor.
         <link href="css/main.css" rel="stylesheet" type="text/css" />
         
         
-    
+    <style>
+        .camcontent{
+            display: block;
+            position: relative;
+            overflow: hidden;
+            height: 480px;
+            margin: auto;
+        }
+        .cambuttons button {
+            border-radius: 15px;
+            font-size: 18px;
+        }
+        .cambuttons button:hover {
+            cursor: pointer;
+            border-radius: 15px;
+            background: #00dd00 ;    /* green */
+        }
+    </style>
 
         
     <script>
@@ -304,6 +321,7 @@ function mostra(ID) {
         </center>
             <hr>
     </div>
+        <div>
     <section class="firstSection" style="margin-bottom: 5px; float: left; margin-left: 60px;">
     <ul class="price">
         <li class="header">Dati Anagrafici</li>
@@ -494,95 +512,111 @@ function mostra(ID) {
         <center>
         <input type="checkbox">sono i dati di chi paga?
         </center>
+        
+        
+    
+        
 </section>
+    </div>
 
-    <input type="submit" class="bottone" onclick="chgAction('save_data.php')" value="Aggiungi un altro skipass">
     
-</form>
-    
-    
-    <section class="firstSection">
+        <div>
+    <section class="firstSection" style="width: 60%; margin-top: 500px;">
         <ul class="price">
         <li class="header">Foto</li>
     </ul>
+        <center>
         <p class="note">La foto deve rappresentare il soggetto che andrà ad utilizzare lo skipass in modo chiaro, centrata sul viso.</p>
         <button onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam</button>
-        <button onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica</button>
-        <center>
+        <button id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica</button>
+        
         <div id='mostra_camera2' style='display: none; margin-top: 10px;'>
         <input type='file' id="fileUpload"/>
-        <canvas id="canvas2" width="400" height="400"></canvas> 
-        <button id="upload2"> Upload </button>
+        <img id="immagine" src="#" alt="your image" style="display: none; max-width:400px; "/>
+        <div>
+        <button id="upload2" style="display:none"> Upload </button>
+        <br> <span id="uploading2" style="display:none;"> Uploading has begun . . .  </span>
+    <span id="uploaded2"  style="display:none;"> Success, your photo has been uploaded!</span>
+    
         </div>
-            
+        </div>
+       
         </center>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script>
-        function el(id){return document.getElementById(id);} // Get elem by ID
+        function readURL(input) {
 
-var canvas  = el("canvas2");
-var context = canvas.getContext("2d");
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    var immagine;
 
-function readImage() {
-    if ( this.files && this.files[0] ) {
-        var FR= new FileReader();
-        FR.onload = function(e) {
-           var img = new Image();
-           img.addEventListener("load", function() {
-             context.drawImage(img, 0, 0, 400, 400);
-           });
-           img.src = e.target.result;
-        };
-        FR.readAsDataURL( this.files[0] );
+    reader.onload = function(e) {
+      $('#immagine').attr('src', e.target.result);
     }
+
+    reader.readAsDataURL(input.files[0]);
+  }
 }
-el("fileUpload").addEventListener("change", readImage, false);
-        </script>
-        <script>
-            document.getElementById("upload2").addEventListener("click", function(){
-            var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+
+$("#fileUpload").change(function() {
+  readURL(this);
+  $('#immagine').show();
+  $('#upload2').show();
+});
+
+document.getElementById("upload2").addEventListener("click", function(){
+            var images = $('#immagine').attr('src');
             $.ajax({
                 type: "POST",
-                url: "caricamento_immagine2.php",
-                data: new FormData(this)
-            }
-            </script>
+                url: "caricamento_immagine.php",
+                data: {
+                    imgBase64: images
+
+        }
+        }).done(function(msg) {
+                console.log("saved");
+                $("#uploading2").hide();
+                $("#uploaded2").show();
+            });
+        });
+  
+  
+  
+  
+
+
+
+
+        </script>
         
         <div id='mostra_camera' style='display:none; margin-top: 10px;'>      
-<div class="camcontent">
+<div class="camcontent" id="camcontent">
     <video id="video" autoplay></video>
-    <canvas id="canvas" width="640" height="480"> </canvas>
+    <canvas id="canvas"></canvas>
 </div>
-<div class="cambuttons">
-    <button id="snap" style="display:none;">  Capture </button>
-    <button id="reset" style="display:none;">  Reset  </button>
-    <button id="upload" style="display:none;"> Upload </button>
+<div>
+    <button id="snap">  Capture </button>
+    <button id="reset_camera" style="display:none" onclick='resetCam();'>Reset</button>
+    <button id="upload" style="display:none"> Upload </button>
     <br> <span id=uploading style="display:none;"> Uploading has begun . . .  </span>
     <span id=uploaded  style="display:none;"> Success, your photo has been uploaded!</span>
+    
 </div>
         </div>
     </section>
+ 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    
 <script>
-        
-        navigator.getUserMedia = ( navigator.getUserMedia ||
+ navigator.getUserMedia = ( navigator.getUserMedia ||
                    navigator.webkitGetUserMedia ||
                    navigator.mozGetUserMedia ||
                    navigator.msGetUserMedia);
 
  var webcamStream;
-    // Put event listeners into place
-    //window.addEventListener("DOMContentLoaded", function() {
-        // Grab elements, create settings, etc.
-       // var canvas = document.getElementById("canvas"),
-         //   context = canvas.getContext("2d"),
-           // video = document.getElementById("video"),
-            // videoObj = { "video": true },
-            //image_format= "jpeg",
-           // jpeg_quality= 85,
-          //  errBack = function(error) {
-              //  console.log("Video capture error: ", error.code);
-           // };
-   function startWebcam() {
+
+ function startWebcam() {
  if (navigator.getUserMedia) {
  console.log("toto");
  navigator.getUserMedia (
@@ -609,39 +643,59 @@ el("fileUpload").addEventListener("change", readImage, false);
     console.log("getUserMedia not supported");
       }  
      }
-        // video.play();       these 2 lines must be repeated above 3 times
-        // $("#snap").show();  rather than here once, to keep "capture" hidden
-        //                     until after the webcam has been activated.
-    
-        // Get-Save Snapshot - image
-        document.getElementById("snap").addEventListener("click", function() {
-            context.drawImage(video, 0, 0, 640, 480);
-            // the fade only works on firefox?
-            $("#video").fadeOut("slow");
-            $("#canvas").fadeIn("slow");
-            $("#snap").hide();
-            $("#reset").show();
-            $("#upload").show();
-        });
-        // reset - clear - to Capture New Photo
-        document.getElementById("reset").addEventListener("click", function() {
-            $("#video").fadeIn("slow");
-            $("#canvas").fadeOut("slow");
-            $("#snap").show();
-            $("#reset").hide();
-            $("#upload").hide();
-        });
-        // Upload image to sever
-        document.getElementById("upload").addEventListener("click", function(){
+
+  document.getElementById("carica").addEventListener('click', function (ev) {
+                video.pause();
+                ev.preventDefault();
+            }, false);
+  
+  document.getElementById("snap").addEventListener("click", function() {
+         var img = document.createElement('img');;
+      var context;
+      var width = video.offsetWidth
+        , height = video.offsetHeight;
+        canvas= document.getElementById("canvas");
+      
+      
+      canvas.width = width;
+      canvas.height = height;
+      
+      
+      
+      
+
+      context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, width, height);
+      img.src = canvas.toDataURL('image/png');
+      $("#canvas").fadeIn("slow");
+      $("#video").fadeOut("slow");
+      $("#reset_camera").show();
+      $("#upload").show();
+      $("#snap").hide();
+      
+      
+  });
+  
+  function resetCam() {
+      var context;
+      context = canvas.getContext('2d');
+      canvas = document.getElementById('canvas');
+      $("#canvas").fadeOut("slow");
+      $("#video").fadeIn("slow");
+      $("#snap").show();
+      $("#reset_camera").hide();
+      $("#upload").hide();
+      
+  }
+  
+  document.getElementById("upload").addEventListener("click", function(){
             var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
-            $("#uploading").show();
             $.ajax({
                 type: "POST",
                 url: "caricamento_immagine.php",
                 data: {
-                    imgBase64: dataUrl,
-                    user: "Joe",
-                userid: 25
+                    imgBase64: dataUrl
+
         }
         }).done(function(msg) {
                 console.log("saved");
@@ -649,14 +703,16 @@ el("fileUpload").addEventListener("change", readImage, false);
                 $("#uploaded").show();
             });
         });
-    }, false);
-    
+  
+  
+  
+  
 </script>
+        </div>
     
     
     
-    
-    <section class="firstSection" style="width: 60%;">
+    <section class="firstSection" style="width: 60%; ">
         <ul class="price">
         <li class="header">Accettazione</li>
     </ul>
@@ -685,6 +741,7 @@ marketing</label>
          <center>
         
             <button class="bottone" onclick="chgAction('my_upload.php')" value="submit2">Concludi Ordine</button>
+            <input type="submit" class="bottone" onclick="chgAction('save_data.php')" value="Aggiungi un altro skipass">
             </center>
 </form>
     </body>

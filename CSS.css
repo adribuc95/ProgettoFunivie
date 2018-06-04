@@ -62,6 +62,18 @@ and open the template in the editor.
         box-shadow: 2px 2px 2px 2px rgba(0.2,0.2,0.2,0.2);
     }
     
+    .secondSection {
+        float: right; 
+        margin-right: 60px;
+        width: 40%;
+        height: 100%;
+    }
+    
+    
+    .thirdSection:hover {
+        box-shadow: 2px 2px 2px 2px rgba(0.2,0.2,0.2,0.2);
+    }
+    
     .note {
       font-size: 11px;
       font-style: italic;
@@ -105,7 +117,7 @@ and open the template in the editor.
         }
         .column2 {
             width: 50%;
-            float:right;
+            float: right;
         }
         #commenti {
         width: 60%;
@@ -123,9 +135,15 @@ and open the template in the editor.
                 float: none;
             }
             .firstSection {
-            width: 80%;
-            height: 100%;
+                
+                width: 80%;
+                height: 100%;
+                float: none;
+                margin-right: 0;
+                margin-left: 0;
     }
+    
+    
     #commenti {
         width: 50%;
     }
