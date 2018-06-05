@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 session_regenerate_id();
 $rawData = $_POST['imgBase64'];
 print $rawData;

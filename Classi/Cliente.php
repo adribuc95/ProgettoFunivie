@@ -23,6 +23,7 @@ class Cliente {
 
     public function salvaDati() {
         echo $this->ID_cliente;
+        echo $this->ID_cliente_riferimento;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $this->titolo = htmlspecialchars($_POST["titolo"]);
             $this->nome = htmlspecialchars($_POST["nome"]);
@@ -113,8 +114,7 @@ class Cliente {
         }
 
 
-        public function getBirthday($birthday)
-    {
+    public function getBirthday($birthday){
         $datetime1 = new DateTime($birthday);
         $datetime2 = new DateTime(date('Y-m-d'));
         $diff = $datetime1->diff($datetime2);
@@ -144,14 +144,15 @@ class Cliente {
         return $this->ID_cliente;
         }
 
-public function setIDCliente($ID_cliente) {
+    public function setIDCliente($ID_cliente) {
         $this->ID_cliente = $ID_cliente;
     }
+    
     public function setIDCliente_Riferimento($ID_cliente_riferimento) {
         $this->ID_cliente_riferimento = $ID_cliente_riferimento;
     }
 
-public function getNewIDCliente() {
+    public function getNewIDCliente() {
     $servername = "localhost";
         $username = "onlinesales";
         $password = "Sale0nl1nE";
@@ -187,7 +188,7 @@ public function getNewIDCliente() {
         return $this->ID_cliente+1;
 }
 
-public function getNewIDCliente_Riferimento() {
+    public function getNewIDCliente_Riferimento() {
     $servername = "localhost";
         $username = "onlinesales";
         $password = "Sale0nl1nE";
@@ -221,6 +222,42 @@ public function getNewIDCliente_Riferimento() {
 // chiusura della connessione
         $conn->close();
         return $this->ID_cliente_riferimento+1;
+}
+
+    public function getIDCliente_Riferimento() {
+    $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT MAX(`ID_cliente_riferimento`) FROM `Cliente`";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $this->ID_cliente_riferimento = $row['MAX(`ID_cliente_riferimento`)'];
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+    }
+// chiusura della connessione
+        $conn->close();
+        return $this->ID_cliente_riferimento;
 }
 
 

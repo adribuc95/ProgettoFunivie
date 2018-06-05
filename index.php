@@ -1,17 +1,3 @@
-<?php 
-        session_start();
-        //include "Classi/Cliente.php";
-        //include "Classi/Foto.php";
-        //include "Classi/Ordine.php";
-        //$cliente = new Cliente();
-        //$_SESSION['ID_cliente_riferimento'] = $cliente->getNewIdCliente_Riferimento();
-        
-
-        
-        
-        
-        
-        ?>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -30,7 +16,7 @@ and open the template in the editor.
         
         
     <script>
-        function enable(element){
+    function enable(element){
         if (element === 'baccompagnati_ss') {
             document.getElementById('colore1').style.color = 'black';
             document.getElementById('colore2').style.color = 'gray';
@@ -49,7 +35,7 @@ and open the template in the editor.
         
     } //funzione che gestisce il fatto del biglietto omaggio
         
-        function disable(element1, element2){
+    function disable(element1, element2){
         document.getElementById(element1).disabled = true;
         document.getElementById(element2).disabled = true;
         document.getElementById(element1).checked = false;
@@ -59,124 +45,72 @@ and open the template in the editor.
         
     } //funzione che gestisce il fatto del biglietto omaggio
         
-        function chgAction( action_name ) {
-            if( action_name=='my_upload.php' ) {
-                document.dati_utente.action = 'my_upload.php';
-            }
-            else {
-                document.dati_utente.action = 'save_data.php';
-            }
+    function chgAction( action_name ) {
+            
+                document.dati_utente.action = action_name;
+            
+                document.dati_utente.action = action_name;
             
         } //funzione che gestisce il cambio azione tra "concludi ordine" e "aggiungi skipass"
         
-        function sblocca() {
+    function sblocca() {
             
             var id_radio_ss = ['sseniores_ss', 'seniores_ss', 'juniores_ss', 'bambini_ss' ];
             var id_radio_ca = ['sseniores_ca', 'seniores_ca', 'juniores_ca', 'bambini_ca' ];
-            var id_cat_ss = ['sseniores_ss_c', 'seniores_ss_c', 'juniores_ss_c', 'bambini_ss_c' ];
-            var id_cat_ca = ['sseniores_ca_c', 'seniores_ca_c', 'juniores_ca_c', 'bambini_ca_c' ];
             
-            
-            var x = document.getElementById('data_nascita').value;
-            var anni = calcAge(x);
-            
-            if (anni <= 5) {
-                        alert("La data di nascita non coincide con l'offerta!");
-            }
-            else if (anni > 5 && anni <= 10) {
-               for(i=0; i<4; i++) {
-                   document.getElementById(id_radio_ss[i]).checked = false;
-                    document.getElementById(id_radio_ca[i]).checked = false;
-                    document.getElementById(id_radio_ss[i]).disabled = true;
-                    document.getElementById(id_radio_ca[i]).disabled = true;
-                    document.getElementById(id_cat_ss[i]).style.color = 'gray';
-                    document.getElementById(id_cat_ca[i]).style.color = 'gray';
-                
-               }
-                
-                document.getElementById(id_radio_ss[2]).disabled = false;
-                document.getElementById(id_cat_ss[2]).style.color = 'black';
-                document.getElementById(id_radio_ca[2]).disabled = false;
-                document.getElementById(id_cat_ca[2]).style.color = 'black';
-                
-            }
-            else if (anni >= 60 && anni < 70) {
-               for(i=0; i<4; i++) {
-                   document.getElementById(id_radio_ss[i]).checked = false;
-                    document.getElementById(id_radio_ca[i]).checked = false;
-                    document.getElementById(id_radio_ss[i]).disabled = true;
-                    document.getElementById(id_radio_ca[i]).disabled = true;
-                    document.getElementById(id_cat_ss[i]).style.color = 'gray';
-                    document.getElementById(id_cat_ca[i]).style.color = 'gray';
-                
-               }
-                
-                document.getElementById(id_radio_ss[1]).disabled = false;
-                document.getElementById(id_cat_ss[1]).style.color = 'black';
-                document.getElementById(id_radio_ca[1]).disabled = false;
-                document.getElementById(id_cat_ca[1]).style.color = 'black';
-                
-            }
-            else if (anni >= 70) {
-               for(i=0; i<4; i++) {
-                    document.getElementById(id_radio_ss[i]).disabled = true;
-                    document.getElementById(id_radio_ca[i]).disabled = true;
-                    document.getElementById(id_radio_ss[i]).checked = false;
-                    document.getElementById(id_radio_ca[i]).checked = false;
-                    document.getElementById(id_cat_ss[i]).style.color = 'gray';
-                    document.getElementById(id_cat_ca[i]).style.color = 'gray';
-                
-               }
-                
-                document.getElementById(id_radio_ss[0]).disabled = false;
-                document.getElementById(id_cat_ss[0]).style.color = 'black';
-                document.getElementById(id_radio_ca[0]).disabled = false;
-                document.getElementById(id_cat_ca[0]).style.color = 'black';
-                
-            }
-            else {
-             for(i=0; i<4; i++) {
-              document.getElementById(id_radio_ss[i]).disabled = true;
-                    document.getElementById(id_radio_ca[i]).disabled = true;
-                    document.getElementById(id_radio_ss[i]).checked = false;
-                    document.getElementById(id_radio_ca[i]).checked = false;
-                    document.getElementById(id_cat_ss[i]).style.color = 'gray';
-                    document.getElementById(id_cat_ca[i]).style.color = 'gray';
-                
-               }
-            }
-        }
-            
-        function checkDate () {
-            var id_radio_ss = ['adulti_ss', 'sseniores_ss', 'seniores_ss', 'juniores_ss', 'bambini_ss' ];
-            var id_radio_ca = ['adulti_ca','sseniores_ca', 'seniores_ca', 'juniores_ca', 'bambini_ca' ];
             
             
             var x = document.getElementById('data_nascita').value;
             var anni = calcAge(x);
-            if ((anni <= 5) && ((document.getElementById(id_radio_ss[4]).checked === true) ||(document.getElementById(id_radio_ca[4]).checked === true))) {
-                    //do nothing  
-                }
-            else if((anni > 5 && anni <= 10) && ((document.getElementById(id_radio_ss[3]).checked == true) || (document.getElementById(id_radio_ca[3]).checked == true))) {
-                    //do nothing
-            }
-            else if ((anni > 10 && anni <= 60) && ((document.getElementById(id_radio_ss[0]).checked == true)||(document.getElementById(id_radio_ca[0]).checked == true))) {
-                     //do nothing
-                }
             
-            else if ((anni > 60 && anni <= 70) && ((document.getElementById(id_radio_ss[2]).checked == true)||(document.getElementById(id_radio_ca[2]).checked == true))) {
-                    //do nothing
-                }
-            else if ((anni > 70) && ((document.getElementById(id_radio_ss[1]).checked == true)||(document.getElementById(id_radio_ca[1]).checked == true))) {
-                    //do nothing
-            }
-            else {
-                alert("La data di nascita non coincide con l'offerta!");
+            if ((document.getElementById(id_radio_ss[0]).checked == true)|| (document.getElementById(id_radio_ca[0]).checked == true)) {
+                   if(anni < 76) {
+                    setTimeout(function(){
+                        alert("La data di nascita non coincide con l'offerta!"); 
+                        document.getElementById(id_radio_ss[0]).checked = false;
+                        document.getElementById(id_radio_ca[0]).checked = false;
+                        document.getElementById('data_nascita').value="";
+                    }, 3000);
+                   }
+               }
+               
+            else if ((document.getElementById(id_radio_ss[1]).checked == true)|| (document.getElementById(id_radio_ca[1]).checked == true)) {
+                   if(anni <= 66) {
+                    setTimeout(function(){
+                        alert("La data di nascita non coincide con l'offerta!"); 
+                        document.getElementById(id_radio_ss[1]).checked = false;
+                        document.getElementById(id_radio_ca[1]).checked = false;
+                        document.getElementById('data_nascita').value="";
+                    }, 3000);
+                   }
+               }
+               
+            else if ((document.getElementById(id_radio_ss[2]).checked == true)|| (document.getElementById(id_radio_ca[2]).checked == true)) {
+                   if(anni > 16) {
+                    setTimeout(function(){
+                        alert("La data di nascita non coincide con l'offerta!"); 
+                        document.getElementById(id_radio_ss[2]).checked = false;
+                        document.getElementById(id_radio_ca[2]).checked = false;
+                        document.getElementById('data_nascita').value="";
+                    }, 3000);
+                   }
+               }
+            else if ((document.getElementById(id_radio_ss[3]).checked == true)|| (document.getElementById(id_radio_ca[3]).checked == true)) {
+                   if((anni > 10)) {
+                    setTimeout(function(){
+                        alert("La data di nascita non coincide con l'offerta!"); 
+                        document.getElementById(id_radio_ss[3]).checked = false;
+                        document.getElementById(id_radio_ca[3]).checked = false;
+                        document.getElementById('data_nascita').value="";
+                    }, 3000);
+                    
+                   }
+               }
             }
             
-        }    
-     
-    
+            
+        
+            
     function calcAge (birthday) {
     birthday = new Date(birthday);
     today = new Date();
@@ -190,7 +124,8 @@ and open the template in the editor.
  
     return years;
 }
-function mostra(ID) {
+
+    function mostra(ID) {
     
         document.getElementById(ID).style.display = '';
     
@@ -205,7 +140,7 @@ function mostra(ID) {
     
 </head>
 <body>
-    <form method="post" action="Pagina_iniziale/save_data_aggiungi_skipass.php" name="dati_utente">
+    <form method="post" action="" name="dati_utente">
 
     
     <div id="tessere" style="border-top: #eee solid thin; ">
@@ -229,7 +164,7 @@ function mostra(ID) {
                       <li id="sseniores_ss_c">
                           <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del 30.11.1942</div>
                           <div class="prezzo">€ 500,00</div>
-                          <input type="radio" name="tessera" value="2" id="sseniores_ss" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca')"/>
+                          <input type="radio" name="tessera" value="2" id="sseniores_ss" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca');"/>
                       </li>
                       <li id="seniores_ss_c">
                             <div class="tipologia"><b>SENIORES</b> <br> nati prima del 30.11.1952</div>
@@ -337,7 +272,7 @@ function mostra(ID) {
     </fieldset>	
     <fieldset>
         <label>Data di nascita *</label>
-        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="DD-MM-YYYY" required min="1920-01-01" max="2017-01-01" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012]|[0-9])([-/])[0-9]{4}" style="font-family: Verdana, sans-serif;" >
+        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="DD-MM-YYYY" required min="1920-01-01" max="2017-01-01" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012]|[0-9])([-/])[0-9]{4}" style="font-family: Verdana, sans-serif;" onchange="sblocca();" >
     </fieldset>	
     <fieldset>
         <label>Indirizzo *</label>
@@ -501,8 +436,8 @@ function mostra(ID) {
 	</fieldset>
         <fieldset>
             <label>Desideri l'assicurazione?</label>
-            Sì <input type="radio" name="checkbox3" value="check" id="agree" required/>
-            No <input type="radio" name="checkbox3" value="check" checked/>
+            Sì <input type="radio" name="assicurazione" value="1" id="agree" required/>
+            No <input type="radio" name="assicurazione" value="0" checked/>
            </fieldset>
         <center>
             <fieldset>
@@ -526,14 +461,14 @@ function mostra(ID) {
     </ul>
         <center>
         <p class="note">La foto deve rappresentare il soggetto che andrà ad utilizzare lo skipass in modo chiaro, centrata sul viso.</p>
-        <button onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam</button>
-        <button id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica</button>
+        <button type="button" onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam</button>
+        <button type="button" id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica</button>
         
         <div id='mostra_camera2' style='display: none; margin-top: 10px;'>
         <input type='file' id="fileUpload"/>
         <img id="immagine" src="#" alt="your image" style="display: none; max-width:400px; "/>
         <div>
-        <button id="upload2" style="display:none"> Upload </button>
+        <button type="button" id="upload2" style="display:none"> Upload </button>
         <br> <span id="uploading2" style="display:none;"> Uploading has begun . . .  </span>
     <span id="uploaded2"  style="display:none;"> Success, your photo has been uploaded!</span>
     
@@ -568,10 +503,9 @@ document.getElementById("upload2").addEventListener("click", function(){
             var images = $('#immagine').attr('src');
             $.ajax({
                 type: "POST",
-                url: "caricamento_immagine.php",
+                url: "Pagina_iniziale/caricamento_immagine.php",
                 data: {
                     imgBase64: images
-
         }
         }).done(function(msg) {
                 console.log("saved");
@@ -595,9 +529,9 @@ document.getElementById("upload2").addEventListener("click", function(){
     <canvas id="canvas"></canvas>
 </div>
 <div>
-    <button id="snap">  Capture </button>
-    <button id="reset_camera" style="display:none" onclick='resetCam();'>Reset</button>
-    <button id="upload" style="display:none"> Upload </button>
+    <button type="button" id="snap">  Capture </button>
+    <button type="button" id="reset_camera" style="display:none" onclick='resetCam();'>Reset</button>
+    <button type="button" id="upload" style="display:none"> Upload </button>
     <br> <span id=uploading style="display:none;"> Uploading has begun . . .  </span>
     <span id=uploaded  style="display:none;"> Success, your photo has been uploaded!</span>
     
@@ -691,10 +625,9 @@ document.getElementById("upload2").addEventListener("click", function(){
             var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
             $.ajax({
                 type: "POST",
-                url: "caricamento_immagine.php",
+                url: "Pagina_iniziale/caricamento_immagine.php",
                 data: {
                     imgBase64: dataUrl
-
         }
         }).done(function(msg) {
                 console.log("saved");
@@ -739,8 +672,8 @@ marketing</label>
     </section>
          <center>
         
-            <button class="bottone" onclick="chgAction('my_upload.php')" value="submit2">Concludi Ordine</button>
-            <input type="submit" class="bottone" value="Aggiungi un altro skipass">
+            <button class="bottone" onclick="chgAction('Pagina_iniziale/concludi_ordine.php')">Concludi Ordine</button>
+            <button  class="bottone" id="final_button" onclick="chgAction('Pagina_iniziale/aggiungi_skipass.php')">Aggiungi un altro skipass</button>
             </center>
 </form>
     </body>

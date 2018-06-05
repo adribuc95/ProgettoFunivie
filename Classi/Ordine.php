@@ -16,6 +16,8 @@ class Ordine {
             $this->ID_tessera = htmlspecialchars($_POST["tessera"]);
             //$this->ID_articolo = htmlspecialchars($_POST["cognome"]);
             $this->data_ordine = date ("Y/m/d");
+            $this->ID_articolo = htmlspecialchars($_POST["assicurazione"]);
+            echo $this->ID_articolo;
         }
         
         
@@ -33,11 +35,11 @@ class Ordine {
         } 
 
         $sql = " INSERT INTO `Ordine` (`ID_ordine`, `ID_tessera`, `ID_articolo`, `ID_cliente`, `data_ordine`)"
-        ."VALUES ('$this->ID_ordine', '$this->ID_tessera', '0', '$this->ID_cliente', '$this->data_ordine' );";
+        ."VALUES ('$this->ID_ordine', '$this->ID_tessera', '$this->ID_articolo', '$this->ID_cliente', '$this->data_ordine' );";
 
 
         if (($conn->query($sql) === TRUE)) {
-            echo "New record created successfully";
+            echo "New record Ordine created successfully";
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
@@ -126,7 +128,7 @@ public function getIDOrdine() { //va a vedere l'ultimo ID_ordine inserito e lo a
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $query = "SELECT `ID_ordine` FROM (`Ordine` JOIN `Cliente`) WHERE 'Ordine.ID_cliente' = 'Cliente.ID_cliente'";
+        $query = "SELECT MAX(`ID_ordine`) FROM `Ordine`";
         if (!$result = $conn->query($query)) {
             echo "Errore della query: ".$conn->error.".";
             exit();
@@ -147,7 +149,7 @@ public function getIDOrdine() { //va a vedere l'ultimo ID_ordine inserito e lo a
     }
 // chiusura della connessione
         $conn->close();
-        return $this->ID_ordine+1;
+        return $this->ID_ordine;
 }
 
 public function countProduct($ID_ordine) { //conta le tessere all'interno di un ordine e ritorna il numero.
