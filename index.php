@@ -1,5 +1,16 @@
 <?php 
         session_start();
+        //include "Classi/Cliente.php";
+        //include "Classi/Foto.php";
+        //include "Classi/Ordine.php";
+        //$cliente = new Cliente();
+        //$_SESSION['ID_cliente_riferimento'] = $cliente->getNewIdCliente_Riferimento();
+        
+
+        
+        
+        
+        
         ?>
 <!DOCTYPE html>
 <!--
@@ -194,7 +205,7 @@ function mostra(ID) {
     
 </head>
 <body>
-    <form method="post" action="save_data.php" name="dati_utente">
+    <form method="post" action="Pagina_iniziale/save_data_aggiungi_skipass.php" name="dati_utente">
 
     
     <div id="tessere" style="border-top: #eee solid thin; ">
@@ -729,7 +740,7 @@ marketing</label>
          <center>
         
             <button class="bottone" onclick="chgAction('my_upload.php')" value="submit2">Concludi Ordine</button>
-            <input type="submit" class="bottone" onclick="chgAction('save_data.php')" value="Aggiungi un altro skipass">
+            <input type="submit" class="bottone" value="Aggiungi un altro skipass">
             </center>
 </form>
     </body>

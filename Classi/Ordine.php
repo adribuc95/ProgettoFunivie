@@ -114,6 +114,42 @@ class Ordine {
         return $this->ID_ordine+1;
 }
 
+public function getIDOrdine() { //va a vedere l'ultimo ID_ordine inserito e lo aumenta di 1
+        $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT `ID_ordine` FROM (`Ordine` JOIN `Cliente`) WHERE 'Ordine.ID_cliente' = 'Cliente.ID_cliente'";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $this->ID_ordine = $row['MAX(`ID_ordine`)'];
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+    }
+// chiusura della connessione
+        $conn->close();
+        return $this->ID_ordine+1;
+}
+
 public function countProduct($ID_ordine) { //conta le tessere all'interno di un ordine e ritorna il numero.
         
         $servername = "localhost";
@@ -128,7 +164,7 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
             die("Connection failed: " . $conn->connect_error);
         } 
 
-        $sql = " SELECT count(`ID_Ordine`) FROM `Ordine` WHERE 'ID_ordine' = $ID_ordine";
+        $sql = " SELECT count(`ID_Ordine`) FROM `Ordine` WHERE 'ID_ordine' = '$ID_ordine'";
         if (!$result = $conn->query($sql)) {
             echo "Errore della query: ".$conn->error.".";
             exit();
@@ -156,57 +192,82 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
         
         public function getTessereDiUnOrdine($ID_ordine) { //ritorna un array contenente gli ID_tessera presenti in un ordine.
             $servername = "localhost";
-        $username = "onlinesales";
-        $password = "Sale0nl1nE";
-        $dbname = "fmc-db-onlinesales";
+            $username = "onlinesales";
+            $password = "Sale0nl1nE";
+            $dbname = "fmc-db-onlinesales";
 
-        // Create connection
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        } 
-            $sql = " SELECT `ID_tessera` FROM `Ordine` WHERE `ID_ordine` = $ID_ordine";
-            if (!$result = $conn->query($sql)) {
-            echo "Errore della query: ".$conn->error.".";
-            exit();
-        }
-        else{
-            // conteggio dei record
-            if($result->num_rows > 0) {
-              // conteggio dei record restituiti dalla query
-              while($row = $result->fetch_array(MYSQLI_ASSOC))
-              {
-                  $this->new_array[] = $row;
-                  
-                
-                
-              }
-              // liberazione delle risorse occupate dal risultato
-              $result->close();
+            // Create connection
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            } 
+                $sql = " SELECT `ID_tessera` FROM `Ordine` WHERE `ID_ordine` = '$ID_ordine'";
+                if (!$result = $conn->query($sql)) {
+                echo "Errore della query: ".$conn->error.".";
+                exit();
             }
-    }
+            else{
+                // conteggio dei record
+                if($result->num_rows > 0) {
+                  // conteggio dei record restituiti dalla query
+                  while($row = $result->fetch_array(MYSQLI_ASSOC))
+                  {
+                      $this->new_array[] = $row;
+
+
+
+                  }
+                  // liberazione delle risorse occupate dal risultato
+                  $result->close();
+                }
+        }
     
             
         }
         
         public function getImporto($ID_ordine) { //vado a prendere i singoli importi facendo una join di ORDINE e TESSERA
-            $sql = "SELECT `importo` FROM (`Tessera` JOIN `Ordine`) WHERE `ID_ordine` = '$ID_ordine'";
-    }
+            $servername = "localhost";
+            $username = "onlinesales";
+            $password = "Sale0nl1nE";
+            $dbname = "fmc-db-onlinesales";
 
-public function getImportoTotale() { //da sistemare --> calcola l'importo totale di un ordine
-     $importo_totale = '';
-    for ($i = 0; $i < $this->numero_prodotti; $i++) {
+            // Create connection
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            } 
+            $sql = "SELECT `importo` FROM (`Tessera` JOIN `Ordine`) WHERE `ID_ordine` = '$ID_ordine'";
+            if (!$result = $conn->query($sql)) {
+                echo "Errore della query: ".$conn->error.".";
+                exit();
+                }
+            else{
+                // conteggio dei record
+                if($result->num_rows > 0) {
+                  // conteggio dei record restituiti dalla query
+                  while($row = $result->fetch_array(MYSQLI_ASSOC))
+                  {
+                      $this->importi[] = $row;
+                  }
+                  // liberazione delle risorse occupate dal risultato
+                  $result->close();
+                }
+            }
+        }
+
+        public function getImportoTotale() { //da sistemare --> calcola l'importo totale di un ordine
+            $importo_totale = '';
+            for ($i = 0; $i < $this->numero_prodotti; $i++) {
                 if(implode("", $this->new_array[$i]) == 1) {
-                    $importo_totale = $importo_totale + 540;//getImporto($this->ID_ordine);
+                    $importo_totale = $importo_totale + getImporto($this->ID_ordine);
                 } 
                 else if(implode("", $this->new_array[$i]) == 2) {
                     $importo_totale = $importo_totale + 540;
                 }
             }
             return $importo_totale;
+        }
 }
-
-
-    }
     
