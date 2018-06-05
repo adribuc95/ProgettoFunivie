@@ -222,5 +222,10 @@ public function getNewIDCliente_Riferimento() {
         $conn->close();
         return $this->ID_cliente_riferimento+1;
 }
+
+
+
+
+
 }
 

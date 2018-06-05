@@ -1,9 +1,9 @@
 <?php
 
 session_start();
-include "Cliente.php";
-include "Foto.php";
-include "Ordine.php";
+include "../Classi/Cliente.php";
+include "../Classi/Foto.php";
+include "../Classi/Ordine.php";
 $cliente1 = new Cliente();
 $ordine1 = new Ordine();
 $immagine = new Foto();

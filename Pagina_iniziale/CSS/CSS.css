@@ -54,7 +54,7 @@ and open the template in the editor.
     
     .firstSection {
         
-        width: 40%;
+
         height: 100%;
     }
     
@@ -62,17 +62,7 @@ and open the template in the editor.
         box-shadow: 2px 2px 2px 2px rgba(0.2,0.2,0.2,0.2);
     }
     
-    .secondSection {
-        float: right; 
-        margin-right: 60px;
-        width: 40%;
-        height: 100%;
-    }
     
-    
-    .thirdSection:hover {
-        box-shadow: 2px 2px 2px 2px rgba(0.2,0.2,0.2,0.2);
-    }
     
     .note {
       font-size: 11px;
@@ -122,7 +112,7 @@ and open the template in the editor.
         #commenti {
         width: 60%;
     }
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 900px) {
             .column1{
                 width: 100%;
                 float: none;
@@ -287,3 +277,19 @@ label {
         color: gray;
     }
     
+    .camcontent{
+            display: block;
+            position: relative;
+            overflow: hidden;
+            height: 480px;
+            margin: auto;
+        }
+        .cambuttons button {
+            border-radius: 15px;
+            font-size: 18px;
+        }
+        .cambuttons button:hover {
+            cursor: pointer;
+            border-radius: 15px;
+            background: #00dd00 ;    /* green */
+        }

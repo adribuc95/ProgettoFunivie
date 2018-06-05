@@ -15,29 +15,8 @@ and open the template in the editor.
         <title>Richiesta Dati</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="css/CSS.css" rel="stylesheet" type="text/css">
-        <link href="css/main.css" rel="stylesheet" type="text/css" />
+        <link href="Pagina_iniziale/CSS/CSS.css" rel="stylesheet" type="text/css">
         
-        
-    <style>
-        .camcontent{
-            display: block;
-            position: relative;
-            overflow: hidden;
-            height: 480px;
-            margin: auto;
-        }
-        .cambuttons button {
-            border-radius: 15px;
-            font-size: 18px;
-        }
-        .cambuttons button:hover {
-            cursor: pointer;
-            border-radius: 15px;
-            background: #00dd00 ;    /* green */
-        }
-    </style>
-
         
     <script>
         function enable(element){
@@ -224,7 +203,7 @@ function mostra(ID) {
         <div class="container">
             <div class="column1" style="text-align: center">
                 <div>
-                   <img src="Skirama.jpg" alt="Skirama" class="immagine" style="min-height: 100px;">
+                    <img src="Pagina_iniziale/Skirama.jpg" alt="Skirama" class="immagine" style="min-height: 100px;">
                 </div>
                 <div class="descrizione">
                     <center>
@@ -268,7 +247,7 @@ function mostra(ID) {
             </div>
             <div class="column2" style="text-align: center">
                 <div>
-                    <img src="Campiglio.png" alt="Campiglio" class="immagine" style="max-width: 100px;">
+                    <img src="Pagina_iniziale/Campiglio.png" alt="Campiglio" class="immagine" style="max-width: 100px;">
                 </div>
                 <div class="descrizione">
                     <center>
@@ -509,8 +488,15 @@ function mostra(ID) {
     <label>Commenti</label>
     <textarea name="commenti" id="commenti" placeholder="" maxlength="100" wrap="soft" style="margin-left: 38px;" value="<?php if (isset($_SESSION['commenti'])&& $_SESSION['commenti'] <> '') {    echo $_SESSION['commenti'];}?>"/></textarea>
 	</fieldset>
+        <fieldset>
+            <label>Desideri l'assicurazione?</label>
+            Sì <input type="radio" name="checkbox3" value="check" id="agree" required/>
+            No <input type="radio" name="checkbox3" value="check" checked/>
+           </fieldset>
         <center>
+            <fieldset>
         <input type="checkbox">sono i dati di chi paga?
+         </fieldset>
         </center>
         
         
@@ -518,9 +504,11 @@ function mostra(ID) {
         
 </section>
     </div>
+            </div>
+        </div>
 
-    
-        <div>
+        
+       
     <section class="firstSection" style="width: 60%; margin-top: 500px;">
         <ul class="price">
         <li class="header">Foto</li>
@@ -708,7 +696,7 @@ document.getElementById("upload2").addEventListener("click", function(){
   
   
 </script>
-        </div>
+      
     
     
     
