@@ -72,7 +72,7 @@ class Foto {
            $this->Foto = $ID_foto;
        }
        
-       public function getNewIdFoto() {
+       public function getIDFoto($ID_ordine, $ID_cliente) {
         $servername = "localhost";
         $username = "onlinesales";
         $password = "Sale0nl1nE";
@@ -84,7 +84,7 @@ class Foto {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $query = "SELECT MAX(`Foto`) FROM `Foto`";
+        $query = "SELECT `Foto` FROM `Foto` INNER JOIN `Ordine` ON Foto.ID_cliente = Ordine.ID_cliente AND Ordine.ID_ordine = '$ID_ordine' WHERE Ordine.ID_cliente = '$ID_cliente'";
         if (!$result = $conn->query($query)) {
             echo "Errore della query: ".$conn->error.".";
             exit();
@@ -96,7 +96,8 @@ class Foto {
               while($row = $result->fetch_array(MYSQLI_ASSOC))
               {
                   
-                $this->Foto = $row['MAX(`Foto`)'];
+                $ID_foto = $row['Foto'];
+                
                 
               }
               // liberazione delle risorse occupate dal risultato
@@ -105,6 +106,6 @@ class Foto {
     }
 // chiusura della connessione
         $conn->close();
-        return $this->Foto+1;
+        return $ID_foto;
 }
 }

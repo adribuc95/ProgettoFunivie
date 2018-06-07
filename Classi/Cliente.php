@@ -141,7 +141,6 @@ class Cliente {
         }
 // chiusura della connessione
         $conn->close();
-        return $this->ID_cliente;
         }
 
     public function setIDCliente($ID_cliente) {

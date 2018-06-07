@@ -12,10 +12,11 @@ and open the template in the editor.
         <title>Richiesta Dati</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="Pagina_iniziale/CSS/CSS.css" rel="stylesheet" type="text/css">
+        <link href="CSS/CSS.css" rel="stylesheet" type="text/css">
         
         
     <script>
+    //funzione che gestisce il fatto del biglietto omaggio
     function enable(element){
         if (element === 'baccompagnati_ss') {
             document.getElementById('colore1').style.color = 'black';
@@ -33,8 +34,9 @@ and open the template in the editor.
             document.getElementById('baccompagnati_ss').checked = false;
         }
         
-    } //funzione che gestisce il fatto del biglietto omaggio
-        
+    } 
+    
+    //funzione che gestisce il fatto del biglietto omaggio    
     function disable(element1, element2){
         document.getElementById(element1).disabled = true;
         document.getElementById(element2).disabled = true;
@@ -43,104 +45,121 @@ and open the template in the editor.
         document.getElementById('colore1').style.color = 'gray';
         document.getElementById('colore2').style.color = 'gray';
         
-    } //funzione che gestisce il fatto del biglietto omaggio
-        
+    } 
+    
+    //funzione che gestisce il cambio azione tra "concludi ordine" e "aggiungi skipass"
     function chgAction( action_name ) {
-            
-                document.dati_utente.action = action_name;
-            
-                document.dati_utente.action = action_name;
-            
-        } //funzione che gestisce il cambio azione tra "concludi ordine" e "aggiungi skipass"
-        
-    function sblocca() {
-            
-            var id_radio_ss = ['sseniores_ss', 'seniores_ss', 'juniores_ss', 'bambini_ss' ];
-            var id_radio_ca = ['sseniores_ca', 'seniores_ca', 'juniores_ca', 'bambini_ca' ];
-            
-            
-            
-            var x = document.getElementById('data_nascita').value;
-            var anni = calcAge(x);
-            
-            if ((document.getElementById(id_radio_ss[0]).checked == true)|| (document.getElementById(id_radio_ca[0]).checked == true)) {
-                   if(anni < 76) {
-                    setTimeout(function(){
-                        alert("La data di nascita non coincide con l'offerta!"); 
-                        document.getElementById(id_radio_ss[0]).checked = false;
-                        document.getElementById(id_radio_ca[0]).checked = false;
-                        document.getElementById('data_nascita').value="";
-                    }, 3000);
-                   }
-               }
-               
-            else if ((document.getElementById(id_radio_ss[1]).checked == true)|| (document.getElementById(id_radio_ca[1]).checked == true)) {
-                   if(anni <= 66) {
-                    setTimeout(function(){
-                        alert("La data di nascita non coincide con l'offerta!"); 
-                        document.getElementById(id_radio_ss[1]).checked = false;
-                        document.getElementById(id_radio_ca[1]).checked = false;
-                        document.getElementById('data_nascita').value="";
-                    }, 3000);
-                   }
-               }
-               
-            else if ((document.getElementById(id_radio_ss[2]).checked == true)|| (document.getElementById(id_radio_ca[2]).checked == true)) {
-                   if(anni > 16) {
-                    setTimeout(function(){
-                        alert("La data di nascita non coincide con l'offerta!"); 
-                        document.getElementById(id_radio_ss[2]).checked = false;
-                        document.getElementById(id_radio_ca[2]).checked = false;
-                        document.getElementById('data_nascita').value="";
-                    }, 3000);
-                   }
-               }
-            else if ((document.getElementById(id_radio_ss[3]).checked == true)|| (document.getElementById(id_radio_ca[3]).checked == true)) {
-                   if((anni > 10)) {
-                    setTimeout(function(){
-                        alert("La data di nascita non coincide con l'offerta!"); 
-                        document.getElementById(id_radio_ss[3]).checked = false;
-                        document.getElementById(id_radio_ca[3]).checked = false;
-                        document.getElementById('data_nascita').value="";
-                    }, 3000);
-                    
-                   }
-               }
-            }
-            
-            
-        
-            
-    function calcAge (birthday) {
-    birthday = new Date(birthday);
-    today = new Date();
- 
-    var years = (today.getFullYear() - birthday.getFullYear());
- 
-    if (today.getMonth() < birthday.getMonth() || 
-        today.getMonth() == birthday.getMonth() && today.getDate() < birthday.getDate()) {
-        years--;
+        if(document.getElementById("uploaded").style.display == 'none' && document.getElementById("uploaded2").style.display == 'none') {
+            alert("manca la foto!!");
+        }
+        else
+        document.dati_utente.action = action_name;
     }
- 
-    return years;
+       
+    //funzione che calcola l'età data una data di nascita.
+    function getAge(dateString) {
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
 }
 
+    //funzione che va a controllare che la data di nascita inserita sia valida per l'offerta scelta.
+    function checkOfferta() {
+        var id_radio_ss = ['sseniores_ss', 'seniores_ss', 'juniores_ss', 'bambini_ss' ];
+        var id_radio_ca = ['sseniores_ca', 'seniores_ca', 'juniores_ca', 'bambini_ca' ];
+
+
+        if ((document.getElementById(id_radio_ss[0]).checked == true)|| (document.getElementById(id_radio_ca[0]).checked == true)) {
+            var x = document.getElementById('data_nascita').value;
+            var anni = getAge(x);
+               if(anni < 76) {
+
+                    console.log(anni);
+                    console.log(x);
+                    alert("La data di nascita non coincide con l'offerta 'SUPER SENIOR'!"); 
+                    document.getElementById(id_radio_ss[0]).checked = false;
+                    document.getElementById(id_radio_ca[0]).checked = false;
+                    document.getElementById('data_nascita').value="";
+
+               }
+           }
+
+        else if ((document.getElementById(id_radio_ss[1]).checked == true)|| (document.getElementById(id_radio_ca[1]).checked == true)) {
+            var x = document.getElementById('data_nascita').value;
+            var anni = getAge(x);
+           if(anni <= 66) {
+
+                    console.log(anni);
+                    console.log(x);
+                    alert("La data di nascita non coincide con l'offerta 'SENIOR'!"); 
+                    document.getElementById(id_radio_ss[1]).checked = false;
+                    document.getElementById(id_radio_ca[1]).checked = false;
+                    document.getElementById('data_nascita').value="";
+
+               }
+           }
+
+        else if ((document.getElementById(id_radio_ss[2]).checked == true)|| (document.getElementById(id_radio_ca[2]).checked == true)) {
+            var x = document.getElementById('data_nascita').value;
+            var anni = getAge(x);
+           if(anni >= 10) {
+
+                    console.log(anni);
+                    console.log(x);
+                    alert("La data di nascita non coincide con l'offerta 'JUNIORES'!"); 
+                    document.getElementById(id_radio_ss[2]).checked = false;
+                    document.getElementById(id_radio_ca[2]).checked = false;
+                    document.getElementById('data_nascita').value="";
+
+               }
+           }
+        else if ((document.getElementById(id_radio_ss[3]).checked == true)|| (document.getElementById(id_radio_ca[3]).checked == true)) {
+            var x = document.getElementById('data_nascita').value;
+            var anni = getAge(x);
+
+           if(anni >=5) {
+
+                    console.log(anni);
+                    console.log(x);
+                    alert("La data di nascita non coincide con l'offerta! 'BAMBINI'!"); 
+                    document.getElementById(id_radio_ss[3]).checked = false;
+                    document.getElementById(id_radio_ca[3]).checked = false;
+                    document.getElementById('data_nascita').value="";
+
+               }
+           }
+        } 
+        
+    //funzione che va a mostrare un elemento dato il suo id.
     function mostra(ID) {
     
         document.getElementById(ID).style.display = '';
     
     }
     
+    //funzione che va a nascondere un elemento dato il suo id.
     function nascondi(ID) {
     
         document.getElementById(ID).style.display = 'none';
+    }
+    
+    function checkFoto() {
+        if(document.getElementById("uploaded").style.display == 'none' && document.getElementById("uploaded2").style.display == 'none') {
+            alert("manca la foto!!");
+            return false;
+    }
     }
     </script>
    
     
 </head>
 <body>
-    <form method="post" action="" name="dati_utente">
+    <form method="post" action="Pagina_iniziale/mantieni_dati.php" name="dati_utente">
 
     
     <div id="tessere" style="border-top: #eee solid thin; ">
@@ -246,8 +265,11 @@ and open the template in the editor.
         </center>
             <hr>
     </div>
-        <div>
-    <section class="firstSection" style="margin-bottom: 5px; float: left; margin-left: 60px;">
+        <div class="dati_utente">
+            <div class="container">
+                <div class="column1" style="text-align: center; align-content:center;">
+                    <center>
+                    <div class="columns">
     <ul class="price">
         <li class="header">Dati Anagrafici</li>
     </ul>
@@ -264,15 +286,15 @@ and open the template in the editor.
     </fieldset>
     <fieldset>
         <label>Nome *</label>
-        <input class="input" name="nome" id="nome" type="text" required  pattern="[a-zA-z]+">
+        <input class="input" name="nome" id="nome" type="text" required  pattern="[a-zA-z]+" value="<?php if (isset($_SESSION['nome']) && $_SESSION['nome'] <> '') {    echo $_SESSION['nome'];}   ?>">
     </fieldset>  
     <fieldset>
         <label>Cognome *</label>
-        <input class="input" name="cognome" id="cognome" type="text" required  pattern="[a-zA-z]+">
+        <input class="input" name="cognome" id="cognome" type="text" required  pattern="[a-zA-z]+" value="<?php if (isset($_SESSION['cognome']) && $_SESSION['cognome'] <> '') {    echo $_SESSION['cognome'];}   ?>">
     </fieldset>	
     <fieldset>
         <label>Data di nascita *</label>
-        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="DD-MM-YYYY" required min="1920-01-01" max="2017-01-01" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012]|[0-9])([-/])[0-9]{4}" style="font-family: Verdana, sans-serif;" onchange="sblocca();" >
+        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="DD-MM-YYYY" required min="1920-01-01" max="2017-01-01" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012]|[0-9])([-/])[0-9]{4}" style="font-family: Verdana, sans-serif;" onchange="setTimeout(checkOfferta, 8000)" >
     </fieldset>	
     <fieldset>
         <label>Indirizzo *</label>
@@ -403,9 +425,15 @@ and open the template in the editor.
         </select>
     </fieldset>
     
-    </section>
+                  
+                </div>
+                    </center>
+                </div>
     
-    <section class="firstSection" style="float: right; margin-right: 60px;">
+                 
+                <div class="column2" style="text-align: center">
+                    <center>
+                    <div class="columns">
     <ul class="price">
         <li class="header">Contatti</li>
     </ul>
@@ -416,7 +444,7 @@ and open the template in the editor.
 	</fieldset>
 	<fieldset>
             <label>Fax</label>
-            <input class="input" name="fax" id="fax" type="text"value="<?php if (isset($_SESSION['fax'])&& $_SESSION['fax'] <> '') {    echo $_SESSION['fax'];}?>"/>
+            <input class="input" name="fax" id="fax" type="text" value="<?php if (isset($_SESSION['fax'])&& $_SESSION['fax'] <> '') {    echo $_SESSION['fax'];}?>"/>
 	</fieldset>
 	<fieldset>
             <label>Cellulare *</label>
@@ -437,7 +465,7 @@ and open the template in the editor.
         <fieldset>
             <label>Desideri l'assicurazione?</label>
             Sì <input type="radio" name="assicurazione" value="1" id="agree" required/>
-            No <input type="radio" name="assicurazione" value="0" checked/>
+            No <input type="radio" name="assicurazione" value="0" required/>
            </fieldset>
         <center>
             <fieldset>
@@ -445,30 +473,34 @@ and open the template in the editor.
          </fieldset>
         </center>
         
-        
+                      
+                    </div>
+                    </center>
+                </div>
     
         
-</section>
-    </div>
+
+                </div>
             </div>
-        </div>
 
         
        
-    <section class="firstSection" style="width: 60%; margin-top: 500px;">
+    <section class="column3">
         <ul class="price">
         <li class="header">Foto</li>
     </ul>
         <center>
         <p class="note">La foto deve rappresentare il soggetto che andrà ad utilizzare lo skipass in modo chiaro, centrata sul viso.</p>
-        <button type="button" onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam</button>
-        <button type="button" id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica</button>
+        <div style="align-content:center;">
+        <button type="button" class="bottone" onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam</button>
+        <button type="button" class="bottone" id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica</button>
+        </div>
         
         <div id='mostra_camera2' style='display: none; margin-top: 10px;'>
         <input type='file' id="fileUpload"/>
         <img id="immagine" src="#" alt="your image" style="display: none; max-width:400px; "/>
         <div>
-        <button type="button" id="upload2" style="display:none"> Upload </button>
+        <button type="button" class="bottone" id="upload2" style="display:none"> Upload </button>
         <br> <span id="uploading2" style="display:none;"> Uploading has begun . . .  </span>
     <span id="uploaded2"  style="display:none;"> Success, your photo has been uploaded!</span>
     
@@ -500,6 +532,7 @@ $("#fileUpload").change(function() {
 });
 
 document.getElementById("upload2").addEventListener("click", function(){
+            $("#uploading2").show();
             var images = $('#immagine').attr('src');
             $.ajax({
                 type: "POST",
@@ -522,21 +555,22 @@ document.getElementById("upload2").addEventListener("click", function(){
 
 
         </script>
-        
+        <center>
         <div id='mostra_camera' style='display:none; margin-top: 10px;'>      
 <div class="camcontent" id="camcontent">
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
 </div>
 <div>
-    <button type="button" id="snap">  Capture </button>
-    <button type="button" id="reset_camera" style="display:none" onclick='resetCam();'>Reset</button>
-    <button type="button" id="upload" style="display:none"> Upload </button>
-    <br> <span id=uploading style="display:none;"> Uploading has begun . . .  </span>
-    <span id=uploaded  style="display:none;"> Success, your photo has been uploaded!</span>
+    <button type="button" id="snap" class="bottone">  Capture </button>
+    <button type="button" id="reset_camera"  class="bottone" style="display:none" onclick='resetCam();'>Reset</button>
+    <button type="button" id="upload" class="bottone" style="display:none"> Upload </button>
+    <br> <span id="uploading" style="display:none;"> Uploading has begun . . .  </span>
+    <span id="uploaded"  style="display:none;"> Success, your photo has been uploaded!</span>
     
 </div>
         </div>
+        </center>
     </section>
  
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -622,6 +656,7 @@ document.getElementById("upload2").addEventListener("click", function(){
   }
   
   document.getElementById("upload").addEventListener("click", function(){
+            $("#uploading").show();
             var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
             $.ajax({
                 type: "POST",
@@ -644,7 +679,7 @@ document.getElementById("upload2").addEventListener("click", function(){
     
     
     
-    <section class="firstSection" style="width: 60%; ">
+    <section class="column4">
         <ul class="price">
         <li class="header">Accettazione</li>
     </ul>
@@ -672,8 +707,8 @@ marketing</label>
     </section>
          <center>
         
-            <button class="bottone" onclick="chgAction('Pagina_iniziale/concludi_ordine.php')">Concludi Ordine</button>
-            <button  class="bottone" id="final_button" onclick="chgAction('Pagina_iniziale/aggiungi_skipass.php')">Aggiungi un altro skipass</button>
+            <button class="bottone" onclick="chgAction('Pagina_iniziale/concludi_ordine.php')" onsubmit="return checkFoto();">Concludi Ordine</button>
+            <button  class="bottone" id="final_button" onclick="chgAction('Pagina_iniziale/aggiungi_skipass.php')" onsubmit="return checkFoto();">Aggiungi un altro skipass</button>
             </center>
 </form>
     </body>

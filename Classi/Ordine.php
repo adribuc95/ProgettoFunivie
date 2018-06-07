@@ -7,7 +7,7 @@ class Ordine {
     public $ID_cliente;
     public $data_ordine;
     public $numero_prodotti;
-    public $new_array;
+   
     
 
     public function salvaDati() { //funzione che va a salvare i dati inseriti nel form iniziale
@@ -166,7 +166,7 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
             die("Connection failed: " . $conn->connect_error);
         } 
 
-        $sql = " SELECT count(`ID_Ordine`) FROM `Ordine` WHERE 'ID_ordine' = '$ID_ordine'";
+        $sql = " SELECT count(`ID_Ordine`) FROM `Ordine` WHERE `ID_ordine` = '$ID_ordine'";
         if (!$result = $conn->query($sql)) {
             echo "Errore della query: ".$conn->error.".";
             exit();
@@ -188,11 +188,12 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
     }
 // chiusura della connessione
         $conn->close();
-       
+            return $this->numero_prodotti;
         }
         
+        //ritorna un array contenente gli ID_tessera presenti in un ordine.
         
-        public function getTessereDiUnOrdine($ID_ordine) { //ritorna un array contenente gli ID_tessera presenti in un ordine.
+        public function getTessereDiUnOrdine($ID_ordine) { 
             $servername = "localhost";
             $username = "onlinesales";
             $password = "Sale0nl1nE";
@@ -215,20 +216,23 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
                   // conteggio dei record restituiti dalla query
                   while($row = $result->fetch_array(MYSQLI_ASSOC))
                   {
-                      $this->new_array[] = $row;
+                      $tipologia_tessere[] = $row;
 
 
 
                   }
+                
+                
                   // liberazione delle risorse occupate dal risultato
                   $result->close();
-                }
-        }
-    
-            
-        }
-        
-        public function getImporto($ID_ordine) { //vado a prendere i singoli importi facendo una join di ORDINE e TESSERA
+                  }
+                  }
+                  return $tipologia_tessere;
+                  }
+                  
+        //vado a prendere i singoli importi facendo una join di ORDINE e TESSERA
+                  //da sistemare!!
+        public function getImporto($ID_ordine) { 
             $servername = "localhost";
             $username = "onlinesales";
             $password = "Sale0nl1nE";
@@ -240,7 +244,7 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             } 
-            $sql = "SELECT `importo` FROM (`Tessera` JOIN `Ordine`) WHERE `ID_ordine` = '$ID_ordine'";
+            $sql = "SELECT `importo` FROM `Tessera` INNER JOIN `Ordine` ON Tessera.ID_tessera = Ordine.ID_tessera AND Ordine.ID_ordine = '$ID_ordine'";
             if (!$result = $conn->query($sql)) {
                 echo "Errore della query: ".$conn->error.".";
                 exit();
@@ -251,15 +255,17 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
                   // conteggio dei record restituiti dalla query
                   while($row = $result->fetch_array(MYSQLI_ASSOC))
                   {
-                      $this->importi[] = $row;
+                      $importi[] = $row;
                   }
                   // liberazione delle risorse occupate dal risultato
                   $result->close();
                 }
             }
+            return $importi;
         }
-
-        public function getImportoTotale() { //da sistemare --> calcola l'importo totale di un ordine
+        
+        //da sistemare --> calcola l'importo totale di un ordine
+        public function getImportoTotale() { 
             $importo_totale = '';
             for ($i = 0; $i < $this->numero_prodotti; $i++) {
                 if(implode("", $this->new_array[$i]) == 1) {
@@ -271,5 +277,149 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
             }
             return $importo_totale;
         }
+        
+        //ritorna gli ID_cliente dei clienti dello stesso ordine
+       
+        public function getIDClienti_StessoOrdine($ID_ordine) {
+            $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT Cliente.ID_cliente FROM `Cliente` INNER JOIN `Ordine` ON Cliente.ID_cliente = Ordine.ID_cliente WHERE Ordine.ID_ordine = '$ID_ordine'";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $ID_clienti[] = $row;
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+    }
+// chiusura della connessione
+        $conn->close();
+        return $ID_clienti;
+        }
+        
+        
+        public function getName_StessoOrdine($ID_ordine) {
+            $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT Cliente.nome FROM `Cliente` INNER JOIN `Ordine` ON Cliente.ID_cliente = Ordine.ID_cliente WHERE Ordine.ID_ordine = '$ID_ordine'";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $nomi[] = $row;
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+            
+        }
+        return $nomi;
+        }
+        
+        public function getSurname_StessoOrdine($ID_ordine) {
+            $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT Cliente.cognome FROM `Cliente` INNER JOIN `Ordine` ON Cliente.ID_cliente = Ordine.ID_cliente WHERE Ordine.ID_ordine = '$ID_ordine'";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $cognomi[] = $row;
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+        }
+            return $cognomi;
+        }
+        
+        public function getDate_StessoOrdine($ID_ordine) {
+            $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT Cliente.data_nascita FROM `Cliente` INNER JOIN `Ordine` ON Cliente.ID_cliente = Ordine.ID_cliente WHERE Ordine.ID_ordine = '$ID_ordine'";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $data_nascita[] = $row;
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+        }
+            return $data_nascita;
+        }
 }
+        
+
     

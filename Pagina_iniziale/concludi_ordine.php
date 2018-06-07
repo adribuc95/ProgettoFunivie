@@ -23,8 +23,8 @@ if ((!isset($_SESSION['prima_volta']))) {
             $ordine->setIDOrdine($ID_ordine);
         }
 
-//header("location: https://www.funiviemadonnacampiglio.it/Riepilogo_ordine/riepilogo_ordine.php");
-header("location: https://www.funiviemadonnacampiglio.it/onlinesale/");
+header("location: https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php");
+//header("location: https://www.funiviemadonnacampiglio.it/onlinesale/");
 $ID_session = session_id();
 $_SESSION['prima_volta'] = true;
 
@@ -56,26 +56,10 @@ $foto->salvaDati();
 $ordine->setIDCliente($new_ID_cliente);
 $ordine->salvaDati();
 
-//checkSkipass($ordine1, $età, $cliente);
-distruggiSessione();
+
+//distruggiSessione();
 
 
-function checkSkipass($ordine, $età, $cliente) {
-        if (($ordine->ID_tessera >= 2 && $ordine->ID_tessera <= 5 && $età >= 5) || ($ordine->ID_tessera >= 8 && $ordine->ID_tessera <= 10 && $età >= 5)) {
-            $message = "l'età inserita non corrisponde con l'offerta!";
-            echo "<script type='text/javascript'>alert('$message');</script>";
-            $cliente->eliminaDaDB($cliente->ID_cliente);
-            $ordine->eliminaDaDB($ordine->ID_ordine);
-            echo "eliminato";
-        }
-        
-        else if (($ordine->ID_tessera >= 2 && $ordine->ID_tessera <= 4 && $età >= 5) || ($ordine->ID_tessera >= 8 && $ordine->ID_tessera <= 10 && $età >= 5)) {
-            $message = "l'età inserita non corrisponde con l'offerta!";
-            echo "<script type='text/javascript'>alert('$message');</script>";
-        }
-            
-        
-    }
 
  function distruggiSessione() {
      session_unset();

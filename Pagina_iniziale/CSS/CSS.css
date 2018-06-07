@@ -12,13 +12,12 @@ and open the template in the editor.
       margin: 0; padding: 0;
       font-size: 12px;
       font-family: "Verdana", sans-serif;
-      color: #444;
+      color: black;
     }
     section {
       
-      height: 230px;
+      height: 100%;
       margin: 0 auto;
-      
       margin-top: 10px;
       padding: 15px;
       padding-top: 5px;
@@ -41,11 +40,11 @@ and open the template in the editor.
       border-radius: 5px 5px 5px 5px;
       padding: 4px;
       width: 250px;
-      color: #444;
+      color: black;
       float: left;
     }
     button {
-      margin-left: 100px;
+      
       border: 1px solid #ccc;
       padding: 10px;
       color: #444;
@@ -53,8 +52,6 @@ and open the template in the editor.
     
     
     .firstSection {
-        
-
         height: 100%;
     }
     
@@ -109,6 +106,17 @@ and open the template in the editor.
             width: 50%;
             float: right;
         }
+        .column3 {
+            width: 60%;
+            margin-top: 500px;
+            align-content: center;
+            
+        }
+        .column4 {
+            width: 60%;
+            align-content: center;
+        }
+        
         #commenti {
         width: 60%;
     }
@@ -124,6 +132,16 @@ and open the template in the editor.
                 width: 100%;
                 float: none;
             }
+            .column3 {
+                margin-top: 10px;
+                width: 80%;
+                float: none;
+            }
+            .column4 {
+                margin-top: 10px;
+                width: 80%;
+                float: none;
+            }
             .firstSection {
                 
                 width: 80%;
@@ -133,9 +151,21 @@ and open the template in the editor.
                 margin-left: 0;
     }
     
+    #video {
+        width: 100%;
+        height: 100%;
+    }
+     #canvas {
+        width: 100%;
+        height: 100%;
+    }
     
     #commenti {
         width: 50%;
+    }
+    #immagine {
+        width: 100%;
+        height: 100%;
     }
     }
         
@@ -259,7 +289,7 @@ label {
         transition: all 0.2s;
         height: 40px;
         width: 20%;
-        min-width: 90px;
+        min-width: 100px;
         
         }
     .bottone:hover{
