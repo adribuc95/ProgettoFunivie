@@ -9,6 +9,7 @@ $cliente = new Cliente();
 $foto = new Foto();
 $ordine = new Ordine();
 
+
 if ((!isset($_SESSION['prima_volta']))) {
             $_SESSION['prima_volta'] = false;
             $new_ID_cliente_riferimento = $cliente->getNewIDCliente_Riferimento();
@@ -22,7 +23,7 @@ if ((!isset($_SESSION['prima_volta']))) {
             $cliente->setIDCliente_Riferimento($ID_cliente_riferimento);
             $ordine->setIDOrdine($ID_ordine);
         }
-
+        
 header("location: https://www.funiviemadonnacampiglio.it/onlinesale/");
 $ID_session = session_id();
 

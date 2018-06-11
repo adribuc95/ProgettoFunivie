@@ -26,7 +26,6 @@ if ((!isset($_SESSION['prima_volta']))) {
 header("location: https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php");
 //header("location: https://www.funiviemadonnacampiglio.it/onlinesale/");
 $ID_session = session_id();
-$_SESSION['prima_volta'] = true;
 
 //creo i nuovi ID
 
@@ -56,14 +55,3 @@ $foto->salvaDati();
 $ordine->setIDCliente($new_ID_cliente);
 $ordine->salvaDati();
 
-
-//distruggiSessione();
-
-
-
- function distruggiSessione() {
-     session_unset();
-    unset($_SESSION['prima_volta']);
-    echo "session destroyed";
-     
- }

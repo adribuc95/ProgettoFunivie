@@ -9,10 +9,12 @@ $ordine = new Ordine();
 $tessera = new Tessera();
 $foto = new Foto();
 
-if ((!isset($_SESSION['prima_volta2']))) {
-            $_SESSION['prima_volta2'] = false;
-            $ID_ordine = $ordine->getIDOrdine(); //recupero ID_ordine
+if ((!isset($_SESSION['ID_ordine']))) {
+            $_SESSION['ID_ordine'] = $ordine->getIDOrdine();
+            
 }
+$ID_ordine = $_SESSION['ID_ordine'];
+
 $numero_tessere = $ordine->countProduct($ID_ordine); //recupero numero tessere dell'ordine
 $tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine); //recupero la tipologia delle tessere di un ordine.
 $ID_clienti = $ordine->getIDClienti_StessoOrdine($ID_ordine); //ritorna gli ID_cliente di tutti i clienti dello stesso ordine.
@@ -20,6 +22,9 @@ $date_nascita = $ordine->getDate_StessoOrdine($ID_ordine);
 $nomi = $ordine->getName_StessoOrdine($ID_ordine);
 $cognomi = $ordine->getSurname_StessoOrdine($ID_ordine);
 $importi = $ordine->getImporto($ID_ordine);
+if ($numero_tessere == 0) {
+    unset($_SESSION['prima_volta']);
+}
 
 
 ?>
@@ -29,105 +34,9 @@ $importi = $ordine->getImporto($ID_ordine);
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <link href="../CSS/CSS.css" rel="stylesheet" type="text/css">
+        <link href="../Pagina_iniziale/CSS/CSS.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
-        <style>
-        
-.square {
-    border: solid darkgray thin;
-    margin: 100px;
-    border-radius: 10px 10px 10px 10px;
-    margin-top: 10px;
-    
-}
-
-.foto {
-    width: 100%;
-    max-width: 95px;
-    max-height: 95px;
-    border-radius: 10px 10px 10px 10px;
-}
-
-
-.column5 {
-    
-    align-content: center;
-    border-bottom: solid gainsboro thin; 
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
-#foto {
-    width: 20%;
-}
-#tipo {
-    width: 10%;
-}
-
-#dati {
-    width: 30%;
-}
-
-#importo {
-   width: 10%; 
-    
-}
-
-#elimina {
-   width: 20%; 
-}
-
-#tot_articoli {
-    width: 30%;
-}
-
-#tot_cauzione {
-    width: 30%;
-}
-
-#tot_importo {
-    width: 30%;
-}
-        
-
-@media screen and (max-width: 900px) {
-    .column5 {
-        width: 100%;
-        
-    }
-    
-    .square {
-        margin: 0px;
-        margin-top: 10px;
-}
-
-.foto {
-    margin-left: 0;
-}
-
-#foto {
-    width: 30%;
-}
-#tipo {
-    width: 0;
-}
-
-#dati {
-    width: 30%;
-}
-
-#importo {
-   width: 10%; 
-    
-}
-
-#elimina {
-   width: 20%; 
-}
-}
-
-
-        </style>
     </head>
     <body>
         
@@ -136,7 +45,7 @@ $importi = $ordine->getImporto($ID_ordine);
             <center>
             <div class='titolo'>
                 <ul class="price">
-                <li class="header">Riepilogo Ordine</li>
+                <li class="header"><i style="font-size:35px;" class="fa">&#xf07a;</i> Riepilogo Ordine</li>
                 </ul>
             </div>
                <div class='column5' style="height: 30px;">
@@ -155,11 +64,12 @@ $importi = $ordine->getImporto($ID_ordine);
                </div>
                 
                 <?php
+                
         
         for($i = 0; $i < $numero_tessere; $i++) { //$numero_tessere al posto di 4
                 $tipologia=$tessera->getTipologia(implode("", $tipologia_tessere[$i]));//
                 $ID_cliente = implode("", $ID_clienti[$i]);
-                $ID_foto =  $foto->getIDFoto($ID_ordine, $ID_cliente); //ritorna l'ID_foto dandogli l'ID_ordine attuale e l'ID_cliente
+                $ID_foto =  $foto->getIDFoto($_SESSION['ID_ordine'], $ID_cliente); //ritorna l'ID_foto dandogli l'ID_ordine attuale e l'ID_cliente
                 
                 $nome = implode("", $nomi[$i]);
                 $cognome = implode("", $cognomi[$i]);
@@ -171,6 +81,7 @@ $importi = $ordine->getImporto($ID_ordine);
                 
 
             echo "<div class='column5'>
+                
                     <table style='width:100%; text-align: center;'>
                         <form action='elimina_tessera.php' method='post'>
                         <tr>
@@ -184,8 +95,9 @@ $importi = $ordine->getImporto($ID_ordine);
                            
                        <td id='elimina'>
                        <input name='elimina' value='$i' hidden/>
-                        <button type='submit'>X</button></td>
+                        <button type='submit' style='background-color: red; border: 1px solid black; color: black'><b><i class='fa fa-trash' style='font-size:20px'></i></b></button></td>
                         <input name='ordine' value='$ID_ordine' hidden/>
+                        <input name='foto$i' value='$ID_foto' hidden/>
                         <input name='numero_tessere' value='$numero_tessere' hidden/>
                        </tr>
                        </form>
@@ -226,12 +138,22 @@ $importi = $ordine->getImporto($ID_ordine);
                 </div>
                 <hr>
                 <div style='margin-top: 10px;' >
-                    <form action="conferma_ordine.php" method="post">
-                        <button class="bottone" onclick="">Conferma Ordine</button>
+                    <?php
+                    if ($numero_tessere > 0) {
+                    echo "<form action='conferma_ordine.php' method='post'>
+                        <button class='bottone'>Conferma Ordine <i class='fa fa-check' style='font-size:16px'></i></button>
                     </form>
-            <form action="modifica_ordine.php" method="post">
-                        <button class="bottone" onclick="">Aggiungi Tessera</button>
+                    <form action='modifica_ordine.php' method='post'>
+                        <button class='bottone'>Aggiungi Tessera <i class='fa fa-plus' style='font-size:16px'></i></button>
                     </form>
+";
+                    }
+                    else { echo "<form action='nuovo_ordine.php' method='post'>
+                        <button class='bottone'>Nuovo Ordine <i class='fa fa-plus' style='font-size:16px'></i></button>
+                    </form>";}
+                            ?>
+            
+                    
                 </div>
             </center>
         </div>

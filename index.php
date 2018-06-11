@@ -4,16 +4,24 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
+<?php
+session_start();
+include "Classi/Ordine.php";
+$ordine = new Ordine();
+if ((!isset($_SESSION['ID_ordine']))) {
+            $_SESSION['ID_ordine'] = $ordine->getNewIDOrdine();
+            
+}
+$tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine);
 
+?>
 <html>
     <head>
-        
-        
         <title>Richiesta Dati</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="CSS/CSS.css" rel="stylesheet" type="text/css">
-        
+        <link href="Pagina_iniziale/CSS/CSS.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
     <script>
     //funzione che gestisce il fatto del biglietto omaggio
@@ -155,14 +163,16 @@ and open the template in the editor.
     }
     }
     </script>
-   
+
     
 </head>
 <body>
+ 
+    <button type="button" onClick="window.location.href='https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php'" style="position: fixed; margin-top: 500px;  width: 50px; align-content: center;
+            height: 50px;"><i style="font-size:35px; color: #1F3284" class="fa">&#xf07a;</i></button>
+  
     <form method="post" action="Pagina_iniziale/mantieni_dati.php" name="dati_utente">
-
-    
-    <div id="tessere" style="border-top: #eee solid thin; ">
+               <div id="tessere" style="border-top: #eee solid thin; ">
         <br>
         <center><b>Seleziona il prodotto: *</b></center>
         <div class="container">
@@ -176,34 +186,34 @@ and open the template in the editor.
                     <ul class="price">
                       <li class="header">Superskirama</li>
                       <li>
-                          <div class="tipologia" style="color:black;"><b>ADULTI</b><br>Ski pass a cui può essere associato <br>un BAMBINO ACCOMPAGNATO.</div>
+                          <div class="tipologia"><b>ADULTI</b><br>Ski pass a cui può essere associato <br>un BAMBINO ACCOMPAGNATO.</div>
                           <div class="prezzo">€ 640,00</div>
-                          <input type="radio" name="tessera" value="1" id="adulti_ss" required class="selezione" onclick="enable('baccompagnati_ss')"/>
+                          <input type="radio" name="tessera" value="1" id="adulti_ss" required class="selezione" />
                       </li>
                       <li id="sseniores_ss_c">
                           <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del 30.11.1942</div>
                           <div class="prezzo">€ 500,00</div>
-                          <input type="radio" name="tessera" value="2" id="sseniores_ss" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca');"/>
+                          <input type="radio" name="tessera" value="2" id="sseniores_ss" required class="selezione" />
                       </li>
                       <li id="seniores_ss_c">
                             <div class="tipologia"><b>SENIORES</b> <br> nati prima del 30.11.1952</div>
                           <div class="prezzo">€ 550,00</div>
-                          <input type="radio" name="tessera" value="3" id="seniores_ss" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca')"/>
+                          <input type="radio" name="tessera" value="3" id="seniores_ss" required class="selezione" />
                       </li>
                       <li id="juniores_ss_c">
                            <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il 30.11.2001</div>
                           <div class="prezzo">€ 500,00</div>
-                          <input type="radio" name="tessera" value="4" id="juniores_ss" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca')"/>
+                          <input type="radio" name="tessera" value="4" id="juniores_ss" required class="selezione" />
                       </li>
                       <li id="bambini_ss_c">
                           <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il 30.11.2009</div>
                           <div class="prezzo">€ 210,00</div>
-                          <input type="radio" name="tessera" value="5" id="bambini_ss" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca')"/>
+                          <input type="radio" name="tessera" value="5" id="bambini_ss" required class="selezione" />
                       </li>
-                      <li class="height1" id="colore1">
+                      <li class="height1">
                           <div class="tipologia"><b>BAMBINI ACCOMPAGNATI </b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
                           <div class="prezzo">Omaggio</div>
-                          <input type="radio" name="omaggio" value="6" id="baccompagnati_ss" disabled class="selezione"/>
+                          <input type="radio" name="tessera" value="6" id="baccompagnati_ss" disabled class="selezione"/>
                       </li>
                     </ul>
                   </div>
@@ -220,34 +230,34 @@ and open the template in the editor.
                     <ul class="price">
                       <li class="header">Campiglio</li>
                       <li>
-                          <div class="tipologia" style="color:black;"><b>ADULTI</b><br>Ski pass a cui può essere associato <br>un BAMBINO ACCOMPAGNATO.</div>
+                          <div class="tipologia"><b>ADULTI</b><br>Ski pass a cui può essere associato <br>un BAMBINO ACCOMPAGNATO.</div>
                           <div class="prezzo">€ 640,00</div>
-                          <input type="radio" name="tessera" value="7" id="adulti_ca" required class="selezione" onclick="enable('baccompagnati_ca')"/>
+                          <input type="radio" name="tessera" value="7" id="adulti_ca" required class="selezione" />
                       </li>
                       <li id="sseniores_ca_c">
                           <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del 30.11.1942</div>
                           <div class="prezzo">€ 500,00</div>
-                          <input type="radio" name="tessera" value="8" id="sseniores_ca" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca')"/>
+                          <input type="radio" name="tessera" value="8" id="sseniores_ca" required class="selezione" />
                       </li>
                       <li id="seniores_ca_c">
                           <div class="tipologia"><b>SENIORES</b> <br> nati prima del 30.11.1952</div>
                           <div class="prezzo">€ 550,00</div>
-                          <input type="radio" name="tessera" value="9" id="seniores_ca" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca')"/>
+                          <input type="radio" name="tessera" value="9" id="seniores_ca" required class="selezione" />
                       </li>
                       <li id="juniores_ca_c">
                           <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il 30.11.2001</div>
                           <div class="prezzo">€ 500,00</div>
-                         <input type="radio" name="tessera" value="10" id="juniores_ca" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca')"/>
+                         <input type="radio" name="tessera" value="10" id="juniores_ca" required class="selezione" />
                       </li>
                       <li id="bambini_ca_c">
                           <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il 30.11.2009</div>
                           <div class="prezzo">€ 210,00</div>
-                          <input type="radio" name="tessera" value="11" id="bambini_ca" required class="selezione" onclick="disable('baccompagnati_ss', 'baccompagnati_ca')"/>
+                          <input type="radio" name="tessera" value="11" id="bambini_ca" required class="selezione" />
                       </li>
-                      <li class="height1" id="colore2">
+                      <li class="height1">
                           <div class="tipologia"><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
                           <div class="prezzo">Omaggio</div>
-                          <input type="radio" name="omaggio" value="12" id="baccompagnati_ca" disabled class="selezione"/>
+                          <input type="radio" name="tessera" value="12" id="baccompagnati_ca" disabled class="selezione"/>
                       </li>
                     </ul>
                   </div>
@@ -467,11 +477,6 @@ and open the template in the editor.
             Sì <input type="radio" name="assicurazione" value="1" id="agree" required/>
             No <input type="radio" name="assicurazione" value="0" required/>
            </fieldset>
-        <center>
-            <fieldset>
-        <input type="checkbox">sono i dati di chi paga?
-         </fieldset>
-        </center>
         
                       
                     </div>
@@ -492,20 +497,23 @@ and open the template in the editor.
         <center>
         <p class="note">La foto deve rappresentare il soggetto che andrà ad utilizzare lo skipass in modo chiaro, centrata sul viso.</p>
         <div style="align-content:center;">
-        <button type="button" class="bottone" onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam</button>
-        <button type="button" class="bottone" id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica</button>
+        <button type="button" class="bottone" onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam <i class="fa fa-video-camera" style="font-size:16px"></i></button>
+        <button type="button" class="bottone" id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica <i class="fa fa-camera" style="font-size:16px"></i></button>
         </div>
         
-        <div id='mostra_camera2' style='display: none; margin-top: 10px;'>
-        <input type='file' id="fileUpload"/>
+        <div id='mostra_camera2' style='display: none; margin-top: 10px; border: #eee 1px solid;'>
+            <div>
+                <button type="button" class="btn" hidden></button>
+                <input type='file' id="fileUpload" style=" margin: 20px;" />
+            </div>
         <img id="immagine" src="#" alt="your image" style="display: none; max-width:400px; "/>
         <div>
-        <button type="button" class="bottone" id="upload2" style="display:none"> Upload </button>
-        <br> <span id="uploading2" style="display:none;"> Uploading has begun . . .  </span>
-    <span id="uploaded2"  style="display:none;"> Success, your photo has been uploaded!</span>
-    
+        <button type="button" class="bottone" id="upload2" style="display:none; margin-top: 10px;"> Carica <i class="fa fa-upload" style="font-size:16px"></i></button>
+        <br> <span id="uploading2" style="display:none; background-color: gold"> <b> Attendi . . . </b> </span>
+        
         </div>
         </div>
+        <span id="uploaded2"  style="display:none; background-color: #00dd00"> <b> Foto caricata! <i class="fa fa-check" style="font-size:16px"></i></b></span>
        
         </center>
         
@@ -544,6 +552,10 @@ document.getElementById("upload2").addEventListener("click", function(){
                 console.log("saved");
                 $("#uploading2").hide();
                 $("#uploaded2").show();
+                $("#upload2").hide();
+                $("#webcam").hide();
+                $("#carica").hide();
+                $("#mostra_camera2").fadeOut("slow");
             });
         });
   
@@ -562,14 +574,14 @@ document.getElementById("upload2").addEventListener("click", function(){
     <canvas id="canvas"></canvas>
 </div>
 <div>
-    <button type="button" id="snap" class="bottone">  Capture </button>
-    <button type="button" id="reset_camera"  class="bottone" style="display:none" onclick='resetCam();'>Reset</button>
-    <button type="button" id="upload" class="bottone" style="display:none"> Upload </button>
-    <br> <span id="uploading" style="display:none;"> Uploading has begun . . .  </span>
-    <span id="uploaded"  style="display:none;"> Success, your photo has been uploaded!</span>
-    
+    <button type="button" id="snap" class="bottone" style="margin-top: 10px;">  Scatta <i class="fa fa-camera" style="font-size:16px"></i></button>
+    <button type="button" id="reset_camera"  class="bottone" style="display:none; margin-top: 10px;" onclick='resetCam();'>Reset <i class="fa fa-trash" style="font-size:16px"></i></button>
+    <button type="button" id="upload" class="bottone" style="display:none; margin-top: 10px;"> Carica <i class="fa fa-upload" style="font-size:16px"></i></button>
+    <br> <span id="uploading" style="display:none; margin-top: 10px; background-color: gold"> <b> Attendi . . . </b> </span>
 </div>
         </div>
+            <span id="uploaded"  style="display:none; margin-top: 10px; background-color: #00dd00"> <b> Foto caricata! <i class="fa fa-check" style="font-size:16px"></i></b></span>
+    
         </center>
     </section>
  
@@ -668,6 +680,12 @@ document.getElementById("upload2").addEventListener("click", function(){
                 console.log("saved");
                 $("#uploading").hide();
                 $("#uploaded").show();
+                $("#upload").hide();
+                $("#reset_camera").hide();
+                $("#canvas").hide();
+                $("#webcam").hide();
+                $("#carica").hide();
+               $("#mostra_camera").fadeOut("slow");
             });
         });
   
@@ -707,8 +725,8 @@ marketing</label>
     </section>
          <center>
         
-            <button class="bottone" onclick="chgAction('Pagina_iniziale/concludi_ordine.php')" onsubmit="return checkFoto();">Concludi Ordine</button>
-            <button  class="bottone" id="final_button" onclick="chgAction('Pagina_iniziale/aggiungi_skipass.php')" onsubmit="return checkFoto();">Aggiungi un altro skipass</button>
+            <button class="bottone" onclick="chgAction('Pagina_iniziale/concludi_ordine.php')" onsubmit="return checkFoto();">Concludi Ordine <i class="fa fa-check" style="font-size:16px"></i></button>
+            <button  class="bottone" id="final_button" onclick="chgAction('Pagina_iniziale/aggiungi_skipass.php')" onsubmit="return checkFoto();">Aggiungi un altro skipass <i class="fa fa-plus" style="font-size:16px"></i></button>
             </center>
 </form>
     </body>

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 class Ordine {
     public $ID_ordine;
     public $ID_tessera;
@@ -19,8 +19,6 @@ class Ordine {
             $this->ID_articolo = htmlspecialchars($_POST["assicurazione"]);
             echo $this->ID_articolo;
         }
-        
-        
         
         $servername = "localhost";
         $username = "onlinesales";
@@ -420,6 +418,7 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
             return $data_nascita;
         }
 }
+
         
 
     

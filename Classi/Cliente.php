@@ -40,7 +40,7 @@ class Cliente {
             $this->sito = htmlspecialchars($_POST["sito"]);
             $this->commenti = htmlspecialchars($_POST["commenti"]);
         }
-        
+                
         $servername = "localhost";
         $username = "onlinesales";
         $password = "Sale0nl1nE";
