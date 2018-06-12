@@ -4,26 +4,32 @@ include "../Classi/Cliente.php";
 include "../Classi/Ordine.php";
 include "../Classi/Tessera.php";
 include "../Classi/Foto.php";
+include "../Classi/Articolo.php";
 
 $ordine = new Ordine();
 $tessera = new Tessera();
 $foto = new Foto();
+$articolo = new Articolo();
 
 if ((!isset($_SESSION['ID_ordine']))) {
-            $_SESSION['ID_ordine'] = $ordine->getIDOrdine();
-            
-}
-$ID_ordine = $_SESSION['ID_ordine'];
+            $ID_ordine = $ordine->getIDOrdine();
+            $_SESSION['ID_ordine'] = $ID_ordine;
+}    
+$ID_ordine = $ordine->getIDOrdine();
 
 $numero_tessere = $ordine->countProduct($ID_ordine); //recupero numero tessere dell'ordine
-$tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine); //recupero la tipologia delle tessere di un ordine.
+$tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine); //recupero la tipologia delle tessere di un ordine.
 $ID_clienti = $ordine->getIDClienti_StessoOrdine($ID_ordine); //ritorna gli ID_cliente di tutti i clienti dello stesso ordine.
 $date_nascita = $ordine->getDate_StessoOrdine($ID_ordine);
 $nomi = $ordine->getName_StessoOrdine($ID_ordine);
 $cognomi = $ordine->getSurname_StessoOrdine($ID_ordine);
-$importi = $ordine->getImporto($ID_ordine);
+$importi_tessere = $ordine->getImporto_Tessera($ID_ordine);
+$importi_articoli = $ordine->getImporto_Articolo($ID_ordine);
+$ID_articoli = $ordine->getIDArticolo_StessoOrdine($ID_ordine);
+
 if ($numero_tessere == 0) {
     unset($_SESSION['prima_volta']);
+    unset($_SESSION['numero_riferimento']);
 }
 
 
@@ -57,7 +63,7 @@ if ($numero_tessere == 0) {
 
                          <th id="dati">Dati</th>
                        <th id="importo">Importo</th>
-                       <th id="elimina">Elimina</th>
+                       <th id="elimina">Rimuovi</th>
                        </tr>
                     
                 </table>
@@ -66,16 +72,19 @@ if ($numero_tessere == 0) {
                 <?php
                 
         
-        for($i = 0; $i < $numero_tessere; $i++) { //$numero_tessere al posto di 4
+        for($i = 0; $i < $numero_tessere; $i++) { 
                 $tipologia=$tessera->getTipologia(implode("", $tipologia_tessere[$i]));//
+                $tipo_articolo=$articolo->getArticolo(implode("", $ID_articoli[$i]));
                 $ID_cliente = implode("", $ID_clienti[$i]);
-                $ID_foto =  $foto->getIDFoto($_SESSION['ID_ordine'], $ID_cliente); //ritorna l'ID_foto dandogli l'ID_ordine attuale e l'ID_cliente
+                $ID_foto =  $foto->getIDFoto($ID_ordine, $ID_cliente); //ritorna l'ID_foto dandogli l'ID_ordine attuale e l'ID_cliente
                 
                 $nome = implode("", $nomi[$i]);
                 $cognome = implode("", $cognomi[$i]);
                 $data = implode("", $date_nascita[$i]);  
-                $importo = implode("", $importi[$i]);
-                $importo_totale = $importo_totale + $importo;
+                $importo_tessera = implode("", $importi_tessere[$i]);
+                $importo_articolo = implode("", $importi_articoli[$i]);
+                $importo_totale = $importo_totale + $importo_tessera + $importo_articolo;
+                
                 
                 
                 
@@ -86,12 +95,13 @@ if ($numero_tessere == 0) {
                         <form action='elimina_tessera.php' method='post'>
                         <tr>
                          <td id='foto'><img src='../Pagina_iniziale/images/$ID_foto.jpg' alt='foto' class='foto'></td>
-                         <td id='tipo'>$tipologia</td>
+                     
+                        <td id='tipo'>$tipologia + $tipo_articolo</td>
 
                          <td id='dati'> 
                             <input name='dati$i' value='$ID_cliente' hidden/>
                             $nome<br>$cognome <br>$data</td>
-                       <td id='importo'>$importo €</td>
+                       <td id='importo'>$importo_tessera + $importo_articolo €</td>
                            
                        <td id='elimina'>
                        <input name='elimina' value='$i' hidden/>
@@ -131,8 +141,8 @@ if ($numero_tessere == 0) {
                        </tr>
                     
                 </table>
-                            </div>
-                            "
+                            </div>";
+                    
                     ?>
                     
                 </div>
@@ -145,8 +155,7 @@ if ($numero_tessere == 0) {
                     </form>
                     <form action='modifica_ordine.php' method='post'>
                         <button class='bottone'>Aggiungi Tessera <i class='fa fa-plus' style='font-size:16px'></i></button>
-                    </form>
-";
+                    </form>";
                     }
                     else { echo "<form action='nuovo_ordine.php' method='post'>
                         <button class='bottone'>Nuovo Ordine <i class='fa fa-plus' style='font-size:16px'></i></button>

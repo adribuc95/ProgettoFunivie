@@ -113,15 +113,6 @@ class Cliente {
         return $this->ID_cliente;
         }
 
-
-    public function getBirthday($birthday){
-        $datetime1 = new DateTime($birthday);
-        $datetime2 = new DateTime(date('Y-m-d'));
-        $diff = $datetime1->diff($datetime2);
-
-        return $diff->format('%y');
-    }
-
     public function eliminaDaDB($ID) {
         $servername = "localhost";
         $username = "onlinesales";

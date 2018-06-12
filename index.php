@@ -9,10 +9,17 @@ session_start();
 include "Classi/Ordine.php";
 $ordine = new Ordine();
 if ((!isset($_SESSION['ID_ordine']))) {
-            $_SESSION['ID_ordine'] = $ordine->getNewIDOrdine();
-            
+            $ID_ordine = $ordine->getNewIDOrdine();
+            $_SESSION['ID_ordine'] = $ID_ordine;
 }
-$tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine);
+
+$numero_prodotti=$ordine->countProduct($ID_ordine);
+
+if($numero_prodotti == 0) {
+    unset($_SESSION['prima_volta']);
+}
+        
+$tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
 
 ?>
 <html>
@@ -24,37 +31,6 @@ $tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine);
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
     <script>
-    //funzione che gestisce il fatto del biglietto omaggio
-    function enable(element){
-        if (element === 'baccompagnati_ss') {
-            document.getElementById('colore1').style.color = 'black';
-            document.getElementById('colore2').style.color = 'gray';
-            document.getElementById(element).disabled = false;
-            document.getElementById('baccompagnati_ca').disabled = true;
-            document.getElementById('baccompagnati_ca').checked = false;
-            
-        }
-        else {
-            document.getElementById('colore2').style.color = 'black';
-            document.getElementById('colore1').style.color = 'gray';
-            document.getElementById(element).disabled = false;
-            document.getElementById('baccompagnati_ss').disabled = true;
-            document.getElementById('baccompagnati_ss').checked = false;
-        }
-        
-    } 
-    
-    //funzione che gestisce il fatto del biglietto omaggio    
-    function disable(element1, element2){
-        document.getElementById(element1).disabled = true;
-        document.getElementById(element2).disabled = true;
-        document.getElementById(element1).checked = false;
-        document.getElementById(element2).checked = false;
-        document.getElementById('colore1').style.color = 'gray';
-        document.getElementById('colore2').style.color = 'gray';
-        
-    } 
-    
     //funzione che gestisce il cambio azione tra "concludi ordine" e "aggiungi skipass"
     function chgAction( action_name ) {
         if(document.getElementById("uploaded").style.display == 'none' && document.getElementById("uploaded2").style.display == 'none') {
@@ -78,8 +54,8 @@ $tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine);
 
     //funzione che va a controllare che la data di nascita inserita sia valida per l'offerta scelta.
     function checkOfferta() {
-        var id_radio_ss = ['sseniores_ss', 'seniores_ss', 'juniores_ss', 'bambini_ss' ];
-        var id_radio_ca = ['sseniores_ca', 'seniores_ca', 'juniores_ca', 'bambini_ca' ];
+        var id_radio_ss = ['sseniores_ss', 'seniores_ss', 'juniores_ss', 'bambini_ss', 'baccompagnati_ss' ];
+        var id_radio_ca = ['sseniores_ca', 'seniores_ca', 'juniores_ca', 'bambini_ca', 'baccompagnati_ca' ];
 
 
         if ((document.getElementById(id_radio_ss[0]).checked == true)|| (document.getElementById(id_radio_ca[0]).checked == true)) {
@@ -137,6 +113,21 @@ $tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine);
                     alert("La data di nascita non coincide con l'offerta! 'BAMBINI'!"); 
                     document.getElementById(id_radio_ss[3]).checked = false;
                     document.getElementById(id_radio_ca[3]).checked = false;
+                    document.getElementById('data_nascita').value="";
+
+               }
+           }
+           else if ((document.getElementById(id_radio_ss[4]).checked == true)|| (document.getElementById(id_radio_ca[4]).checked == true)) {
+            var x = document.getElementById('data_nascita').value;
+            var anni = getAge(x);
+
+           if(anni >=5) {
+
+                    console.log(anni);
+                    console.log(x);
+                    alert("La data di nascita non coincide con l'offerta! 'BAMBINI'!"); 
+                    document.getElementById(id_radio_ss[4]).checked = false;
+                    document.getElementById(id_radio_ca[4]).checked = false;
                     document.getElementById('data_nascita').value="";
 
                }
@@ -210,11 +201,32 @@ $tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine);
                           <div class="prezzo">€ 210,00</div>
                           <input type="radio" name="tessera" value="5" id="bambini_ss" required class="selezione" />
                       </li>
-                      <li class="height1">
-                          <div class="tipologia"><b>BAMBINI ACCOMPAGNATI </b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
-                          <div class="prezzo">Omaggio</div>
-                          <input type="radio" name="tessera" value="6" id="baccompagnati_ss" disabled class="selezione"/>
-                      </li>
+                      <?php
+                        if(isset($_SESSION['numero_riferimento'])) {
+                          if (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 1) {
+                              echo "<li class='height1' id='colore2'>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='prezzo'>Omaggio</div>
+                          <input type='radio' name='tessera' value='12' id='baccompagnati_ss' required class='selezione'/>
+                      </li>";
+                          }
+                          else {
+                              echo "<li class='height1' id='colore1'>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='prezzo'>Omaggio</div>
+                          <input type='radio' name='tessera' value='12' id='baccompagnati_ss' disabled class='selezione'/>
+                      </li>";
+                          }
+                        }
+                          else {
+                              echo "<li class='height1' id='colore1'>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='prezzo'>Omaggio</div>
+                          <input type='radio' name='tessera' value='12' id='baccompagnati_ss' disabled class='selezione'/>
+                      </li>";
+                          }
+                      
+                      ?>
                     </ul>
                   </div>
                     </center>
@@ -254,11 +266,32 @@ $tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine);
                           <div class="prezzo">€ 210,00</div>
                           <input type="radio" name="tessera" value="11" id="bambini_ca" required class="selezione" />
                       </li>
-                      <li class="height1">
-                          <div class="tipologia"><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
-                          <div class="prezzo">Omaggio</div>
-                          <input type="radio" name="tessera" value="12" id="baccompagnati_ca" disabled class="selezione"/>
-                      </li>
+                      <?php
+                        if(isset($_SESSION['numero_riferimento'])) {
+                          if (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 7) {
+                              echo "<li class='height1' id='colore2'>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='prezzo'>Omaggio</div>
+                          <input type='radio' name='tessera' value='12' id='baccompagnati_ca' required class='selezione'/>
+                      </li>";
+                          }
+                          else {
+                              echo "<li class='height1' id='colore1'>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='prezzo'>Omaggio</div>
+                          <input type='radio' name='tessera' value='12' id='baccompagnati_ca' disabled class='selezione'/>
+                      </li>";
+                          }
+                        }
+                          else {
+                              echo "<li class='height1' id='colore1'>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='prezzo'>Omaggio</div>
+                          <input type='radio' name='tessera' value='12' id='baccompagnati_ca' disabled class='selezione'/>
+                      </li>";
+                          }
+                      
+                      ?>
                     </ul>
                   </div>
                     </center>
@@ -267,13 +300,15 @@ $tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine);
             </div>
         </div>
     </div>
-    
-    <div>
-        <hr>
+       
+    <div style="width: 100%;">
+         <hr>
         <center>
+            
         Non sai la differenza? Clicca qui: 
+         <hr>
         </center>
-            <hr>
+           
     </div>
         <div class="dati_utente">
             <div class="container">
@@ -304,7 +339,7 @@ $tipologia_tessere = $ordine->getTessereDiUnOrdine($ID_ordine);
     </fieldset>	
     <fieldset>
         <label>Data di nascita *</label>
-        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="DD-MM-YYYY" required min="1920-01-01" max="2017-01-01" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012]|[0-9])([-/])[0-9]{4}" style="font-family: Verdana, sans-serif;" onchange="setTimeout(checkOfferta, 8000)" >
+        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="GG/MM/YYYY" required min="1920-01-01" max="2017-01-01" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012])([-/])[0-9]{4}" style="font-family: Verdana, sans-serif;" onchange="setTimeout(checkOfferta, 5000)" >
     </fieldset>	
     <fieldset>
         <label>Indirizzo *</label>
@@ -596,32 +631,51 @@ document.getElementById("upload2").addEventListener("click", function(){
  var webcamStream;
 
  function startWebcam() {
- if (navigator.getUserMedia) {
- console.log("toto");
- navigator.getUserMedia (
+ // Older browsers might not implement mediaDevices at all, so we set an empty object first
+if (navigator.mediaDevices === undefined) {
+  navigator.mediaDevices = {};
+}
 
-    // constraints
-    {
-      video: true,
-      audio: false
-    },
+// Some browsers partially implement mediaDevices. We can't just assign an object
+// with getUserMedia as it would overwrite existing properties.
+// Here, we will just add the getUserMedia property if it's missing.
+if (navigator.mediaDevices.getUserMedia === undefined) {
+  navigator.mediaDevices.getUserMedia = function(constraints) {
 
-    // successCallback
-     function(localMediaStream) {
-      var video = document.querySelector('video');
-      video.src = window.URL.createObjectURL(localMediaStream);
-      webcamStream = localMediaStream;
-    },
+    // First get ahold of the legacy getUserMedia, if present
+    var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-    // errorCallback
-       function(err) {
-       console.log("The following error occured: " + err);
-       }
-     );
-    } else {
-    console.log("getUserMedia not supported");
-      }  
-     }
+    // Some browsers just don't implement it - return a rejected promise with an error
+    // to keep a consistent interface
+    if (!getUserMedia) {
+      return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+    }
+
+    // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+    return new Promise(function(resolve, reject) {
+      getUserMedia.call(navigator, constraints, resolve, reject);
+    });
+  }
+}
+
+navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+.then(function(stream) {
+  var video = document.querySelector('video');
+  // Older browsers may not have srcObject
+  if ("srcObject" in video) {
+    video.srcObject = stream;
+  } else {
+    // Avoid using this in new browsers, as it is going away.
+    video.src = window.URL.createObjectURL(stream);
+  }
+  video.onloadedmetadata = function(e) {
+    video.play();
+  };
+})
+.catch(function(err) {
+  console.log(err.name + ": " + err.message);
+});
+ }
 
   document.getElementById("carica").addEventListener('click', function (ev) {
                 video.pause();
@@ -688,6 +742,8 @@ document.getElementById("upload2").addEventListener("click", function(){
                $("#mostra_camera").fadeOut("slow");
             });
         });
+        
+        
   
   
   

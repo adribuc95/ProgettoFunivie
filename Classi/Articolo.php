@@ -1,14 +1,13 @@
 <?php
 
-class Tessera {
-    public $ID_tessera;
-    public $tipologia;
-    public $categoria;
+class Articolo {
+    public $ID_articolo;
+    public $articolo;
     public $importo;
     public $inizio_validità;
     public $fine_validità;
     
-    public function getTipologia($ID_tessera) {
+    public function getArticolo($ID_articolo) {
         $servername = "localhost";
         $username = "onlinesales";
         $password = "Sale0nl1nE";
@@ -20,7 +19,7 @@ class Tessera {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $query = "SELECT `tipologia` FROM `Tessera` WHERE `ID_tessera` = '$ID_tessera'";
+        $query = "SELECT `articolo` FROM `Articolo` WHERE `ID_articolo` = '$ID_articolo'";
         if (!$result = $conn->query($query)) {
             echo "Errore della query: ".$conn->error.".";
             exit();
@@ -32,7 +31,7 @@ class Tessera {
               while($row = $result->fetch_array(MYSQLI_ASSOC))
               {
                   
-                $this->tipologia = $row['tipologia'];
+                $this->articolo = $row['articolo'];
                 
               }
               // liberazione delle risorse occupate dal risultato
@@ -41,7 +40,7 @@ class Tessera {
     }
 // chiusura della connessione
         $conn->close();
-        return $this->tipologia;
+        return $this->articolo;
 }
         
     }

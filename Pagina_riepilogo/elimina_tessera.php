@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 if ($numero_tessere == 0) {
     unset($_SESSION["prima_volta"]);
+    unset($_SESSION['numero_riferimento']);
 }
 
 

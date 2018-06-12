@@ -16,12 +16,14 @@ if ((!isset($_SESSION['prima_volta']))) {
             $new_ID_ordine = $ordine->getNewIDOrdine();
             $cliente->setIDCliente_Riferimento($new_ID_cliente_riferimento);
             $ordine->setIDOrdine($new_ID_ordine);
+            $_SESSION['numero_riferimento'] = 0;
         }
         else {
             $ID_cliente_riferimento = $cliente->getIDCliente_Riferimento();
             $ID_ordine = $ordine->getIDOrdine();
             $cliente->setIDCliente_Riferimento($ID_cliente_riferimento);
             $ordine->setIDOrdine($ID_ordine);
+            $_SESSION['numero_riferimento']++;
         }
         
 header("location: https://www.funiviemadonnacampiglio.it/onlinesale/");
@@ -40,9 +42,6 @@ $cliente->setIDCliente($new_ID_cliente);
 $cliente->salvaDati();
 $cliente->mantieniDatiForm();
 
-
-//recupero l'ID_Cliente attuale e l'età
-$età = $cliente->getBirthday($cliente->data_nascita);
 
 
 $foto->setIDCliente($new_ID_cliente);

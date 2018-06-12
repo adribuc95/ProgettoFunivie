@@ -191,7 +191,7 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
         
         //ritorna un array contenente gli ID_tessera presenti in un ordine.
         
-        public function getTessereDiUnOrdine($ID_ordine) { 
+        public function getTessere_StessoOrdine($ID_ordine) { 
             $servername = "localhost";
             $username = "onlinesales";
             $password = "Sale0nl1nE";
@@ -230,7 +230,7 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
                   
         //vado a prendere i singoli importi facendo una join di ORDINE e TESSERA
                   //da sistemare!!
-        public function getImporto($ID_ordine) { 
+        public function getImporto_Tessera($ID_ordine) { 
             $servername = "localhost";
             $username = "onlinesales";
             $password = "Sale0nl1nE";
@@ -262,18 +262,36 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
             return $importi;
         }
         
-        //da sistemare --> calcola l'importo totale di un ordine
-        public function getImportoTotale() { 
-            $importo_totale = '';
-            for ($i = 0; $i < $this->numero_prodotti; $i++) {
-                if(implode("", $this->new_array[$i]) == 1) {
-                    $importo_totale = $importo_totale + getImporto($this->ID_ordine);
-                } 
-                else if(implode("", $this->new_array[$i]) == 2) {
-                    $importo_totale = $importo_totale + 540;
+        public function getImporto_Articolo($ID_ordine) { 
+            $servername = "localhost";
+            $username = "onlinesales";
+            $password = "Sale0nl1nE";
+            $dbname = "fmc-db-onlinesales";
+
+            // Create connection
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            } 
+            $sql = "SELECT `importo` FROM `Articolo` INNER JOIN `Ordine` ON Articolo.ID_articolo = Ordine.ID_articolo AND Ordine.ID_ordine = '$ID_ordine'";
+            if (!$result = $conn->query($sql)) {
+                echo "Errore della query: ".$conn->error.".";
+                exit();
+                }
+            else{
+                // conteggio dei record
+                if($result->num_rows > 0) {
+                  // conteggio dei record restituiti dalla query
+                  while($row = $result->fetch_array(MYSQLI_ASSOC))
+                  {
+                      $importi[] = $row;
+                  }
+                  // liberazione delle risorse occupate dal risultato
+                  $result->close();
                 }
             }
-            return $importo_totale;
+            return $importi;
         }
         
         //ritorna gli ID_cliente dei clienti dello stesso ordine
@@ -416,6 +434,40 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
             }
         }
             return $data_nascita;
+        }
+        
+        public function getIDArticolo_StessoOrdine($ID_ordine) {
+            $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT `ID_articolo` FROM `Ordine` WHERE `ID_ordine` = '$ID_ordine'";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $ID_articolo[] = $row;
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+        }
+            return $ID_articolo;
         }
 }
 

@@ -101,10 +101,12 @@ and open the template in the editor.
         .column1 {
             width: 50%;
             float:left;
+            padding-bottom: 10px;
         }
         .column2 {
             width: 50%;
             float: right;
+            padding-bottom: 10px;
         }
         .column3 {
             width: 60%;
@@ -125,7 +127,7 @@ and open the template in the editor.
                 width: 100%;
                 float: none;
                 border-bottom: 1px solid #eee;
-                padding-bottom: 20px;
+                padding-bottom: 10px;
             }
             .column2 {
                 margin-top: 10px;
@@ -233,6 +235,13 @@ and open the template in the editor.
         align-content: center;
     }
 }
+
+.testo {
+    
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .tipologia {
     float: left;
     overflow: hidden;
@@ -261,6 +270,10 @@ and open the template in the editor.
 
 #colore1 {
     color: gray;
+}
+
+#colore2 {
+    border: activeborder medium solid;
 }
 
 
