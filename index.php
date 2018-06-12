@@ -157,6 +157,8 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
     </script>
 
     
+
+    
 </head>
 <body>
  
@@ -306,11 +308,25 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
          <hr>
         <center>
             
-        Non sai la differenza? Clicca qui: 
+            Non sai la differenza? Clicca qui:
+            <!-- riferimento a MODAL1 --> 
+            <a href="#openModal2"><i class="fa fa-info-circle" style="font-size:20px"></i></a>
+         <!-- MODAL1 speigazione differenze --> 
+        <div id="openModal2" class="modalDialog">
+            <div>
+		<a href="#close" title="Close" class="chiudi">X</a>
+		<ul class="price">
+                <li class="header">Differenze</li>
+                </ul>
+		<p>we</p>
+		<p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
+            </div>
+        </div>
          <hr>
         </center>
-           
+        
     </div>
+        
         <div class="dati_utente">
             <div class="container">
                 <div class="column1" style="text-align: center; align-content:center;">
@@ -509,7 +525,21 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
     <textarea name="commenti" id="commenti" placeholder="" maxlength="100" wrap="soft" style="margin-left: 38px;" value="<?php if (isset($_SESSION['commenti'])&& $_SESSION['commenti'] <> '') {    echo $_SESSION['commenti'];}?>"/></textarea>
 	</fieldset>
         <fieldset>
-            <label>Desideri l'assicurazione?</label>
+            <label>Desideri l'assicurazione? 
+                <!-- riferimento a MODAL2 --> 
+                <a href="#openModal"><i class="fa fa-info-circle" style="font-size:20px"></i></a>   
+            </label>
+            <!-- MODAL2 spiegazione assicurazione -->
+            <div id="openModal" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="chiudi">X</a>
+                        <ul class="price">
+                        <li class="header">Assicurazione</li>
+                        </ul>
+                        <p>This is a sample modal box that can be created using the powers of CSS3.</p>
+                        <p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
+                    </div>
+                </div>
             Sì <input type="radio" name="assicurazione" value="1" id="agree" required/>
             No <input type="radio" name="assicurazione" value="0" required/>
            </fieldset>
@@ -523,9 +553,6 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
 
                 </div>
             </div>
-
-        
-       
     <section class="column3">
         <ul class="price">
         <li class="header">Foto</li>

@@ -118,7 +118,19 @@ if ($numero_tessere == 0) {
                     
                 <tr>
                          <th id="tot_articoli">Totale Articoli</th>
-                         <th id="tot_cauzione">Totale Cauzione</th>
+                         <th id="tot_cauzione">Totale Cauzione <a href="#openModal"><i class="fa fa-info-circle" style="font-size:20px;"></i></a>
+         <!-- MODAL1 speigazione cauzione --> 
+        </th>
+        <div id="openModal" class="modalDialog">
+            <div>
+		<a href="#close" title="Close" class="chiudi">X</a>
+		<ul class="price">
+                <li class="header">Cauzione</li>
+                </ul>
+		<p>we</p>
+		<p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
+            </div>
+        </div>
 
                          <th id="tot_importo">Totale importo</th>
                        </tr>
