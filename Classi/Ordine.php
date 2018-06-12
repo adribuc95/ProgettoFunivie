@@ -53,7 +53,6 @@ class Ordine {
         $this->ID_cliente = $ID_cliente;
     }
     
-  
     
     public function eliminaDaDB($ID) { //elimina la riga corrispondente a $ID
         $servername = "localhost";

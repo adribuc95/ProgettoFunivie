@@ -11,11 +11,8 @@ $tessera = new Tessera();
 $foto = new Foto();
 $articolo = new Articolo();
 
-if ((!isset($_SESSION['ID_ordine']))) {
-            $ID_ordine = $ordine->getIDOrdine();
-            $_SESSION['ID_ordine'] = $ID_ordine;
-}    
-$ID_ordine = $ordine->getIDOrdine();
+    
+$ID_ordine = $_SESSION['ID_ordine'];
 
 $numero_tessere = $ordine->countProduct($ID_ordine); //recupero numero tessere dell'ordine
 $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine); //recupero la tipologia delle tessere di un ordine.

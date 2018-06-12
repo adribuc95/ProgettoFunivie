@@ -153,6 +153,7 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
             return false;
     }
     }
+    
     </script>
 
     
@@ -339,7 +340,7 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
     </fieldset>	
     <fieldset>
         <label>Data di nascita *</label>
-        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="GG/MM/YYYY" required min="1920-01-01" max="2017-01-01" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012])([-/])[0-9]{4}" style="font-family: Verdana, sans-serif;" onchange="setTimeout(checkOfferta, 5000)" >
+        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="GG-MM-YYYY" required min="1920-01-01" max="2017-01-01" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012])([-/])[0-9]{4}" style="font-family: Verdana, sans-serif;" onchange="setTimeout(checkOfferta, 5000)" >
     </fieldset>	
     <fieldset>
         <label>Indirizzo *</label>
