@@ -8,12 +8,83 @@ and open the template in the editor.
     Author     : adribuc
 */
 
- body {
-      margin: 0; padding: 0;
-      font-size: 12px;
-      font-family: "Verdana", sans-serif;
-      color: black;
+@media all and (min-width:1100px){
+    body {
+      font-size: 16px;
+      
     }
+    
+    .input {
+        height: 20px;
+        font-size: 14px;
+    }
+    .header {
+        font-size: 35px;
+        font-weight: 800;
+    }
+}
+
+
+
+@media all and (max-width:1100px) and (min-width:600px){
+     
+ body {
+      font-size: 14px;
+     
+    }
+    
+    .input {
+        height: 15px;
+        font-size: 12px;
+    }
+    .header {
+        font-size: 30px;
+    }
+    }
+    @media all and (max-width:600px) and (min-width:400px){
+     
+ body {
+      font-size: 12px;
+      
+    }
+    
+    .input {
+        height: 12px;
+        font-size: 10px;
+    }
+    .header {
+        font-size: 25px;
+    }
+    
+    
+    }
+    
+    @media all and (max-width:400px) {
+        body {
+      font-size: 10px;
+
+    }
+    
+    .input {
+        height: 10px;
+        font-size: 9px;
+    }
+    .header {
+        font-size: 20px;
+    }
+    }
+    
+    table {
+        font-size:calc(10px + 0.7vw);
+        
+    }
+    body {
+       font-family: 'Montserrat', sans-serif;
+       
+       
+       
+    }
+    
     section {
       
       height: 100%;
@@ -49,20 +120,9 @@ and open the template in the editor.
       padding: 10px;
       color: #444;
     }
-    
-    
-    .firstSection {
-        height: 100%;
-    }
-    
-    .firstSection:hover {
-        box-shadow: 2px 2px 2px 2px rgba(0.2,0.2,0.2,0.2);
-    }
-    
-    
-    
+     
     .note {
-      font-size: 11px;
+      
       font-style: italic;
     }
     .noBottomBorder {
@@ -86,10 +146,8 @@ and open the template in the editor.
         list-style-type: none;
         background-color: #1F3284;
         color: white;
-        font-size: 25px;
-        border-radius: 10px 10px 10px 10px;
-        
-        min-height: 20px;
+        border-radius: 10px 10px 10px 10px; 
+       
         
     }
     
@@ -97,22 +155,30 @@ and open the template in the editor.
             width: 50%;
             height: 50%;
             max-height: 100px;
+            min-height: 100px;
         }
+        
+        #tessere {
+           border-top: #eee solid thin; 
+           margin-bottom: 10px; 
+        }
+        
         .column1 {
+            padding-top: 10px;
             width: 50%;
             float:left;
             padding-bottom: 10px;
         }
         .column2 {
+            padding-top: 10px;
             width: 50%;
             float: right;
             padding-bottom: 10px;
         }
         .column3 {
             width: 60%;
-            margin-top: 500px;
-            align-content: center;
-            
+            padding-top: 1320px;
+            align-content: center; 
         }
         .column4 {
             width: 60%;
@@ -122,7 +188,7 @@ and open the template in the editor.
         #commenti {
         width: 60%;
     }
-        @media screen and (max-width: 900px) {
+        @media screen and (max-width: 950px) {
             .column1{
                 width: 100%;
                 float: none;
@@ -135,23 +201,17 @@ and open the template in the editor.
                 float: none;
             }
             .column3 {
-                margin-top: 10px;
+                padding-top: 10px;
                 width: 80%;
                 float: none;
+               
             }
             .column4 {
                 margin-top: 10px;
                 width: 80%;
                 float: none;
             }
-            .firstSection {
-                
-                width: 80%;
-                height: 100%;
-                float: none;
-                margin-right: 0;
-                margin-left: 0;
-    }
+            
     
     #video {
         width: 100%;
@@ -162,9 +222,7 @@ and open the template in the editor.
         height: 100%;
     }
     
-    #commenti {
-        width: 50%;
-    }
+    
     #immagine {
         width: 100%;
         height: 100%;
@@ -195,13 +253,12 @@ and open the template in the editor.
 .price .header {
     background-color: #1F3284;
     color: white;
-    font-size: 25px;
     border-radius: 10px 10px 10px 10px;
 }
 
 .price li {
     border-bottom: 1px solid #eee;
-    min-height: 20px;
+    
     padding: 20px;
     text-align: center;
     
@@ -214,7 +271,7 @@ and open the template in the editor.
 
 .price .grey {
     background-color: #1F3284;
-    font-size: 20px;
+    
     border-radius: 10px 10px 10px 10px;
 }
 
@@ -225,7 +282,7 @@ and open the template in the editor.
     padding: 10px 25px;
     text-align: center;
     text-decoration: none;
-    font-size: 18px;
+   
     border-radius: 10px 10px 10px 10px;
 }
 
@@ -269,11 +326,11 @@ and open the template in the editor.
 }
 
 #colore1 {
-    color: gray;
+    color: #ccc;
 }
 
 #colore2 {
-    border: activeborder medium solid;
+   color: #0099ff;
 }
 
 
@@ -296,7 +353,7 @@ label {
         }
         .cambuttons button {
             border-radius: 15px;
-            font-size: 18px;
+           
         }
         .cambuttons button:hover {
             cursor: pointer;
@@ -305,6 +362,7 @@ label {
         }
         
         .bottone{
+            font-size:calc(10px + 0.7vw);
     overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -314,27 +372,26 @@ label {
         border-radius:2em;
         box-sizing: border-box;
         text-decoration:none;
-        font-family:'Verdana',sans-serif;
+        font-family: 'Montserrat', sans-serif;
         font-weight:500;
         color:#FFFFFF;
         background-color:#1F3284;
         text-align:center;
         transition: all 0.2s;
         height: 40px;
-        width: 20%;
         min-width: 100px;
        
         
         }
     .bottone:hover{
-     background-color: activeborder;
-     color: white;
+     background-color: #FFFFFF;
+     color: #1F3284;
     }
-    @media all and (max-width:925px) and (min-width:500px){
+    @media all and (min-width:500px){
      .bottone {
       display:black;
       margin:0.2em auto;
-      width: 50%;
+      width: 40%;
      }
     }
     @media all and (max-width:500px){

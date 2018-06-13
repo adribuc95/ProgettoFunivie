@@ -7,6 +7,6 @@ $filteredData = explode(',', $rawData);
 $unencoded = base64_decode($filteredData[1]);
 $userid  = session_id();
 // name & save the image file
-$fp = fopen('images/'.$userid.'.jpg', 'w');
+$fp = fopen('../immagini_skipass/'.$userid.'.jpg', 'w');
 fwrite($fp, $unencoded);
 fclose($fp);

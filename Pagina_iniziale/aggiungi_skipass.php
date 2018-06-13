@@ -16,6 +16,7 @@ if ((!isset($_SESSION['prima_volta']))) {
             $new_ID_ordine = $ordine->getNewIDOrdine();
             $cliente->setIDCliente_Riferimento($new_ID_cliente_riferimento);
             $ordine->setIDOrdine($new_ID_ordine);
+            $_SESSION['ID_ordine'] = $new_ID_ordine;
             $_SESSION['numero_riferimento'] = 0;
         }
         else {

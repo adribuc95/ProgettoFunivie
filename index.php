@@ -7,20 +7,28 @@ and open the template in the editor.
 <?php
 session_start();
 include "Classi/Ordine.php";
+include "Classi/Tessera.php";
 $ordine = new Ordine();
+$tessera = new Tessera();
 if ((!isset($_SESSION['ID_ordine']))) {
-            $ID_ordine = $ordine->getNewIDOrdine();
-            $_SESSION['ID_ordine'] = $ID_ordine;
+           $numero_prodotti = 0;
 }
 
-$numero_prodotti=$ordine->countProduct($ID_ordine);
+else if(!isset($_SESSION['prima_volta'])) {
+    unset($_SESSION['ID_ordine']);
+}
+else {
+    $ID_ordine = $_SESSION['ID_ordine'];
+    $numero_prodotti=$ordine->countProduct($ID_ordine);
+}
+
+$importi = $tessera->getImporti();
 
 if($numero_prodotti == 0) {
     unset($_SESSION['prima_volta']);
 }
         
 $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
-
 ?>
 <html>
     <head>
@@ -29,6 +37,7 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="Pagina_iniziale/CSS/CSS.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> 
         
     <script>
     //funzione che gestisce il cambio azione tra "concludi ordine" e "aggiungi skipass"
@@ -51,6 +60,23 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
         }
         return age;
 }
+
+function getLimitDate(age) {
+        var date = new Date();
+        var year = date.getFullYear() - age;
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+
+        if (day < 10) {
+            day = '0' + day;
+        }
+        if (month < 10) {
+            month = '0' + month;
+        }
+        
+    var formattedDate = day + '/' + month + '/' + year;
+    return formattedDate;
+    }
 
     //funzione che va a controllare che la data di nascita inserita sia valida per l'offerta scelta.
     function checkOfferta() {
@@ -148,12 +174,11 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
     }
     
     function checkFoto() {
-        if(document.getElementById("uploaded").style.display == 'none' && document.getElementById("uploaded2").style.display == 'none') {
+        if((document.getElementById("uploaded").style.display == 'none' && document.getElementById("uploaded2").style.display == 'none')) {
             alert("manca la foto!!");
             return false;
     }
     }
-    
     </script>
 
     
@@ -162,17 +187,30 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
 </head>
 <body>
  
-    <button type="button" onClick="window.location.href='https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php'" style="position: fixed; margin-top: 500px;  width: 50px; align-content: center;
-            height: 50px;"><i style="font-size:35px; color: #1F3284" class="fa">&#xf07a;</i></button>
+    <button type="button" onClick="window.location.href='https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php'" style="position: fixed;  float:left; width: 50px; align-content: center; color:#1F3284; font-weight: 800; border-radius: 10px 10px 10px 10px; height: 50px;">
+        <?php echo "$numero_prodotti";?><i style="font-size:25px; color: #1F3284; " class="fa">&#xf07a;</i></button>
   
     <form method="post" action="Pagina_iniziale/mantieni_dati.php" name="dati_utente">
-               <div id="tessere" style="border-top: #eee solid thin; ">
+               <div id="tessere">
         <br>
-        <center><b>Seleziona il prodotto: *</b></center>
+        <center><b>Seleziona il prodotto: * <a href="#openModal2"><i class="fa fa-info-circle" style="font-size:20px"></i></a>
+         <!-- MODAL1 speigazione differenze --> 
+        </b>
+        <div id="openModal2" class="modalDialog">
+            <div>
+		<a href="#close" title="Close" class="chiudi">X</a>
+		<ul class="price">
+                <li class="header">Differenze</li>
+                </ul>
+		<p>we</p>
+                <p>spiegazione differenze campiglio/skirama</p>
+            </div>
+        </div>
+        </center>
         <div class="container">
             <div class="column1" style="text-align: center">
                 <div>
-                    <img src="Pagina_iniziale/Skirama.jpg" alt="Skirama" class="immagine" style="min-height: 100px;">
+                    <img src="Pagina_iniziale/Skirama.jpg" alt="Skirama" class="immagine" style="max-width: 250px">
                 </div>
                 <div class="descrizione">
                     <center>
@@ -181,41 +219,41 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
                       <li class="header">Superskirama</li>
                       <li>
                           <div class="tipologia"><b>ADULTI</b><br>Ski pass a cui può essere associato <br>un BAMBINO ACCOMPAGNATO.</div>
-                          <div class="prezzo">€ 640,00</div>
+                          <div class="prezzo"><?php $importo[0] = implode("", $importi[0]); echo "€ $importo[0],00";?></div>
                           <input type="radio" name="tessera" value="1" id="adulti_ss" required class="selezione" />
                       </li>
                       <li id="sseniores_ss_c">
-                          <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del 30.11.1942</div>
-                          <div class="prezzo">€ 500,00</div>
+                          <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del <script>document.write(getLimitDate(76));</script></div>
+                          <div class="prezzo"><?php $importo[1] = implode("", $importi[1]); echo "€ $importo[1],00";?></div>
                           <input type="radio" name="tessera" value="2" id="sseniores_ss" required class="selezione" />
                       </li>
                       <li id="seniores_ss_c">
-                            <div class="tipologia"><b>SENIORES</b> <br> nati prima del 30.11.1952</div>
-                          <div class="prezzo">€ 550,00</div>
+                            <div class="tipologia"><b>SENIORES</b> <br> nati prima del <script>document.write(getLimitDate(66));</script></div>
+                          <div class="prezzo"><?php $importo[2] = implode("", $importi[2]); echo "€ $importo[2],00";?></div>
                           <input type="radio" name="tessera" value="3" id="seniores_ss" required class="selezione" />
                       </li>
                       <li id="juniores_ss_c">
-                           <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il 30.11.2001</div>
-                          <div class="prezzo">€ 500,00</div>
+                           <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il <script>document.write(getLimitDate(10));</script></div>
+                          <div class="prezzo"><?php $importo[3] = implode("", $importi[3]); echo "€ $importo[3],00";?></div>
                           <input type="radio" name="tessera" value="4" id="juniores_ss" required class="selezione" />
                       </li>
                       <li id="bambini_ss_c">
-                          <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il 30.11.2009</div>
-                          <div class="prezzo">€ 210,00</div>
+                          <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il <script>document.write(getLimitDate(5));</script></div>
+                          <div class="prezzo"><?php $importo[4] = implode("", $importi[4]); echo "€ $importo[4],00";?></div>
                           <input type="radio" name="tessera" value="5" id="bambini_ss" required class="selezione" />
                       </li>
                       <?php
                         if(isset($_SESSION['numero_riferimento'])) {
                           if (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 1) {
                               echo "<li class='height1' id='colore2'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
                           <div class='prezzo'>Omaggio</div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ss' required class='selezione'/>
                       </li>";
                           }
                           else {
                               echo "<li class='height1' id='colore1'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
                           <div class='prezzo'>Omaggio</div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ss' disabled class='selezione'/>
                       </li>";
@@ -223,7 +261,7 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
                         }
                           else {
                               echo "<li class='height1' id='colore1'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
                           <div class='prezzo'>Omaggio</div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ss' disabled class='selezione'/>
                       </li>";
@@ -246,41 +284,41 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
                       <li class="header">Campiglio</li>
                       <li>
                           <div class="tipologia"><b>ADULTI</b><br>Ski pass a cui può essere associato <br>un BAMBINO ACCOMPAGNATO.</div>
-                          <div class="prezzo">€ 640,00</div>
+                          <div class="prezzo"><?php $importo[6] = implode("", $importi[6]); echo "€ $importo[6],00";?></div>
                           <input type="radio" name="tessera" value="7" id="adulti_ca" required class="selezione" />
                       </li>
                       <li id="sseniores_ca_c">
-                          <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del 30.11.1942</div>
-                          <div class="prezzo">€ 500,00</div>
+                          <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del <script>document.write(getLimitDate(76));</script></div>
+                          <div class="prezzo"><?php $importo[7] = implode("", $importi[7]); echo "€ $importo[7],00";?></div>
                           <input type="radio" name="tessera" value="8" id="sseniores_ca" required class="selezione" />
                       </li>
                       <li id="seniores_ca_c">
-                          <div class="tipologia"><b>SENIORES</b> <br> nati prima del 30.11.1952</div>
-                          <div class="prezzo">€ 550,00</div>
+                          <div class="tipologia"><b>SENIORES</b> <br> nati prima del <script>document.write(getLimitDate(66));</script></div>
+                          <div class="prezzo"><?php $importo[8] = implode("", $importi[8]); echo "€ $importo[8],00";?></div>
                           <input type="radio" name="tessera" value="9" id="seniores_ca" required class="selezione" />
                       </li>
                       <li id="juniores_ca_c">
-                          <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il 30.11.2001</div>
-                          <div class="prezzo">€ 500,00</div>
+                          <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il <script>document.write(getLimitDate(10));</script></div>
+                          <div class="prezzo"><?php $importo[9] = implode("", $importi[9]); echo "€ $importo[9],00";?></div>
                          <input type="radio" name="tessera" value="10" id="juniores_ca" required class="selezione" />
                       </li>
                       <li id="bambini_ca_c">
-                          <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il 30.11.2009</div>
-                          <div class="prezzo">€ 210,00</div>
+                          <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il <script>document.write(getLimitDate(5));</script></div>
+                          <div class="prezzo"><?php $importo[10] = implode("", $importi[10]); echo "€ $importo[10],00";?></div>
                           <input type="radio" name="tessera" value="11" id="bambini_ca" required class="selezione" />
                       </li>
                       <?php
                         if(isset($_SESSION['numero_riferimento'])) {
                           if (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 7) {
                               echo "<li class='height1' id='colore2'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
                           <div class='prezzo'>Omaggio</div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ca' required class='selezione'/>
                       </li>";
                           }
                           else {
                               echo "<li class='height1' id='colore1'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
                           <div class='prezzo'>Omaggio</div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ca' disabled class='selezione'/>
                       </li>";
@@ -288,7 +326,7 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
                         }
                           else {
                               echo "<li class='height1' id='colore1'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il 30.11.2009 <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
                           <div class='prezzo'>Omaggio</div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ca' disabled class='selezione'/>
                       </li>";
@@ -304,29 +342,6 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
         </div>
     </div>
        
-    <div style="width: 100%;">
-         <hr>
-        <center>
-            
-            Non sai la differenza? Clicca qui:
-            <!-- riferimento a MODAL1 --> 
-            <a href="#openModal2"><i class="fa fa-info-circle" style="font-size:20px"></i></a>
-         <!-- MODAL1 speigazione differenze --> 
-        <div id="openModal2" class="modalDialog">
-            <div>
-		<a href="#close" title="Close" class="chiudi">X</a>
-		<ul class="price">
-                <li class="header">Differenze</li>
-                </ul>
-		<p>we</p>
-		<p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
-            </div>
-        </div>
-         <hr>
-        </center>
-        
-    </div>
-        
         <div class="dati_utente">
             <div class="container">
                 <div class="column1" style="text-align: center; align-content:center;">
@@ -339,7 +354,7 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
     
     <fieldset>
         <label>Titolo *</label>
-        <select id="titolo" name="titolo" required style="height: 25px; margin-left: 38px;">
+        <select id="titolo" name="titolo" required style="height: 25px;">
           <option value="" selected disabled hidden> </option>
           <option value="signor">Sig.</option>
           <option value="signora">Sig.ra</option>
@@ -348,15 +363,15 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
     </fieldset>
     <fieldset>
         <label>Nome *</label>
-        <input class="input" name="nome" id="nome" type="text" required  pattern="[a-zA-z]+" value="<?php if (isset($_SESSION['nome']) && $_SESSION['nome'] <> '') {    echo $_SESSION['nome'];}   ?>">
+        <input class="input" name="nome" id="nome" type="text" required   value="<?php if (isset($_SESSION['nome']) && $_SESSION['nome'] <> '') {    echo $_SESSION['nome'];}   ?>">
     </fieldset>  
     <fieldset>
         <label>Cognome *</label>
-        <input class="input" name="cognome" id="cognome" type="text" required  pattern="[a-zA-z]+" value="<?php if (isset($_SESSION['cognome']) && $_SESSION['cognome'] <> '') {    echo $_SESSION['cognome'];}   ?>">
+        <input class="input" name="cognome" id="cognome" type="text" required   value="<?php if (isset($_SESSION['cognome']) && $_SESSION['cognome'] <> '') {    echo $_SESSION['cognome'];}   ?>">
     </fieldset>	
     <fieldset>
         <label>Data di nascita *</label>
-        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="GG-MM-YYYY" required min="1920-01-01" max="2017-01-01" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012])([-/])[0-9]{4}" style="font-family: Verdana, sans-serif;" onchange="setTimeout(checkOfferta, 5000)" >
+        <input class="input" type="date" id="data_nascita" name="data_nascita" placeholder="GG-MM-YYYY" required min="1920-01-01"  pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])([-/])(0[1-9]|1[012])([-/])[0-9]{4}"  onchange="setTimeout(checkOfferta, 5000)" >
     </fieldset>	
     <fieldset>
         <label>Indirizzo *</label>
@@ -370,9 +385,9 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
         <label>CAP *</label>
         <input class="input" name='CAP' required pattern="[0-9]{5}" placeholder='es: 38086' value="<?php if (isset($_SESSION['CAP']) && $_SESSION['CAP'] <> '') {    echo $_SESSION['CAP'];}   ?>"> 
     </fieldset>
-    <fieldset style="border-bottom: none; ">
+    <fieldset >
     <label>Provincia *</label>
-        <select id="provincia" name="provincia" required style=" margin-left: 38px; height: 25px;">
+        <select id="provincia" name="provincia" required style="height: 25px;">
             <option value="" selected disabled hidden> </option>
             <option value="ag">Agrigento</option>
             <option value="al">Alessandria</option>
@@ -536,9 +551,8 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
                         <ul class="price">
                         <li class="header">Assicurazione</li>
                         </ul>
-                        <p>This is a sample modal box that can be created using the powers of CSS3.</p>
-                        <p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
-                    </div>
+                        <p>spiegazione assicurazione</p>
+                        </div>
                 </div>
             Sì <input type="radio" name="assicurazione" value="1" id="agree" required/>
             No <input type="radio" name="assicurazione" value="0" required/>
@@ -563,7 +577,9 @@ $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
         <button type="button" class="bottone" onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam <i class="fa fa-video-camera" style="font-size:16px"></i></button>
         <button type="button" class="bottone" id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica <i class="fa fa-camera" style="font-size:16px"></i></button>
         </div>
-        
+        <div id='no_foto1'>
+        Ho già la foto dagli anni scorsi.<input type="checkbox" name="checkbox" value="check" id="no_foto" onclick='if(document.getElementById("no_foto").checked == true) {nascondi("mostra_camera2"); nascondi("mostra_camera"); nascondi("webcam"); nascondi("carica");} else {mostra("webcam"); mostra("carica");}'/>
+        </div>
         <div id='mostra_camera2' style='display: none; margin-top: 10px; border: #eee 1px solid;'>
             <div>
                 <button type="button" class="btn" hidden></button>
@@ -618,6 +634,8 @@ document.getElementById("upload2").addEventListener("click", function(){
                 $("#upload2").hide();
                 $("#webcam").hide();
                 $("#carica").hide();
+                $("#no_foto").hide();
+                $("#no_foto1").hide();
                 $("#mostra_camera2").fadeOut("slow");
             });
         });
@@ -767,6 +785,8 @@ navigator.mediaDevices.getUserMedia({ audio: true, video: true })
                 $("#canvas").hide();
                 $("#webcam").hide();
                 $("#carica").hide();
+                $("#no_foto").hide();
+                $("#no_foto1").hide();
                $("#mostra_camera").fadeOut("slow");
             });
         });
@@ -789,29 +809,28 @@ navigator.mediaDevices.getUserMedia({ audio: true, video: true })
             <div style="border-bottom: 1px solid #eee;">
                 <label class="privacy"> Dichiaro di aver letto e compreso l’informativa (link all’informativa) di cui all’art 13
 Regolamento (UE) 679/2016 e autorizzo il trattamento dei miei dati personali</label>
-            
-                Do il consenso <input type="radio" name="checkbox" value="check" id="agree" required/>
-            Nego il consenso <input type="radio" name="checkbox" value="check" checked/>
+                Do il consenso <input type="checkbox" name="checkbox" value="check" id="agree1" required/>
             </div>
             <div style="margin-top:10px; border-bottom: 1px solid #eee;">
             <label class="privacy"> Dichiaro inoltre di avere attentamente letto l&#39;informativa e di prestare il mio consenso al
 trattamento ed alla comunicazione dei miei dati personali anche per le finalità di
 marketing</label>
-            Do il consenso <input type="radio" name="checkbox2" value="check" id="agree" required/>
-            Nego il consenso <input type="radio" name="checkbox2" value="check" checked/>
+            Do il consenso <input type="radio" name="checkbox2" value="check" id="agree2" required/>
+            Nego il consenso <input type="radio" name="checkbox2" value="check"/>
             </div>
             <div style="margin-top:10px;">
             <label class="privacy"> accetto l'iscrizione alla newsletter</label>
-            Sì <input type="radio" name="checkbox3" value="check" id="agree" required/>
-            No <input type="radio" name="checkbox3" value="check" checked/>
+            Sì <input type="radio" name="checkbox3" value="check" id="agree3" required/>
+            No <input type="radio" name="checkbox3" value="check"/>
             </div>
 	 </fieldset>
-    </section>
+    
          <center>
         
             <button class="bottone" onclick="chgAction('Pagina_iniziale/concludi_ordine.php')" onsubmit="return checkFoto();">Concludi Ordine <i class="fa fa-check" style="font-size:16px"></i></button>
-            <button  class="bottone" id="final_button" onclick="chgAction('Pagina_iniziale/aggiungi_skipass.php')" onsubmit="return checkFoto();">Aggiungi un altro skipass <i class="fa fa-plus" style="font-size:16px"></i></button>
+            <button  class="bottone" id="final_button" onclick="chgAction('Pagina_iniziale/aggiungi_skipass.php')" onsubmit="return checkFoto();">Aggiungi skipass <i class="fa fa-plus" style="font-size:16px"></i></button>
             </center>
+        </section>
 </form>
     </body>
 </html>

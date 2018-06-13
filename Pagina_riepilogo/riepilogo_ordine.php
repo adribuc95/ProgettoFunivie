@@ -10,9 +10,13 @@ $ordine = new Ordine();
 $tessera = new Tessera();
 $foto = new Foto();
 $articolo = new Articolo();
-
-    
-$ID_ordine = $_SESSION['ID_ordine'];
+$_SESSION['firefox'] = false;
+if(!isset($_SESSION['ID_ordine']) && (!isset($_SESSION['firefox']))) {   
+$ID_ordine = $ordine->getIDOrdine();
+}
+else {
+    $ID_ordine = $_SESSION['ID_ordine'];
+}
 
 $numero_tessere = $ordine->countProduct($ID_ordine); //recupero numero tessere dell'ordine
 $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine); //recupero la tipologia delle tessere di un ordine.
@@ -36,9 +40,10 @@ if ($numero_tessere == 0) {
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
         <link href="../Pagina_iniziale/CSS/CSS.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+         <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> 
+        
         
     </head>
     <body>
@@ -51,24 +56,14 @@ if ($numero_tessere == 0) {
                 <li class="header"><i style="font-size:35px;" class="fa">&#xf07a;</i> Riepilogo Ordine</li>
                 </ul>
             </div>
-               <div class='column5' style="height: 30px;">
-                <table style="width:100%;">
-                    
-                <tr>
-                         <th id="foto">Foto</th>
-                         <th id="tipo">Tipo</th>
-
-                         <th id="dati">Dati</th>
-                       <th id="importo">Importo</th>
-                       <th id="elimina">Rimuovi</th>
-                       </tr>
-                    
-                </table>
-               </div>
+               
                 
                 <?php
                 
-        
+        if ($numero_tessere == 0) {
+            echo "<center><div>Nessuna articolo selezionato</div></center>";
+        }
+        else {
         for($i = 0; $i < $numero_tessere; $i++) { 
                 $tipologia=$tessera->getTipologia(implode("", $tipologia_tessere[$i]));//
                 $tipo_articolo=$articolo->getArticolo(implode("", $ID_articoli[$i]));
@@ -91,16 +86,31 @@ if ($numero_tessere == 0) {
                     <table style='width:100%; text-align: center;'>
                         <form action='elimina_tessera.php' method='post'>
                         <tr>
-                         <td id='foto'><img src='../Pagina_iniziale/images/$ID_foto.jpg' alt='foto' class='foto'></td>
+                         <td id='foto'><img src='../immagini_skipass/$ID_foto.jpg' alt='foto' class='foto'></td>
                      
-                        <td id='tipo'>$tipologia + $tipo_articolo</td>
+                        <td id='tipo'>$tipologia ";
+                    if($importo_articolo == 0) {
+                        echo"</td>";
+                    }
+                    else {
+                        echo " <hr>$tipo_articolo</td>";
+                    }
+                
+                    echo "
 
                          <td id='dati'> 
                             <input name='dati$i' value='$ID_cliente' hidden/>
                             $nome<br>$cognome <br>$data</td>
-                       <td id='importo'>$importo_tessera + $importo_articolo €</td>
-                           
-                       <td id='elimina'>
+                       <td id='importo'>$importo_tessera,00 €"; 
+            
+            if($importo_articolo == 0) {
+                echo"</td>";
+            }
+            else {
+            echo " <hr> $importo_articolo,00 €</td>";
+                }
+                
+            echo "     <td id='elimina'>
                        <input name='elimina' value='$i' hidden/>
                         <button type='submit' style='background-color: red; border: 1px solid black; color: black'><b><i class='fa fa-trash' style='font-size:20px'></i></b></button></td>
                         <input name='ordine' value='$ID_ordine' hidden/>
@@ -110,6 +120,7 @@ if ($numero_tessere == 0) {
                        </form>
                      </table>        
         </div>";
+        }
         }
         ?>
                 <hr>
@@ -128,7 +139,7 @@ if ($numero_tessere == 0) {
                 <li class="header">Cauzione</li>
                 </ul>
 		<p>we</p>
-		<p>You could do a lot of things here like have a pop-up ad that shows when your website loads, or create a login/register form for users.</p>
+                <p>spiegazione cauzione</p>
             </div>
         </div>
 
