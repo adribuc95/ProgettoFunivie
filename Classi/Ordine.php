@@ -468,6 +468,42 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
         }
             return $ID_articolo;
         }
+        
+        public function getEmail_StessoOrdine($ID_ordine) {
+        $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT Cliente.email FROM `Cliente` INNER JOIN `Ordine` ON Cliente.ID_cliente = Ordine.ID_cliente WHERE Ordine.ID_ordine = $ID_ordine";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $email[] = $row;
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+    }
+// chiusura della connessione
+        $conn->close();
+        return $email;
+}
 }
 
         

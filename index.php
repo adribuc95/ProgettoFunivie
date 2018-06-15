@@ -87,7 +87,7 @@ function getLimitDate(age) {
         if ((document.getElementById(id_radio_ss[0]).checked == true)|| (document.getElementById(id_radio_ca[0]).checked == true)) {
             var x = document.getElementById('data_nascita').value;
             var anni = getAge(x);
-               if(anni < 76) {
+               if(anni < 75) {
 
                     console.log(anni);
                     console.log(x);
@@ -102,7 +102,7 @@ function getLimitDate(age) {
         else if ((document.getElementById(id_radio_ss[1]).checked == true)|| (document.getElementById(id_radio_ca[1]).checked == true)) {
             var x = document.getElementById('data_nascita').value;
             var anni = getAge(x);
-           if(anni <= 66) {
+           if(anni <= 65) {
 
                     console.log(anni);
                     console.log(x);
@@ -117,7 +117,7 @@ function getLimitDate(age) {
         else if ((document.getElementById(id_radio_ss[2]).checked == true)|| (document.getElementById(id_radio_ca[2]).checked == true)) {
             var x = document.getElementById('data_nascita').value;
             var anni = getAge(x);
-           if(anni >= 10) {
+           if(anni >= 16) {
 
                     console.log(anni);
                     console.log(x);
@@ -132,7 +132,7 @@ function getLimitDate(age) {
             var x = document.getElementById('data_nascita').value;
             var anni = getAge(x);
 
-           if(anni >=5) {
+           if(anni >=8) {
 
                     console.log(anni);
                     console.log(x);
@@ -147,7 +147,7 @@ function getLimitDate(age) {
             var x = document.getElementById('data_nascita').value;
             var anni = getAge(x);
 
-           if(anni >=5) {
+           if(anni >=8) {
 
                     console.log(anni);
                     console.log(x);
@@ -187,7 +187,7 @@ function getLimitDate(age) {
 </head>
 <body>
  
-    <button type="button" onClick="window.location.href='https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php'" style="position: fixed;  float:left; width: 50px; align-content: center; color:#1F3284; font-weight: 800; border-radius: 10px 10px 10px 10px; height: 50px;">
+    <button type="button" onClick="window.location.href='https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php'" style="position: fixed;  float:left; width: 50px; align-content: center; color:#1F3284; font-weight: 800; border-radius: 10px 10px 10px 10px; height: 50px;" <?php if($numero_prodotti==0){echo "disabled";}  ?>>
         <?php echo "$numero_prodotti";?><i style="font-size:25px; color: #1F3284; " class="fa">&#xf07a;</i></button>
   
     <form method="post" action="Pagina_iniziale/mantieni_dati.php" name="dati_utente">
@@ -199,11 +199,14 @@ function getLimitDate(age) {
         <div id="openModal2" class="modalDialog">
             <div>
 		<a href="#close" title="Close" class="chiudi">X</a>
-		<ul class="price">
-                <li class="header">Differenze</li>
+		<ul class="price2">
+                <li class="header2">Differenze</li>
                 </ul>
-		<p>we</p>
-                <p>spiegazione differenze campiglio/skirama</p>
+                <p>SKIPASS SUPERSKIRAMA 380 KM DI PISTE<br>
+                    Consentono corse illimitate sugli impianti della Funivie Madonna di Campiglio Spa e su quelli delle seguenti località: Folgarida-Marilleva, Pinzolo (sciisticamente collegate) Pejo, Ponte di Legno-Tonale-Presena, Andalo-Fai della Paganella, Monte Bondone e Folgaria-Lavarone. <br>
+                Per maggiori informazioni clicca  <a href="https://www.skirama.it/homepage?@winter" target="_blank">qui</a>. </p>
+                <p>SKIPASS MADONNA DI CAMPIGLIO 60 KM DI PISTE<br>
+consentono corse illimitate su tutti gli impianti della Società Funivie Madonna di Campiglio Spa.</p>
             </div>
         </div>
         </center>
@@ -223,46 +226,46 @@ function getLimitDate(age) {
                           <input type="radio" name="tessera" value="1" id="adulti_ss" required class="selezione" />
                       </li>
                       <li id="sseniores_ss_c">
-                          <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del <script>document.write(getLimitDate(76));</script></div>
+                          <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del <script>document.write(getLimitDate(75));</script></div>
                           <div class="prezzo"><?php $importo[1] = implode("", $importi[1]); echo "€ $importo[1],00";?></div>
                           <input type="radio" name="tessera" value="2" id="sseniores_ss" required class="selezione" />
                       </li>
                       <li id="seniores_ss_c">
-                            <div class="tipologia"><b>SENIORES</b> <br> nati prima del <script>document.write(getLimitDate(66));</script></div>
+                            <div class="tipologia"><b>SENIORES</b> <br> nati prima del <script>document.write(getLimitDate(65));</script></div>
                           <div class="prezzo"><?php $importo[2] = implode("", $importi[2]); echo "€ $importo[2],00";?></div>
                           <input type="radio" name="tessera" value="3" id="seniores_ss" required class="selezione" />
                       </li>
                       <li id="juniores_ss_c">
-                           <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il <script>document.write(getLimitDate(10));</script></div>
+                           <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il <script>document.write(getLimitDate(16));</script></div>
                           <div class="prezzo"><?php $importo[3] = implode("", $importi[3]); echo "€ $importo[3],00";?></div>
                           <input type="radio" name="tessera" value="4" id="juniores_ss" required class="selezione" />
                       </li>
                       <li id="bambini_ss_c">
-                          <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il <script>document.write(getLimitDate(5));</script></div>
+                          <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il <script>document.write(getLimitDate(8));</script></div>
                           <div class="prezzo"><?php $importo[4] = implode("", $importi[4]); echo "€ $importo[4],00";?></div>
                           <input type="radio" name="tessera" value="5" id="bambini_ss" required class="selezione" />
                       </li>
                       <?php
                         if(isset($_SESSION['numero_riferimento'])) {
-                          if (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 1) {
+                          if ((implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 1) || (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 2) || (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 3)) {
                               echo "<li class='height1' id='colore2'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
-                          <div class='prezzo'>Omaggio</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(8));</script> <br><a href='#openModal4'><i class='fa fa-info-circle' style='font-size:20px'></i></a></div>
+                          <div class='prezzo'>"; $importo[5] = implode("", $importi[5]); echo "€ $importo[5],00 </div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ss' required class='selezione'/>
                       </li>";
                           }
                           else {
                               echo "<li class='height1' id='colore1'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
-                          <div class='prezzo'>Omaggio</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(8));</script> <br><a href='#openModal4'><i class='fa fa-info-circle' style='font-size:20px'></i></a></div>
+                          <div class='prezzo'>"; $importo[5] = implode("", $importi[5]); echo "€ $importo[5],00 </div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ss' disabled class='selezione'/>
                       </li>";
                           }
                         }
                           else {
                               echo "<li class='height1' id='colore1'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
-                          <div class='prezzo'>Omaggio</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(8));</script> <br><a href='#openModal4'><i class='fa fa-info-circle' style='font-size:20px'></i></a></div>
+                          <div class='prezzo'>"; $importo[5] = implode("", $importi[5]); echo "€ $importo[5],00 </div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ss' disabled class='selezione'/>
                       </li>";
                           }
@@ -273,6 +276,25 @@ function getLimitDate(age) {
                     </center>
                 </div>
             </div>
+            
+           <!-- modal spiegazione BAMBINO ACCOMPAGNATO SKIRAMA -->
+           <div id="openModal4" class="modalDialog">
+                    <div>
+                         <center>
+                        <a href="#close" title="Close" class="chiudi">X</a>
+                        <ul class="price2">
+                        <li class="header2">Bambino Accompagnato Skirama</li>
+                        </ul>
+                        <p>La vendita è abbinata esclusivamente all’acquisto di uno skipass annuale adulti, senior o super
+                        senior della stessa tipologia. Riduzioni solo con documento d’identità. <br>
+                        Tutte le tessere Superskirama sono
+                        comprensive di n. 5 giornate sugli impianti del <a href="https://www.dolomitisuperski.com/" target="_blank">Dolomiti Superski</a> (utilizzabili dal 01.12.2018).</p>
+                   </center>
+                    </div>
+                </div>
+           
+           <!-- fine -->
+            
             <div class="column2" style="text-align: center">
                 <div>
                     <img src="Pagina_iniziale/Campiglio.png" alt="Campiglio" class="immagine" style="max-width: 100px;">
@@ -288,22 +310,22 @@ function getLimitDate(age) {
                           <input type="radio" name="tessera" value="7" id="adulti_ca" required class="selezione" />
                       </li>
                       <li id="sseniores_ca_c">
-                          <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del <script>document.write(getLimitDate(76));</script></div>
+                          <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del <script>document.write(getLimitDate(75));</script></div>
                           <div class="prezzo"><?php $importo[7] = implode("", $importi[7]); echo "€ $importo[7],00";?></div>
                           <input type="radio" name="tessera" value="8" id="sseniores_ca" required class="selezione" />
                       </li>
                       <li id="seniores_ca_c">
-                          <div class="tipologia"><b>SENIORES</b> <br> nati prima del <script>document.write(getLimitDate(66));</script></div>
+                          <div class="tipologia"><b>SENIORES</b> <br> nati prima del <script>document.write(getLimitDate(65));</script></div>
                           <div class="prezzo"><?php $importo[8] = implode("", $importi[8]); echo "€ $importo[8],00";?></div>
                           <input type="radio" name="tessera" value="9" id="seniores_ca" required class="selezione" />
                       </li>
                       <li id="juniores_ca_c">
-                          <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il <script>document.write(getLimitDate(10));</script></div>
+                          <div class="tipologia"><b>JUNIORES</b> <br>nati dopo il <script>document.write(getLimitDate(16));</script></div>
                           <div class="prezzo"><?php $importo[9] = implode("", $importi[9]); echo "€ $importo[9],00";?></div>
                          <input type="radio" name="tessera" value="10" id="juniores_ca" required class="selezione" />
                       </li>
                       <li id="bambini_ca_c">
-                          <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il <script>document.write(getLimitDate(5));</script></div>
+                          <div class="tipologia"><b>BAMBINI</b> <br>nati dopo il <script>document.write(getLimitDate(8));</script></div>
                           <div class="prezzo"><?php $importo[10] = implode("", $importi[10]); echo "€ $importo[10],00";?></div>
                           <input type="radio" name="tessera" value="11" id="bambini_ca" required class="selezione" />
                       </li>
@@ -311,14 +333,14 @@ function getLimitDate(age) {
                         if(isset($_SESSION['numero_riferimento'])) {
                           if (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 7) {
                               echo "<li class='height1' id='colore2'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(8));</script> <br><a href='#openModal3'><i class='fa fa-info-circle' style='font-size:20px'></i></a></div>
                           <div class='prezzo'>Omaggio</div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ca' required class='selezione'/>
                       </li>";
                           }
                           else {
                               echo "<li class='height1' id='colore1'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(8));</script> <br><a href='#openModal3'><i class='fa fa-info-circle' style='font-size:20px'></i></a></div>
                           <div class='prezzo'>Omaggio</div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ca' disabled class='selezione'/>
                       </li>";
@@ -326,7 +348,7 @@ function getLimitDate(age) {
                         }
                           else {
                               echo "<li class='height1' id='colore1'>
-                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(5));</script> <br>qualora il genitore acquisti contestualmente uno <br> skipass “bistagionale Madonna di Campiglio Adulto”</div>
+                          <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(8));</script> <br><a href='#openModal3'><i class='fa fa-info-circle' style='font-size:20px'></i></a></div>
                           <div class='prezzo'>Omaggio</div>
                           <input type='radio' name='tessera' value='12' id='baccompagnati_ca' disabled class='selezione'/>
                       </li>";
@@ -341,14 +363,28 @@ function getLimitDate(age) {
             </div>
         </div>
     </div>
+        
+        <!-- modal spiegazione BAMBINO ACCOMPAGNATO CAMPIGLIO -->
+           <div id="openModal3" class="modalDialog">
+                    <div>
+                        <center>
+                        <a href="#close" title="Close" class="chiudi">X</a>
+                        <ul class="price2">
+                        <li class="header2">Bambino Accompagnato Campiglio</li>
+                        </ul>
+                        <p>Qualora il genitore acquisti contestualmente uno skipass "Campiglio Adulto"</p>
+                        </center>
+                    </div>
+                </div>
+           <!-- fine -->
        
         <div class="dati_utente">
             <div class="container">
                 <div class="column1" style="text-align: center; align-content:center;">
                     <center>
                     <div class="columns">
-    <ul class="price">
-        <li class="header">Dati Anagrafici</li>
+    <ul class="price2">
+        <li class="header2">Dati Anagrafici</li>
     </ul>
     <p class="note">L'asterisco (*) indica i campi obbligatori</p>
     
@@ -511,8 +547,8 @@ function getLimitDate(age) {
                 <div class="column2" style="text-align: center">
                     <center>
                     <div class="columns">
-    <ul class="price">
-        <li class="header">Contatti</li>
+    <ul class="price2">
+        <li class="header2">Contatti</li>
     </ul>
         <p class="note">Questi dati possono essere ripetuti per ordini di più tessere.</p>
         <fieldset>
@@ -548,11 +584,13 @@ function getLimitDate(age) {
             <div id="openModal" class="modalDialog">
                     <div>
                         <a href="#close" title="Close" class="chiudi">X</a>
-                        <ul class="price">
-                        <li class="header">Assicurazione</li>
+                        <ul class="price2">
+                        <li class="header2">Assicurazione</li>
                         </ul>
-                        <p>spiegazione assicurazione</p>
-                        </div>
+                        <p>La polizza per lo sciatore abbinata allo skipass stagionale o bi-stagionale copre non solo lo sci e lo snowboard, ma anche le attività sportive praticate nel Mondo.
+La polizza è valida per tutta la durata dello skipass stagionale o bi-stagionale. Stagione sciistica 2018/2019.
+Le garanzie offerte vanno dalla Responsabilità Civile per i danni causati involontariamente a persone o cose, al rimborso delle spese mediche di primo soccorso, dal rimborso in pro-rata degli abbonamenti non utilizzati a seguito di infortunio al rimpatrio sanitario al domicilio.
+Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Informativo del prodotto AIG sNOw Problem – Formula stagionale clicca <a href="https://www.funiviecampiglio.it/43-estate-inverno/287-assicurazione" target="_blank">qui</a> </p></div>
                 </div>
             Sì <input type="radio" name="assicurazione" value="1" id="agree" required/>
             No <input type="radio" name="assicurazione" value="0" required/>
@@ -568,8 +606,8 @@ function getLimitDate(age) {
                 </div>
             </div>
     <section class="column3">
-        <ul class="price">
-        <li class="header">Foto</li>
+        <ul class="price2">
+        <li class="header2">Foto</li>
     </ul>
         <center>
         <p class="note">La foto deve rappresentare il soggetto che andrà ad utilizzare lo skipass in modo chiaro, centrata sul viso.</p>
@@ -801,9 +839,9 @@ navigator.mediaDevices.getUserMedia({ audio: true, video: true })
     
     
     
-    <section class="column4">
-        <ul class="price">
-        <li class="header">Accettazione</li>
+    <section class="column4" style="margin-top: 20px;">
+        <ul class="price2">
+        <li class="header2">Accettazione</li>
     </ul>
         <fieldset style="text-align: center;">
             <div style="border-bottom: 1px solid #eee;">

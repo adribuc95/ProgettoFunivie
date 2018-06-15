@@ -22,6 +22,9 @@ and open the template in the editor.
         font-size: 35px;
         font-weight: 800;
     }
+    .header2 {
+        font-size: 30px;
+    }
 }
 
 
@@ -40,6 +43,9 @@ and open the template in the editor.
     .header {
         font-size: 30px;
     }
+    .header2 {
+        font-size: 25px;
+    }
     }
     @media all and (max-width:600px) and (min-width:400px){
      
@@ -55,13 +61,16 @@ and open the template in the editor.
     .header {
         font-size: 25px;
     }
+    .header2 {
+        font-size: 20px;
+    }
     
     
     }
     
     @media all and (max-width:400px) {
         body {
-      font-size: 10px;
+      font-size: 12px;
 
     }
     
@@ -70,6 +79,9 @@ and open the template in the editor.
         font-size: 9px;
     }
     .header {
+        font-size: 20px;
+    }
+    .header2 {
         font-size: 20px;
     }
     }
@@ -177,7 +189,7 @@ and open the template in the editor.
         }
         .column3 {
             width: 60%;
-            padding-top: 1320px;
+            padding-top: 1330px;
             align-content: center; 
         }
         .column4 {
@@ -274,6 +286,60 @@ and open the template in the editor.
     
     border-radius: 10px 10px 10px 10px;
 }
+
+.price2 {
+   
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    
+    
+}
+
+.price2:hover {
+    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2);
+    border-radius: 10px 10px 10px 10px;
+}
+
+.price2 .header2 {
+    
+    background-color: #1F3284;
+    color: white;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.price2 li {
+    border-bottom: 1px solid #eee;
+    
+    
+    text-align: center;
+    align-content: center;
+    
+    margin-bottom: 5px;
+    margin-top 5px;
+    
+    
+    
+}
+
+.price2 .grey {
+    background-color: #1F3284;
+    
+    border-radius: 10px 10px 10px 10px;
+}
+
+.header2 {
+    height: 100%;
+        list-style-type: none;
+        background-color: #1F3284;
+        color: white;
+        border-radius: 10px 10px 10px 10px; 
+        padding: 5px;
+       
+        
+    }
 
 .button {
     background-color: #1F3284;
@@ -398,7 +464,8 @@ label {
      .bottone {
       display:black;
       margin:0.2em auto;
-      width: 80%;
+      width: 60%;
+      font-size: 12px;
      }
     }
 

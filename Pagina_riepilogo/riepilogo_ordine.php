@@ -27,6 +27,7 @@ $cognomi = $ordine->getSurname_StessoOrdine($ID_ordine);
 $importi_tessere = $ordine->getImporto_Tessera($ID_ordine);
 $importi_articoli = $ordine->getImporto_Articolo($ID_ordine);
 $ID_articoli = $ordine->getIDArticolo_StessoOrdine($ID_ordine);
+$emails = $ordine->getEmail_StessoOrdine($ID_ordine);
 
 if ($numero_tessere == 0) {
     unset($_SESSION['prima_volta']);
@@ -43,8 +44,13 @@ if ($numero_tessere == 0) {
         <link href="../Pagina_iniziale/CSS/CSS.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
          <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> 
-        
-        
+         <script>
+             function mostra() {
+    
+        document.getElementById("email").style.display = '';
+    
+    }
+             </script>
     </head>
     <body>
         
@@ -59,7 +65,7 @@ if ($numero_tessere == 0) {
                
                 
                 <?php
-                
+         
         if ($numero_tessere == 0) {
             echo "<center><div>Nessuna articolo selezionato</div></center>";
         }
@@ -77,10 +83,9 @@ if ($numero_tessere == 0) {
                 $importo_articolo = implode("", $importi_articoli[$i]);
                 $importo_totale = $importo_totale + $importo_tessera + $importo_articolo;
                 
+            
                 
                 
-                
-
             echo "<div class='column5'>
                 
                     <table style='width:100%; text-align: center;'>
@@ -138,8 +143,7 @@ if ($numero_tessere == 0) {
 		<ul class="price">
                 <li class="header">Cauzione</li>
                 </ul>
-		<p>we</p>
-                <p>spiegazione cauzione</p>
+                <p>Gli skipass sono venduti su supporto del tipo Key-Card al costo di € 5,00 ciascuno a titolo di cauzione. In caso di restituzione del supporto integro e ben conservato, la medesima somma verrà rimborsata.</p>
             </div>
         </div>
 
@@ -167,15 +171,18 @@ if ($numero_tessere == 0) {
                     
                 </div>
                 <hr>
-                <div style='margin-top: 10px;' >
+                <div style='margin-top: 10px;'>
                     <?php
                     if ($numero_tessere > 0) {
-                    echo "<form action='conferma_ordine.php' method='post'>
-                        <button class='bottone'>Conferma Ordine <i class='fa fa-check' style='font-size:16px'></i></button>
-                    </form>
+                    echo "
                     <form action='modifica_ordine.php' method='post'>
                         <button class='bottone'>Aggiungi Tessera <i class='fa fa-plus' style='font-size:16px'></i></button>
-                    </form>";
+                    </form>
+                    
+                        <button class='bottone' onclick='mostra();'>Conferma Ordine <i class='fa fa-check' style='font-size:16px'></i></button>
+                        
+                    
+                    ";
                     }
                     else { echo "<form action='nuovo_ordine.php' method='post'>
                         <button class='bottone'>Nuovo Ordine <i class='fa fa-plus' style='font-size:16px'></i></button>
@@ -183,6 +190,21 @@ if ($numero_tessere == 0) {
                             ?>
             
                     
+                </div>
+                <div id='email' style='display: none; margin-top: 10px;'>
+                    
+                    <hr>
+                    <form action='../igfs-payment-gateway-master/pagamento_init.php' method="post">
+                    <center>
+                        <br>
+                        seleziona la mail su cui vuoi ricevere la notifica di pagamento:<br>
+                    <input name="email" id="email" type="email" placeholder="nome@dominio.it" required pattern=".+@.+..+" value="<?php if (isset($_SESSION['email'])&& $_SESSION['email'] <> '') {    echo $_SESSION['email'];}?>" style='height: 30px; width: 40%; margin-top: 10px; align-content: center'/> <br>
+                    <input name='importo_totale' value='<?php echo $importo_totale; ?>' hidden/>
+                    <input name='ID_ordine' value='<?php echo $ID_ordine; ?>' hidden/>
+                     <button class='bottone' style='margin-top: 10px'>Paga <i class='fa fa-paypal' style='font-size:16px;'></i></button>
+                     
+                    </center>
+                    </form>
                 </div>
             </center>
         </div>
