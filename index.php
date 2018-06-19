@@ -690,7 +690,7 @@ document.getElementById("upload2").addEventListener("click", function(){
         });
   
   document.getElementById("conferma").addEventListener("click", function(){
-            
+            $("#uploading3").show();
             $("#no-uploading").hide();
             var images = "";
             $.ajax({
@@ -701,6 +701,7 @@ document.getElementById("upload2").addEventListener("click", function(){
         }
         }).done(function(msg) {
                 console.log("saved");
+                $("#uploading3").hide();
                 $("#no_foto").hide();
                 $("#no_foto1").hide();
                 $("#uploaded2").show();

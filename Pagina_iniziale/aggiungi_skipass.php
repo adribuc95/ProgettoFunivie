@@ -54,7 +54,7 @@ $ordine->setIDCliente($new_ID_cliente);
 $ordine->salvaDati();
 
 
-if ($foto->getLastIDFoto() == $ID_session) {
+if (implode($foto->getLastIDFoto()) == $ID_session) {
     $foto->setIDCliente($new_ID_cliente);
     $foto->salvaNoFoto();
 }

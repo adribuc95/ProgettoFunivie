@@ -66,7 +66,7 @@ class Email {
             $result->close();
         }
 
-        $file = 'miofile.txt';
+        $file = 'datiOrdine.txt';
         $f = fopen($file,'w');
 
         $c = fopen($file,'rb');

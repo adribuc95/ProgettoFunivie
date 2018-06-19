@@ -121,7 +121,7 @@ public function getLastIDFoto() {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $query = "SELECT `Foto` FROM `Foto`";
+        $query = "SELECT `Foto` FROM `Foto` ORDER BY `ID_cliente` DESC";
         if (!$result = $conn->query($query)) {
             echo "Errore della query: ".$conn->error.".";
             exit();
@@ -133,7 +133,7 @@ public function getLastIDFoto() {
               while($row = $result->fetch_array(MYSQLI_ASSOC))
               {
                   
-                $ID_foto = $row[];
+                $ID_foto[] = $row;
                 
                 
               }
@@ -144,10 +144,10 @@ public function getLastIDFoto() {
 // chiusura della connessione
         $conn->close();
         $i=0;
-        while($ID_foto[$i] == 'Foto anni scorsi') {
+        while(implode($ID_foto[$i]) == 'Foto anni scorsi') {
             $i++;
         }
-        echo $ID_foto[$i];
+        
         return $ID_foto[$i];
 }
 
