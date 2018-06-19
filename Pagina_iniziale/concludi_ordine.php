@@ -44,9 +44,7 @@ $cliente->salvaDati();
 $cliente->mantieniDatiForm();
 
 
-$foto->setIDCliente($new_ID_cliente);
-$foto->setIDFoto($ID_session);
-$foto->salvaDati();
+
 
 
 
@@ -54,3 +52,15 @@ $foto->salvaDati();
 $ordine->setIDCliente($new_ID_cliente);
 $ordine->salvaDati();
 
+if (implode($foto->getLastIDFoto()) == $ID_session) {
+    $foto->setIDCliente($new_ID_cliente);
+    $foto->salvaNoFoto();
+    
+    
+}
+else {
+    $foto->setIDCliente($new_ID_cliente);
+    $foto->setIDFoto($ID_session);
+    $foto->salvaDati();
+    
+}

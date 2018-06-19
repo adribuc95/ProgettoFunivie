@@ -45,12 +45,21 @@ $cliente->mantieniDatiForm();
 
 
 
-$foto->setIDCliente($new_ID_cliente);
-$foto->setIDFoto($ID_session);
-$foto->salvaDati();
+
 
 
 
 //assegno i gli ID a Ordine
 $ordine->setIDCliente($new_ID_cliente);
 $ordine->salvaDati();
+
+
+if ($foto->getLastIDFoto() == $ID_session) {
+    $foto->setIDCliente($new_ID_cliente);
+    $foto->salvaNoFoto();
+}
+else {
+    $foto->setIDCliente($new_ID_cliente);
+    $foto->setIDFoto($ID_session);
+    $foto->salvaDati();
+}

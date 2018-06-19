@@ -27,10 +27,8 @@ $cognomi = $ordine->getSurname_StessoOrdine($ID_ordine);
 $importi_tessere = $ordine->getImporto_Tessera($ID_ordine);
 $importi_articoli = $ordine->getImporto_Articolo($ID_ordine);
 $ID_articoli = $ordine->getIDArticolo_StessoOrdine($ID_ordine);
-$emails = $ordine->getEmail_StessoOrdine($ID_ordine);
 
 if ($numero_tessere == 0) {
-    unset($_SESSION['prima_volta']);
     unset($_SESSION['numero_riferimento']);
 }
 
@@ -49,6 +47,10 @@ if ($numero_tessere == 0) {
     
         document.getElementById("email").style.display = '';
     
+    }
+    function defaultImage() {
+        img=document.getElementById('image');
+        img.src='default/default.jpg';
     }
              </script>
     </head>
@@ -91,7 +93,10 @@ if ($numero_tessere == 0) {
                     <table style='width:100%; text-align: center;'>
                         <form action='elimina_tessera.php' method='post'>
                         <tr>
-                         <td id='foto'><img src='../immagini_skipass/$ID_foto.jpg' alt='foto' class='foto'></td>
+                        
+                         <td id='foto'>
+                         
+                         <img src='../immagini_skipass/$ID_foto.jpg' class='foto' onerror=document.getElementById('image$i').src='default/default.jpg'; id='image$i'></td>
                      
                         <td id='tipo'>$tipologia ";
                     if($importo_articolo == 0) {

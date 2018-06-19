@@ -17,7 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 $shopID = uniqid("shopID");
 
+//url dove si trovano i file di gestione del pagamento.
 $siteUrl = 'https://www.funiviemadonnacampiglio.it/onlinesale/igfs-payment-gateway-master/';
+
 if($_POST) {
 
 		include_once(dirname(__FILE__) ."/igfs.php");

@@ -1,5 +1,7 @@
 <?php
 include_once(dirname(__FILE__) ."/igfs.php");
+
+//pagina pagamento NON andato a buon fine.
 echo "<html>
     <head>
         <title>TODO supply a title</title>
@@ -19,39 +21,38 @@ echo "<html>
 </html>";
 
 $igfs = new Igfs();
+
 if($igfs->ID_ordine != '') {
-$ID_ordine=$igfs->ID_ordine;
+    $ID_ordine=$igfs->ID_ordine;
 
-//aggiorno esito in DB
+    //aggiorno esito in DB
 
-                        $servername = "localhost";
-                        $username = "onlinesales";
-                        $password = "Sale0nl1nE";
-                        $dbname = "fmc-db-onlinesales";
+    $servername = "localhost";
+    $username = "onlinesales";
+    $password = "Sale0nl1nE";
+    $dbname = "fmc-db-onlinesales";
 
-                        // Create connection
-                        $conn = new mysqli($servername, $username, $password, $dbname);
-                        // Check connection
-                        if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                        } 
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
 
-                        $sql = " UPDATE `Pagamento` SET `esito`='ERRORE' WHERE `ID_ordine`= '$ID_ordine";
+    $sql = " UPDATE `Pagamento` SET `esito`='ERRORE' WHERE `ID_ordine`= '$ID_ordine";
 
 
-                        if (($conn->query($sql) === TRUE)) {
-                            echo "update Pagamento successfully";
-                        } else {
-                            echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
+    if (($conn->query($sql) === TRUE)) {
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 
-                        $conn->close();
+    $conn->close();
 }
 
-
+//reinderizzo alla pagina del riepilogo ordine, se il pagamento non è andato a buon fine.
 header("refresh:3; url= https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php");
 
 
-//mail('richard@123789.org','error',print_r($_REQUEST,true));
 
 

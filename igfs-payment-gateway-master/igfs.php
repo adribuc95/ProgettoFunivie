@@ -13,16 +13,15 @@ class Igfs
 	public $ssl = true;	
 	public $testmode = false;	
 	public $testurl = 'https://testuni.netsw.it/UNI_CG_SERVICES/services';
-	public $liveurl = 'https://testeps.netswgroup.it/UNI_CG_SERVICES/services';
+	public $liveurl = 'https://testeps.netswgroup.it/UNI_CG_SERVICES/services'; //'https://pagamenti.unicredit.it/UNI_CG_SERVICES/services'
 	public $IgfsNotifyURL = '';
 	public $IgfsErrorURL = '';
-	public $IgfsTimeout = 15000;
+	public $IgfsTimeout = 30000;
 	public $IgfsTreminalId = 'UNI_ECOM';//"UNI_MYBK"
 	public $IgfsApikSig = 'UNI_TESTKEY';
-	public $IgfsShopUserRef = 'UNIBO';
+	public $IgfsShopUserRef = 'UNIBO'; //3055296
 	public $IgfsCurrencyCode = 'EUR'; //ISO
-	public $IgfsLangID = 'EN'; //ISO
-        public $ID_ordine = '';
+	public $IgfsLangID = 'IT'; //ISO
 	
     function __construct() {
 		//parent::__construct();
@@ -47,17 +46,14 @@ class Igfs
 			$init->timeout 		= $this->IgfsTimeout;			
 			$init->tid              = $this->IgfsTreminalId;
 			$init->kSig 		= $this->IgfsApikSig;
-			$init->shopID 		= $paymentData['cart_id']; //$cart_id  . strtotime($date);
-			$init->shopUserRef 	= $paymentData['email'];;
+			$init->shopID 		= $paymentData['cart_id'];
+			$init->shopUserRef 	= $paymentData['email'];
 			$init->trType = "PURCHASE";
 			$init->currencyCode = $this->IgfsCurrencyCode;//iso_code;
 			$init->amount = 1;//$paymentData['amount']*100;
 			$init->langID = $this->IgfsLangID; //per italiano: "IT"
 			$init->notifyURL = $this->IgfsNotifyURL;
 			$init->errorURL = $this->IgfsErrorURL;
-                        
-                        $data = date ("Y/m/d");
-                        $importo_totale = $paymentData['amount'];
 			
 			if(!$init->execute()){
 			//assign error 
@@ -66,45 +62,10 @@ class Igfs
 			//redirect to success page.
 			$payment_id = $init->paymentID;
 			$this->setCookiesValue('payment_id',$payment_id);
-                        $this->ID_ordine = $paymentData['ID_ordine'];
-                        
-                        //salvo nel DB
-                        
-                        $servername = "localhost";
-                        $username = "onlinesales";
-                        $password = "Sale0nl1nE";
-                        $dbname = "fmc-db-onlinesales";
-
-                        // Create connection
-                        $conn = new mysqli($servername, $username, $password, $dbname);
-                        // Check connection
-                        if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                        } 
-
-                        $sql = " INSERT INTO `Pagamento` (`ID_pagamento`, `ID_shop`, `ID_ordine`, `email`, `importo`, `data_pagamento`, `esito`)"
-                        ."VALUES ('$payment_id', '$init->shopID', '$this->ID_ordine', '$init->shopUserRef',  '$importo_totale', '$data',  'POSITIVO');";
-
-
-                        if (($conn->query($sql) === TRUE)) {
-                            echo "New record Pagamento created successfully";
-                        } else {
-                            echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-
-                        $conn->close();
-                        
-                        
-                        
-                        //fine
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
+                        $this->setCookiesValue('ID_ordine',$paymentData['ID_ordine']);
+                        $this->setCookiesValue('data', date("Y/m/d"));
+                        $this->setCookiesValue('importo_totale', $paymentData['amount']);
+                        $this->setCookiesValue('email', $paymentData['email']);
 			header("location: ".$init->redirectURL);
                         
                         
@@ -120,10 +81,13 @@ class Igfs
 	function verifyPayment(){
 	
 	include_once(dirname(__FILE__) ."/IGFS_CG_API/init/IgfsCgVerify.php");
-	
 		$verify = new IgfsCgVerify();
 		$payment_id =  $this->getCookiesValue('payment_id');
-		$cart_id =  $this->getCookiesValue('cart_id');
+		$cart_id =$this->getCookiesValue('cart_id');
+                $ID_ordine=$this->getCookiesValue('ID_ordine');
+                $data=$this->getCookiesValue('data');
+                $importo_totale=$this->getCookiesValue('importo_totale');
+                $email=$this->getCookiesValue('email');
 		if($payment_id) { 
 				
 				if($this->testmode==true){
@@ -138,8 +102,39 @@ class Igfs
 				$verify->kSig = $this->IgfsApikSig;
 				$verify->shopID = $cart_id;
 				$verify->paymentID = $payment_id;
+                                
 				
-				if ($verify->execute()){			   
+				if ($verify->execute()){
+                                    
+                                    //salvo nel DB
+                        
+                        $servername = "localhost";
+                        $username = "onlinesales";
+                        $password = "Sale0nl1nE";
+                        $dbname = "fmc-db-onlinesales";
+
+                        // Create connection
+                        $conn = new mysqli($servername, $username, $password, $dbname);
+                        // Check connection
+                        if ($conn->connect_error) {
+                            die("Connection failed: " . $conn->connect_error);
+                        } 
+
+                        $sql = " INSERT INTO `Pagamento` (`ID_pagamento`, `ID_shop`, `ID_ordine`, `email_riferimento`, `importo`, `data_pagamento`, `esito`)"
+                        ."VALUES ('$payment_id', '$verify->shopID', '$ID_ordine', '$email',  '$importo_totale', '$data',  'POSITIVO');";
+
+
+                        if (($conn->query($sql) === TRUE)) {
+                            
+                        } else {
+                            echo "Error: " . $sql . "<br>" . $conn->error;
+                        }
+
+                        $conn->close();
+                        
+                        
+                        
+                        //fine
 					$this->deleteCookiesValue('payment_id');
 					return $verify->paymentID;
 				}

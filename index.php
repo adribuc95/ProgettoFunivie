@@ -10,25 +10,26 @@ include "Classi/Ordine.php";
 include "Classi/Tessera.php";
 $ordine = new Ordine();
 $tessera = new Tessera();
-if ((!isset($_SESSION['ID_ordine']))) {
-           $numero_prodotti = 0;
-}
 
-else if(!isset($_SESSION['prima_volta'])) {
-    unset($_SESSION['ID_ordine']);
-}
-else {
+
+if (isset($_SESSION['ID_ordine'])) {
     $ID_ordine = $_SESSION['ID_ordine'];
-    $numero_prodotti=$ordine->countProduct($ID_ordine);
 }
 
-$importi = $tessera->getImporti();
+    $numero_prodotti=$ordine->countProduct($ID_ordine);
 
 if($numero_prodotti == 0) {
     unset($_SESSION['prima_volta']);
+    unset($_SESSION['numero_riferimento']);
+    unset($_SESSION['ID_ordine']);
 }
+else {
+    $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
+}
+
+$importi = $tessera->getImporti();
         
-$tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine);
+
 ?>
 <html>
     <head>
@@ -174,8 +175,11 @@ function getLimitDate(age) {
     }
     
     function checkFoto() {
-        if((document.getElementById("uploaded").style.display == 'none' && document.getElementById("uploaded2").style.display == 'none')) {
-            alert("manca la foto!!");
+        if(document.getElementById("no-uploading").style.display == 'none') {
+            return true;
+    }
+    else {
+        alert("manca la foto!!");
             return false;
     }
     }
@@ -251,14 +255,14 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                               echo "<li class='height1' id='colore2'>
                           <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(8));</script> <br><a href='#openModal4'><i class='fa fa-info-circle' style='font-size:20px'></i></a></div>
                           <div class='prezzo'>"; $importo[5] = implode("", $importi[5]); echo "€ $importo[5],00 </div>
-                          <input type='radio' name='tessera' value='12' id='baccompagnati_ss' required class='selezione'/>
+                          <input type='radio' name='tessera' value='6' id='baccompagnati_ss' required class='selezione'/>
                       </li>";
                           }
                           else {
                               echo "<li class='height1' id='colore1'>
                           <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(8));</script> <br><a href='#openModal4'><i class='fa fa-info-circle' style='font-size:20px'></i></a></div>
                           <div class='prezzo'>"; $importo[5] = implode("", $importi[5]); echo "€ $importo[5],00 </div>
-                          <input type='radio' name='tessera' value='12' id='baccompagnati_ss' disabled class='selezione'/>
+                          <input type='radio' name='tessera' value='6' id='baccompagnati_ss' disabled class='selezione'/>
                       </li>";
                           }
                         }
@@ -266,7 +270,7 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                               echo "<li class='height1' id='colore1'>
                           <div class='tipologia'><b>BAMBINI ACCOMPAGNATI</b><br>nati dopo il <script>document.write(getLimitDate(8));</script> <br><a href='#openModal4'><i class='fa fa-info-circle' style='font-size:20px'></i></a></div>
                           <div class='prezzo'>"; $importo[5] = implode("", $importi[5]); echo "€ $importo[5],00 </div>
-                          <input type='radio' name='tessera' value='12' id='baccompagnati_ss' disabled class='selezione'/>
+                          <input type='radio' name='tessera' value='6' id='baccompagnati_ss' disabled class='selezione'/>
                       </li>";
                           }
                       
@@ -587,7 +591,7 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                         <ul class="price2">
                         <li class="header2">Assicurazione</li>
                         </ul>
-                        <p>La polizza per lo sciatore abbinata allo skipass stagionale o bi-stagionale copre non solo lo sci e lo snowboard, ma anche le attività sportive praticate nel Mondo.
+                        <p>La polizza per lo sciatore abbinata allo skipass stagionale o bi-stagionale (AL COSTO DI 46,00 €) copre non solo lo sci e lo snowboard, ma anche le attività sportive praticate nel Mondo.
 La polizza è valida per tutta la durata dello skipass stagionale o bi-stagionale. Stagione sciistica 2018/2019.
 Le garanzie offerte vanno dalla Responsabilità Civile per i danni causati involontariamente a persone o cose, al rimborso delle spese mediche di primo soccorso, dal rimborso in pro-rata degli abbonamenti non utilizzati a seguito di infortunio al rimpatrio sanitario al domicilio.
 Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Informativo del prodotto AIG sNOw Problem – Formula stagionale clicca <a href="https://www.funiviecampiglio.it/43-estate-inverno/287-assicurazione" target="_blank">qui</a> </p></div>
@@ -616,7 +620,8 @@ Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Info
         <button type="button" class="bottone" id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica <i class="fa fa-camera" style="font-size:16px"></i></button>
         </div>
         <div id='no_foto1'>
-        Ho già la foto dagli anni scorsi.<input type="checkbox" name="checkbox" value="check" id="no_foto" onclick='if(document.getElementById("no_foto").checked == true) {nascondi("mostra_camera2"); nascondi("mostra_camera"); nascondi("webcam"); nascondi("carica");} else {mostra("webcam"); mostra("carica");}'/>
+        Ho già la foto dagli anni scorsi.<input type="checkbox" name="checkbox" value="check" id="no_foto" onclick='if(document.getElementById("no_foto").checked == true) {mostra("conferma"); nascondi("mostra_camera2"); nascondi("mostra_camera"); nascondi("webcam"); nascondi("carica");} else {mostra("webcam"); mostra("carica"); nascondi("conferma");}'/>
+        <br><button type="button" id="conferma" class="bottone" style="display:none; margin-top: 10px;"> Conferma <i class="fa fa-check" style="font-size:16px"></i></button>
         </div>
         <div id='mostra_camera2' style='display: none; margin-top: 10px; border: #eee 1px solid;'>
             <div>
@@ -626,11 +631,15 @@ Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Info
         <img id="immagine" src="#" alt="your image" style="display: none; max-width:400px; "/>
         <div>
         <button type="button" class="bottone" id="upload2" style="display:none; margin-top: 10px;"> Carica <i class="fa fa-upload" style="font-size:16px"></i></button>
-        <br> <span id="uploading2" style="display:none; background-color: gold"> <b> Attendi . . . </b> </span>
+        <br> 
+        <span id="uploading2" style="display:none; background-color: gold"> <b> Attendi . . . </b> </span>
         
         </div>
         </div>
-        <span id="uploaded2"  style="display:none; background-color: #00dd00"> <b> Foto caricata! <i class="fa fa-check" style="font-size:16px"></i></b></span>
+        <span id="no-uploading" style="background-color: red"> <b> Immagine non caricata </b> </span>
+        <span id="uploading3" style="display:none; background-color: gold"> <b> Attendi . . . </b> </span>
+        <span id="uploaded"  style="display:none; background-color: #00dd00"> <b> Foto caricata! <i class="fa fa-check" style="font-size:16px"></i></b></span>
+        <span id="uploaded2"  style="display:none; background-color: #00dd00"> <b> Confermato <i class="fa fa-check" style="font-size:16px"></i></b></span>
        
         </center>
         
@@ -640,7 +649,8 @@ Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Info
 
   if (input.files && input.files[0]) {
     var reader = new FileReader();
-    var immagine;
+    var immagine = document.createElement("img");
+    immagine.src = "https://funiviemadonnacampiglio.it/onlinesale/immagini_skipass/default/default.jpg";
 
     reader.onload = function(e) {
       $('#immagine').attr('src', e.target.result);
@@ -658,6 +668,7 @@ $("#fileUpload").change(function() {
 
 document.getElementById("upload2").addEventListener("click", function(){
             $("#uploading2").show();
+            $("#no-uploading").hide();
             var images = $('#immagine').attr('src');
             $.ajax({
                 type: "POST",
@@ -668,7 +679,7 @@ document.getElementById("upload2").addEventListener("click", function(){
         }).done(function(msg) {
                 console.log("saved");
                 $("#uploading2").hide();
-                $("#uploaded2").show();
+                $("#uploaded").show();
                 $("#upload2").hide();
                 $("#webcam").hide();
                 $("#carica").hide();
@@ -678,7 +689,24 @@ document.getElementById("upload2").addEventListener("click", function(){
             });
         });
   
-  
+  document.getElementById("conferma").addEventListener("click", function(){
+            
+            $("#no-uploading").hide();
+            var images = "";
+            $.ajax({
+                type: "POST",
+                url: "Pagina_iniziale/caricamento_immagine.php",
+                data: {
+                    imgBase64: images
+        }
+        }).done(function(msg) {
+                console.log("saved");
+                $("#no_foto").hide();
+                $("#no_foto1").hide();
+                $("#uploaded2").show();
+               
+            });
+        });
   
   
 
@@ -696,11 +724,10 @@ document.getElementById("upload2").addEventListener("click", function(){
     <button type="button" id="snap" class="bottone" style="margin-top: 10px;">  Scatta <i class="fa fa-camera" style="font-size:16px"></i></button>
     <button type="button" id="reset_camera"  class="bottone" style="display:none; margin-top: 10px;" onclick='resetCam();'>Reset <i class="fa fa-trash" style="font-size:16px"></i></button>
     <button type="button" id="upload" class="bottone" style="display:none; margin-top: 10px;"> Carica <i class="fa fa-upload" style="font-size:16px"></i></button>
-    <br> <span id="uploading" style="display:none; margin-top: 10px; background-color: gold"> <b> Attendi . . . </b> </span>
+    <br> 
+    <span id="uploading" style="display:none; margin-top: 10px; background-color: gold"> <b> Attendi . . . </b> </span>
 </div>
         </div>
-            <span id="uploaded"  style="display:none; margin-top: 10px; background-color: #00dd00"> <b> Foto caricata! <i class="fa fa-check" style="font-size:16px"></i></b></span>
-    
         </center>
     </section>
  
@@ -742,7 +769,7 @@ if (navigator.mediaDevices.getUserMedia === undefined) {
   }
 }
 
-navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+navigator.mediaDevices.getUserMedia({ audio: false, video: true })
 .then(function(stream) {
   var video = document.querySelector('video');
   // Older browsers may not have srcObject
@@ -806,6 +833,7 @@ navigator.mediaDevices.getUserMedia({ audio: true, video: true })
   }
   
   document.getElementById("upload").addEventListener("click", function(){
+            $("#no-uploading").hide();
             $("#uploading").show();
             var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
             $.ajax({

@@ -11,7 +11,7 @@ abstract class BaseIgfsCg {
 
 	public $serverURL = NULL;
 	public $serverURLs = NULL;
-	public $cTimeout = 15000;
+	public $cTimeout = 30000;
 	public $timeout = 30000;
 	
 	public $proxy = NULL;
