@@ -51,8 +51,8 @@ if($igfs->ID_ordine != '') {
 }
 
 //reinderizzo alla pagina del riepilogo ordine, se il pagamento non è andato a buon fine.
-header("refresh:3; url= https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php");
-
+header("refresh:3; url= ../Pagina_riepilogo/riepilogo_ordine.php");
+exit();
 
 
 

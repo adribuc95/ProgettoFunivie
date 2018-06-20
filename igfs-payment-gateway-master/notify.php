@@ -14,6 +14,9 @@ if($payment_id){
     //esporto dati per salvarli nel database SKIDATA
     $email->emailDati("adribuc95@gmail.com", $ID_ordine); //mettere mail che si vuole.
     
+    //da implementare
+    //$email->emailRiepilogo("adribuc95@gmail.com", $ID_ordine);
+    
 
     //pagina pagamento andato a buon fine.
     echo "<html>
@@ -38,18 +41,20 @@ if($payment_id){
     distruggiSessione();
     
     //reindirizza alla homepage
-    header("refresh:3; url= https://www.funiviemadonnacampiglio.it/");
+    header("refresh:3; url= ../index.php");
+    exit();
 
 }
 //se esito negativo, rimanda a pagina error.php
 else{
-header("location: https://www.funiviemadonnacampiglio.it/onlinesale/igfs-payment-gateway-master/error.php");
+header("location: error.php");
+exit();
 }
 
 //funzione che elimina le variabili di sessione e permette un nuovo ordine.
 function distruggiSessione() {
-     session_unset();
-    unset($_SESSION['ID_ordine']);
-    unset($_SESSION['prima_volta']);
-     
+    unset($_SESSION["ID_ordine"]);
+    unset($_SESSION["prima_volta"]);
+    unset($_SESSION["numero_riferimento"]);
+    session_unset();
  }

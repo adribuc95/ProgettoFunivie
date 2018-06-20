@@ -77,6 +77,7 @@ and open the template in the editor.
     .input {
         height: 10px;
         font-size: 9px;
+        align-content: center;
     }
     .header {
         font-size: 20px;
@@ -170,26 +171,21 @@ and open the template in the editor.
             min-height: 100px;
         }
         
-        #tessere {
-           border-top: #eee solid thin; 
-           margin-bottom: 10px; 
-        }
         
         .column1 {
             padding-top: 10px;
             width: 50%;
             float:left;
-            padding-bottom: 10px;
+            margin-bottom: 10px;
         }
         .column2 {
             padding-top: 10px;
             width: 50%;
             float: right;
-            padding-bottom: 10px;
+            margin-bottom: 10px;
         }
         .column3 {
-            width: 60%;
-            padding-top: 1330px;
+            width: 60%;   
             align-content: center; 
         }
         .column4 {
@@ -200,11 +196,20 @@ and open the template in the editor.
         #commenti {
         width: 60%;
     }
+    .main {
+        width:90%;
+    }
         @media screen and (max-width: 950px) {
+            #impaginazione {
+        display: none;
+    }
+            .main{
+                width: 80%;
+            }
             .column1{
                 width: 100%;
                 float: none;
-                border-bottom: 1px solid #eee;
+                
                 padding-bottom: 10px;
             }
             .column2 {
@@ -215,14 +220,15 @@ and open the template in the editor.
             .column3 {
                 padding-top: 10px;
                 width: 80%;
-                float: none;
+                
                
             }
             .column4 {
                 margin-top: 10px;
                 width: 80%;
-                float: none;
+                
             }
+            
             
     
     #video {
@@ -244,6 +250,9 @@ and open the template in the editor.
         
         .columns {
         width: 80%;
+    }
+    .columns2 {
+        width: 100%;
     }
         
 
@@ -298,10 +307,7 @@ and open the template in the editor.
     
 }
 
-.price2:hover {
-    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2);
-    border-radius: 10px 10px 10px 10px;
-}
+
 
 .price2 .header2 {
     
@@ -352,11 +358,31 @@ and open the template in the editor.
     border-radius: 10px 10px 10px 10px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 700px) {
+    
+    .main{
+                width: 100%;
+            }
+    
     .columns {
-        width: 80%;
+        width: 100%;
         align-content: center;
     }
+    .columns2 {
+        width: 100%;
+        align-content: center;
+    }
+    .column3 {
+                padding-top: 10px;
+                width: 100%;
+                
+               
+            }
+            .column4 {
+                margin-top: 10px;
+                width: 100%;
+                
+            }
 }
 
 .testo {
@@ -386,9 +412,6 @@ and open the template in the editor.
     width: 30%;
     font-weight: bold;
     
-}
-.height1 {
-    height: 60px;
 }
 
 #colore1 {
@@ -507,7 +530,8 @@ label {
 }
 
 #importo {
-   width: 10%; 
+   width: 10%;
+   
     
 }
 

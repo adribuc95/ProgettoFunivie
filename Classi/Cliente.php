@@ -19,6 +19,8 @@ class Cliente {
     public $commenti;
     public $is_syncronised = 0;
     public $is_exported = 0;
+    public $newsletter;
+    public $marketing;
     
 
     public function salvaDati() {
@@ -39,6 +41,8 @@ class Cliente {
             $this->email = htmlspecialchars($_POST["email"]);
             $this->sito = htmlspecialchars($_POST["sito"]);
             $this->commenti = htmlspecialchars($_POST["commenti"]);
+            $this->newsletter = htmlspecialchars($_POST["checkbox3"]);
+            $this->marketing = htmlspecialchars($_POST["checkbox2"]);
         }
                 
         $servername = "localhost";
@@ -53,13 +57,13 @@ class Cliente {
             die("Connection failed: " . $conn->connect_error);
         } 
 
-        $sql = "INSERT INTO `Cliente` (`ID_cliente_riferimento`, `ID_cliente`, `titolo`, `nome`, `cognome`, `data_nascita`, `indirizzo`, `city`, `cap`, `provincia`, `telefono`, `fax`, `cellulare`, `email`, `sito`, `commenti`,`is_syncronised`, `is_exported`) "
-                 ."VALUES ('$this->ID_cliente_riferimento', '$this->ID_cliente', '$this->titolo', '$this->nome', '$this->cognome', '$this->data_nascita', '$this->indirizzo', '$this->city', '$this->cap', '$this->provincia', '$this->telefono', '$this->fax', '$this->cellulare', '$this->email', '$this->sito', '$this->commenti', '1', '1');";
+        $sql = "INSERT INTO `Cliente` (`ID_cliente_riferimento`, `ID_cliente`, `titolo`, `nome`, `cognome`, `data_nascita`, `indirizzo`, `city`, `cap`, `provincia`, `telefono`, `fax`, `cellulare`, `email`, `sito`, `commenti`,`is_syncronised`, `is_exported`, `newsletter`, `marketing`) "
+                 ."VALUES ('$this->ID_cliente_riferimento', '$this->ID_cliente', '$this->titolo', '$this->nome', '$this->cognome', '$this->data_nascita', '$this->indirizzo', '$this->city', '$this->cap', '$this->provincia', '$this->telefono', '$this->fax', '$this->cellulare', '$this->email', '$this->sito', '$this->commenti', '$this->is_syncronised', '$this->is_exported', '$this->newsletter', '$this->marketing');";
         
 
 
         if (($conn->query($sql) === TRUE)) {
-            echo "New record created successfully";
+            echo "New record Cliente created successfully";
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }

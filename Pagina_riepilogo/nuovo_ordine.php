@@ -3,12 +3,14 @@
 session_start();
 distruggiSessione();
 
-header("location: https://www.funiviemadonnacampiglio.it/onlinesale/");
+header("../index.php");
+exit();
 
  function distruggiSessione() {
-     session_unset();
-    unset($_SESSION['ID_ordine']);
-    unset($_SESSION['prima_volta']);
+    unset($_SESSION["ID_ordine"]);
+    unset($_SESSION["prima_volta"]);
+    unset($_SESSION["numero_riferimento"]);
+    session_unset();
     
     echo "session destroyed";
      

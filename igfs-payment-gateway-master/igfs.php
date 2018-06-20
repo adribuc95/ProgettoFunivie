@@ -57,7 +57,7 @@ class Igfs
 			
 			if(!$init->execute()){
 			//assign error 
-			header("location: https://www.funiviemadonnacampiglio.it/onlinesale/igfs-payment-gateway-master/error.php");
+			header("location: error.php");
 			}else{
 			//redirect to success page.
 			$payment_id = $init->paymentID;

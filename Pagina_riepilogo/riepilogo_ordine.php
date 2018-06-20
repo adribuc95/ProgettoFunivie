@@ -10,33 +10,32 @@ $ordine = new Ordine();
 $tessera = new Tessera();
 $foto = new Foto();
 $articolo = new Articolo();
-$_SESSION['firefox'] = false;
-if(!isset($_SESSION['ID_ordine']) && (!isset($_SESSION['firefox']))) {   
+
+if(!isset($_SESSION["ID_ordine"])) {   
 $ID_ordine = $ordine->getIDOrdine();
 }
+
 else {
-    $ID_ordine = $_SESSION['ID_ordine'];
+    $ID_ordine = $_SESSION["ID_ordine"];
 }
 
 $numero_tessere = $ordine->countProduct($ID_ordine); //recupero numero tessere dell'ordine
-$tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine); //recupero la tipologia delle tessere di un ordine.
-$ID_clienti = $ordine->getIDClienti_StessoOrdine($ID_ordine); //ritorna gli ID_cliente di tutti i clienti dello stesso ordine.
-$date_nascita = $ordine->getDate_StessoOrdine($ID_ordine);
-$nomi = $ordine->getName_StessoOrdine($ID_ordine);
-$cognomi = $ordine->getSurname_StessoOrdine($ID_ordine);
-$importi_tessere = $ordine->getImporto_Tessera($ID_ordine);
-$importi_articoli = $ordine->getImporto_Articolo($ID_ordine);
-$ID_articoli = $ordine->getIDArticolo_StessoOrdine($ID_ordine);
 
-if ($numero_tessere == 0) {
-    unset($_SESSION['numero_riferimento']);
+if ($numero_tessere != 0) {
+    $tipologia_tessere = $ordine->getTessere_StessoOrdine($ID_ordine); //recupero la tipologia delle tessere di un ordine.
+    $ID_clienti = $ordine->getIDClienti_StessoOrdine($ID_ordine); //ritorna gli ID_cliente di tutti i clienti dello stesso ordine.
+    $date_nascita = $ordine->getDate_StessoOrdine($ID_ordine);
+    $nomi = $ordine->getName_StessoOrdine($ID_ordine);
+    $cognomi = $ordine->getSurname_StessoOrdine($ID_ordine);
+    $importi_tessere = $ordine->getImporto_Tessera($ID_ordine);
+    $importi_articoli = $ordine->getImporto_Articolo($ID_ordine);
+    $ID_articoli = $ordine->getIDArticolo_StessoOrdine($ID_ordine);
 }
-
 
 ?>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Riepilogo Ordine</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="../Pagina_iniziale/CSS/CSS.css" rel="stylesheet" type="text/css">
@@ -61,7 +60,7 @@ if ($numero_tessere == 0) {
             <center>
             <div class='titolo'>
                 <ul class="price">
-                <li class="header"><i style="font-size:35px;" class="fa">&#xf07a;</i> Riepilogo Ordine</li>
+                <li class="header">Riepilogo Ordine<i style="font-size:35px;" class="fa">&#xf07a;</i></li>
                 </ul>
             </div>
                
@@ -111,7 +110,7 @@ if ($numero_tessere == 0) {
                          <td id='dati'> 
                             <input name='dati$i' value='$ID_cliente' hidden/>
                             $nome<br>$cognome <br>$data</td>
-                       <td id='importo'>$importo_tessera,00 €"; 
+                       <td id='importo'>$importo_tessera,00€"; 
             
             if($importo_articolo == 0) {
                 echo"</td>";

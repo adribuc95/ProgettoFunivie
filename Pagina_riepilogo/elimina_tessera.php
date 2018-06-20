@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-header("location: https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php");
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $riferimento = htmlspecialchars($_POST["elimina"]);
@@ -12,10 +12,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $nome_foto = $ID_foto.".jpg";
             eliminaDaDB($ID_cliente, $ID_ordine, $nome_foto);
 }
-if ($numero_tessere == 0) {
-    unset($_SESSION["prima_volta"]);
-}
+
 $_SESSION["numero_riferimento"]--;
+
+header("location: riepilogo_ordine.php");
+exit();
 
 
 
