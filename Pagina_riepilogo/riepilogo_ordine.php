@@ -12,7 +12,7 @@ $foto = new Foto();
 $articolo = new Articolo();
 
 if(!isset($_SESSION["ID_ordine"])) {   
-$ID_ordine = $ordine->getIDOrdine();
+header("location: ../index.php");
 }
 
 else {
