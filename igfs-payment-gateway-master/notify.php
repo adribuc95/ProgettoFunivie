@@ -32,8 +32,9 @@ if($payment_id){
         <center>
             <i class='fa fa-check' style='font-size:90px; color: green; margin-top: 20px;'></i> <br>
             <h1 style='color: green; font-size: 70px;'>Grazie!</h1>
-            <p style='font-size: 25px;'>Il tuo ordine è andato a buon fine! Verrai reindirizzato alla Homepage... <br> A breve riceverai una mail di conferma.
+            <p style='font-size: 25px;'>Il tuo ordine è andato a buon fine! Verrai reindirizzato alla Homepage... <br> A breve riceverai una mail di conferma. <br> 
             </p>
+            <p style='font-size: 15px;'>(Se non la visualizzi, controlla tra la posta indesiderata)</p>
         </center>
         </body>
     </html>";
@@ -41,7 +42,7 @@ if($payment_id){
     distruggiSessione();
     
     //reindirizza alla homepage
-    header("refresh:3; url= ../index.php");
+    header("refresh:5; url= ../index.php");
     exit();
 
 }
