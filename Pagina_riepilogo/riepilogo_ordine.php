@@ -39,9 +39,9 @@ if ($numero_tessere != 0) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="../Pagina_iniziale/CSS/CSS.css" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-         <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> 
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous"> <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> 
          <script>
+             
              function mostra() {
     
         document.getElementById("email").style.display = '';
@@ -90,7 +90,7 @@ if ($numero_tessere != 0) {
             echo "<div class='column5'>
                 
                     <table style='width:100%; text-align: center;'>
-                        <form action='elimina_tessera.php' method='post'>
+                        <form action='elimina_tessera.php' method='post' name='elimina_tessera'>
                         <tr>
                         
                          <td id='foto'>
@@ -121,7 +121,7 @@ if ($numero_tessere != 0) {
                 
             echo "     <td id='elimina'>
                        <input name='elimina' value='$i' hidden/>
-                        <button type='submit' style='background-color: red; border: 1px solid black; color: black'><b><i class='fa fa-trash' style='font-size:20px'></i></b></button></td>
+                        <button id='button_elimina' onsubmit='return confirmAzione();' type='submit'><b><i class='fa fa-times-circle' style='font-size:30px'></i></b></button></td>
                         <input name='ordine' value='$ID_ordine' hidden/>
                         <input name='foto$i' value='$ID_foto' hidden/>
                         <input name='numero_tessere' value='$numero_tessere' hidden/>
@@ -205,7 +205,10 @@ if ($numero_tessere != 0) {
                     <input name="email" id="email" type="email" placeholder="nome@dominio.it" required pattern=".+@.+..+" value="<?php if (isset($_SESSION['email'])&& $_SESSION['email'] <> '') {    echo $_SESSION['email'];}?>" style='height: 30px; width: 40%; margin-top: 10px; align-content: center'/> <br>
                     <input name='importo_totale' value='<?php echo $importo_totale; ?>' hidden/>
                     <input name='ID_ordine' value='<?php echo $ID_ordine; ?>' hidden/>
-                     <button class='bottone' style='margin-top: 10px'>Paga <i class='fa fa-paypal' style='font-size:16px;'></i></button>
+                    <input id='azione' name="azione"hidden />
+                    <button class='bottone' style='margin-top: 10px'onclick="document.getElementById('azione').value ='carta';">Paga Con Carta di Credito <i class='fa fa-credit-card' style='font-size:16px;'></i></button>
+                     <button class='bottone' style='margin-top: 10px' onclick="document.getElementById('azione').value ='bonifico';">Paga Con Bonifico <i class='fa fa-piggy-bank' style='font-size:16px;'></i></button>
+                     
                      
                     </center>
                     </form>

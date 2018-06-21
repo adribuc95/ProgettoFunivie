@@ -12,10 +12,10 @@ $ID_ordine = $_SESSION["ID_ordine"];
 if($payment_id){
 
     //esporto dati per salvarli nel database SKIDATA
-    $email->emailDati("adribuc95@gmail.com", $ID_ordine); //mettere mail che si vuole.
+    $email->emailDati("adribuc95@gmail.com", $ID_ordine); //mettere mail che si vuole. (ADMIN)
     
-    //da implementare
-    //$email->emailRiepilogo("adribuc95@gmail.com", $ID_ordine);
+    //email riepilogo UTENTE
+    $email->emailRiepilogo($_SESSION["email2"], $ID_ordine);
     
 
     //pagina pagamento andato a buon fine.

@@ -17,7 +17,7 @@ class Igfs
 	public $IgfsNotifyURL = '';
 	public $IgfsErrorURL = '';
 	public $IgfsTimeout = 30000;
-	public $IgfsTreminalId = 'UNI_ECOM';//"UNI_MYBK"
+	public $IgfsTreminalId = '';//
 	public $IgfsApikSig = 'UNI_TESTKEY';
 	public $IgfsShopUserRef = 'UNIBO'; //3055296
 	public $IgfsCurrencyCode = 'EUR'; //ISO
@@ -44,7 +44,7 @@ class Igfs
                         
 			
 			$init->timeout 		= $this->IgfsTimeout;			
-			$init->tid              = $this->IgfsTreminalId;
+			$init->tid              = $paymentData["metodo"];
 			$init->kSig 		= $this->IgfsApikSig;
 			$init->shopID 		= $paymentData['cart_id'];
 			$init->shopUserRef 	= $paymentData['email'];
@@ -66,6 +66,7 @@ class Igfs
                         $this->setCookiesValue('data', date("Y/m/d"));
                         $this->setCookiesValue('importo_totale', $paymentData['amount']);
                         $this->setCookiesValue('email', $paymentData['email']);
+                        $this->setCookiesValue('metodo',$paymentData['metodo']);
 			header("location: ".$init->redirectURL);
                         
                         
@@ -84,10 +85,12 @@ class Igfs
 		$verify = new IgfsCgVerify();
 		$payment_id =  $this->getCookiesValue('payment_id');
 		$cart_id =$this->getCookiesValue('cart_id');
+                $_SESSION["shop_ID"] = $cart_id;
                 $ID_ordine=$this->getCookiesValue('ID_ordine');
                 $data=$this->getCookiesValue('data');
                 $importo_totale=$this->getCookiesValue('importo_totale');
                 $email=$this->getCookiesValue('email');
+                $metodo = $this->getCookiesValue('metodo');
 		if($payment_id) { 
 				
 				if($this->testmode==true){
@@ -98,7 +101,7 @@ class Igfs
 				}
 
 				$verify->timeout = $this->IgfsTimeout;		
-				$verify->tid = $this->IgfsTreminalId;
+				$verify->tid = $metodo;
 				$verify->kSig = $this->IgfsApikSig;
 				$verify->shopID = $cart_id;
 				$verify->paymentID = $payment_id;

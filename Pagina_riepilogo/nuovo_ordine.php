@@ -3,7 +3,7 @@
 session_start();
 distruggiSessione();
 
-header("../index.php");
+header("location: ../index.php");
 exit();
 
  function distruggiSessione() {

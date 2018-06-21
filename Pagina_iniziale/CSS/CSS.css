@@ -645,3 +645,15 @@ label {
 }
 
 .chiudi:hover { background: #00d9ff; }
+
+#button_elimina:hover {
+    background-color: red;
+    color: white;
+}
+
+#button_elimina {
+background-color: white; 
+border: 1px solid white; 
+color: red;
+border-radius: 40px;
+    }

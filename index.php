@@ -44,10 +44,6 @@ $importi = $tessera->getImporti();
     <script>
     //funzione che gestisce il cambio azione tra "concludi ordine" e "aggiungi skipass"
     function chgAction( action_name ) {
-        if(document.getElementById("uploaded").style.display == 'none' && document.getElementById("uploaded2").style.display == 'none') {
-            alert("manca la foto!!");
-        }
-        else
         document.dati_utente.action = action_name;
     }
        
@@ -186,6 +182,7 @@ function getLimitDate(age) {
     }
     }
     
+    
     </script>
 
     
@@ -236,13 +233,14 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                 </div>
                 <div class="descrizione">
                     <center>
-                    <div class="columns">
+                    <div class="columns" >
                     <ul class="price">
                       <li class="header">Superskirama</li>
+                      
                       <li>
                           <div class="tipologia"><b>ADULTI</b><br>Ski pass a cui può essere associato <br>un BAMBINO ACCOMPAGNATO.</div>
                           <div class="prezzo"><?php $importo[0] = implode("", $importi[0]); echo "€ $importo[0],00";?></div>
-                          <input type="radio" name="tessera" value="1" id="adulti_ss" required class="selezione" />
+                          <input type="radio" name="tessera" value="1" id="adulti_ss" required class="selezione"/>
                       </li>
                       <li id="sseniores_ss_c">
                           <div class="tipologia"><b>SUPER SENIORES</b> <br>nati prima del <script>document.write(getLimitDate(75));</script></div>
@@ -292,6 +290,7 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                       
                       ?>
                     </ul>
+</div>
                   </div>
                     </center>
                 </div>
@@ -649,10 +648,12 @@ Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Info
         <button type="button" class="bottone" onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam <i class="fa fa-video-camera" style="font-size:16px"></i></button>
         <button type="button" class="bottone" id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica <i class="fa fa-camera" style="font-size:16px"></i></button>
         </div>
+        <!--
         <div id='no_foto1'>
         Ho già la foto dagli anni scorsi.<input type="checkbox" name="checkbox" value="check" id="no_foto" onclick='if(document.getElementById("no_foto").checked == true) {mostra("conferma"); nascondi("mostra_camera2"); nascondi("mostra_camera"); nascondi("webcam"); nascondi("carica");} else {mostra("webcam"); mostra("carica"); nascondi("conferma");}'/>
         <br><button type="button" id="conferma" class="bottone" style="display:none; margin-top: 10px;"> Conferma <i class="fa fa-check" style="font-size:16px"></i></button>
         </div>
+        -->
         <div id='mostra_camera2' style='display: none; margin-top: 10px; border: #eee 1px solid;'>
             <div>
                 <button type="button" class="btn" hidden></button>
@@ -871,6 +872,8 @@ navigator.mediaDevices.getUserMedia({ audio: false, video: true })
   document.getElementById("upload").addEventListener("click", function(){
             $("#no-uploading").hide();
             $("#uploading").show();
+            $("#upload").hide();
+            $("#reset_camera").hide();
             var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
             $.ajax({
                 type: "POST",
@@ -882,8 +885,6 @@ navigator.mediaDevices.getUserMedia({ audio: false, video: true })
                 console.log("saved");
                 $("#uploading").hide();
                 $("#uploaded").show();
-                $("#upload").hide();
-                $("#reset_camera").hide();
                 $("#canvas").hide();
                 $("#webcam").hide();
                 $("#carica").hide();

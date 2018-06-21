@@ -468,8 +468,82 @@ public function countProduct($ID_ordine) { //conta le tessere all'interno di un 
         }
             return $ID_articolo;
         }
-           
+        
+        public function getImportoTotale($ID_ordine) {
+            $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT `importo` FROM `Pagamento` WHERE `ID_ordine` = '$ID_ordine'";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $importo_totale = $row['importo'];
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+    }
+// chiusura della connessione
+        $conn->close();
+        return $importo_totale;
 }
+
+public function getIDShop($ID_ordine) {
+            $servername = "localhost";
+        $username = "onlinesales";
+        $password = "Sale0nl1nE";
+        $dbname = "fmc-db-onlinesales";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $query = "SELECT `ID_shop` FROM `Pagamento` WHERE `ID_ordine` = '$ID_ordine'";
+        if (!$result = $conn->query($query)) {
+            echo "Errore della query: ".$conn->error.".";
+            exit();
+        }
+        else{
+            // conteggio dei record
+            if($result->num_rows > 0) {
+              // conteggio dei record restituiti dalla query
+              while($row = $result->fetch_array(MYSQLI_ASSOC))
+              {
+                  
+                $ID_shop = $row['ID_pagamento'];
+                
+              }
+              // liberazione delle risorse occupate dal risultato
+              $result->close();
+            }
+    }
+// chiusura della connessione
+        $conn->close();
+        return $ID_shop;
+}
+
+        }
+           
+
 
         
 
