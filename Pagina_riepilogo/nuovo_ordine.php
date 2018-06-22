@@ -1,3 +1,10 @@
+<!--
+////////////////////////////////
+AUTHOR: @ADRIANO BUCELLA
+adribuc95@gmail.com
+///////////////////////////////
+-->
+<!--FILE CHE VA A DISTRUGGERE LA SESSIONE PER INIZIARE UN NUOVO ORDINE E REINDERIZZA ALL'INDEX-->
 <?php
 
 session_start();

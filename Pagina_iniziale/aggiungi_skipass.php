@@ -1,5 +1,12 @@
+<!--
+////////////////////////////////
+AUTHOR: @ADRIANO BUCELLA
+adribuc95@gmail.com
+///////////////////////////////
+-->
+<!--FILE CHE VA A SALVARE I DATI NEL DB E REINDERIZZA ALL'INDEX-->
 <?php
-
+//INIZIALIZZAZIONE E GESTIONE DELLE VARIABILI E DEI DATI NECESSARI
 session_start();
 
 include "../Classi/Cliente.php";
@@ -23,25 +30,25 @@ if ((!isset($_SESSION["prima_volta"]))) {
             $ordine->setIDOrdine($_SESSION["ID_ordine"]);
             $_SESSION["numero_riferimento"]++;
         }
-
+//imposto l' ID_session --> viene rigenerato al caricamento dell'immagine
 $ID_session = session_id();
 
-//creo i nuovi ID
+//creo un nuovo ID_cliente
 $new_ID_cliente = $cliente->getNewIDCliente();
 
 //assegno i nuovi ID a Cliente
 $cliente->setIDCliente($new_ID_cliente);
 
-//salvo i dati Cliente
+//salvo i dati Cliente nel DB e mantengo i dati per l'aggiunta di tessere.
 $cliente->salvaDati();
 $cliente->mantieniDatiForm();
 
-//assegno i gli ID a Ordine
+//assegno gli ID a Ordine e foto
 $ordine->setIDCliente($new_ID_cliente);
 $ordine->salvaDati();
-
 $foto->setIDCliente($new_ID_cliente);
 
+//gestione del fatto se è stata caricata immagine o no, per ora non utilizzata (va sempre in else)
 if (implode($foto->getLastIDFoto()) == $ID_session) {
     $foto->salvaNoFoto();
     echo "no foto";
@@ -54,5 +61,5 @@ else {
     echo "foto";
 }
 
-//header("location: ../index.php");
+header("location: ../index.php");
 exit();

@@ -20,7 +20,7 @@ class Email {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $query = "SELECT Ordine.ID_ordine, `Foto`, `data_nascita`, `titolo`, `nome`, `cognome`, `indirizzo`, `cap`, `city`, `cellulare`, `email`, `data_ordine`, `tipologia`, `commenti` FROM `Ordine`INNER JOIN `Foto` ON Ordine.ID_cliente = Foto.ID_cliente INNER JOIN `Cliente` ON Ordine.ID_cliente = Cliente.ID_cliente INNER JOIN `Tessera` ON Ordine.ID_tessera = Tessera.ID_tessera WHERE Ordine.ID_ordine= '$ID_ordine'";
+        $query = "SELECT `Foto`, `data_nascita`, `titolo`, `nome`, `cognome`, `indirizzo`, `cap`, `city`, `cellulare`, `email`, `Codice_Fiscale`, `data_ordine`, `tipologia`, `commenti` FROM `Ordine`INNER JOIN `Foto` ON Ordine.ID_cliente = Foto.ID_cliente INNER JOIN `Cliente` ON Ordine.ID_cliente = Cliente.ID_cliente INNER JOIN `Tessera` ON Ordine.ID_tessera = Tessera.ID_tessera WHERE Ordine.ID_ordine= '$ID_ordine'";
         $output='';
         if (!$result = $conn->query($query)) {
              echo "Errore della query: ".$conn->error.".";
@@ -28,6 +28,7 @@ class Email {
          }
          else{
              //intestazione file
+             $output.=''.'ID_ordine'.';';
              $output.=''.'link_immagine'.';';
              $output.=''.'data_nascita'.';';
             $output.=''.'titolo'.';';
@@ -38,6 +39,7 @@ class Email {
             $output.=''.'città'.';';
             $output.=''.'cellulare'.';';
             $output.=''.'email'.';';
+            $output.=''.'codice_fiscale'.';';
             $output.=''.'data_ordine'.';';
             $output.=''.'tessera'.';';
             $output.=''.'commenti'.';';
@@ -47,6 +49,7 @@ class Email {
               // conteggio dei record restituiti dalla query
             while($row = $result->fetch_array(MYSQLI_ASSOC)) {
                 //dati file
+                $output.='"'.$ID_ordine.'";';
                 if($row['Foto'] == 'Foto anni scorsi') {
                     $output.= '"Foto anni scorsi";';
                 }
@@ -62,24 +65,52 @@ class Email {
                 $output.='"'.$row['city'].'";';
                 $output.='"'.$row['cellulare'].'";';
                 $output.='"'.$row['email'].'";';
+                $output.='"'.$row['Codice_Fiscale'].'";';
                 $output.='"'.$row['data_ordine'].'";';
                 $output.='"'.$row['tipologia'].'";';
                 $output.='"'.$row['commenti'].'";';
                 $output.="\n\n";
+                
+                $output2.='"'.$ID_ordine.'";';
+                if($row['Foto'] == 'Foto anni scorsi') {
+                    $output2.= '"Foto anni scorsi";';
+                }
+                else {
+                $output2.= '"'.'https://www.funiviemadonnacampiglio.it/onlinesale/immagini_skipass/'.$row['Foto'].'.jpg";';
+                }
+                $output2.='"'.$row['data_nascita'].'";';
+                $output2.='"'.$row['titolo'].'";';
+                $output2.='"'.$row['nome'].'";';
+                $output2.='"'.$row['cognome'].'";';
+                $output2.='"'.$row['indirizzo'].'";';
+                $output2.='"'.$row['cap'].'";';
+                $output2.='"'.$row['city'].'";';
+                $output2.='"'.$row['cellulare'].'";';
+                $output2.='"'.$row['email'].'";';
+                $output2.='"'.$row['Codice_Fiscale'].'";';
+                $output2.='"'.$row['data_ordine'].'";';
+                $output2.='"'.$row['tipologia'].'";';
+                $output2.='"'.$row['commenti'].'";';
+                $output2.="\n\n";
                 }
             $result->close();
         }
 
-        $file = 'datiOrdine.txt';
+        $file = '../dati_ordine/datiOrdine_'.$ID_ordine.'.txt';
         $f = fopen($file,'w');
-
+        $file2 = '../dati_ordine/totale_ordini.txt';
         $c = fopen($file,'rb');
+        $d = fopen($file2,'a');
+        $f = fopen($file,'w');
+        
+        fwrite($d, $output2);
         fwrite($f,$output);
         fwrite($c,$output);
         $data = fread($c, filesize($file));
         fclose($f);
         fclose($c);
-
+        fclose($d);
+                
         // Adatto il file al formato MIME base64 usando base64_encode
         $data = chunk_split(base64_encode($data));
 
@@ -116,7 +147,8 @@ class Email {
         // chiudo con il separatore
         $msg .= "--{$mime_boundary}--\n";
       // Invio la mail
-      mail($email, "dati_ordine n°$ID_ordine", $msg, $headers); //mettere email che si vuole.
+      mail($email, "dati_ordine n°$ID_ordine", $msg, "From: biglietterie@funiviecampiglio.it\r\n" .
+     "Reply-To: biglietterie@funiviecampiglio.it\r\n" .$headers); 
      }
     }
     
@@ -140,7 +172,7 @@ class Email {
     $ID_articoli = $ordine->getIDArticolo_StessoOrdine($ID_ordine);
     $ID_shop = $_SESSION["shop_ID"];
     
-    $URL_QR ='https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='.$ID_shop.'choe=UTF-8';
+    $URL_QR ='https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='.$ID_shop;
         
         // Genero il "separatore"
         // Serve per dividere, appunto, le varie parti del messaggio.
@@ -220,7 +252,7 @@ for($i = 0; $i < $numero_tessere; $i++) {
                 $msg .="</span></p>";
             }
             else {
-            $msg .= " <hr> $importo_articolo,00 €</span></p>";
+            $msg .= " <hr> $importo_articolo,00€</span></p>";
                 }
                 
             $msg .="
@@ -289,12 +321,13 @@ for($i = 0; $i < $numero_tessere; $i++) {
 <p style='width: 80%; margin: 0px 0px 12px; font-stretch: normal; font-size: 14px; line-height: normal; font-family: Trebuchet MS;  -webkit-text-stroke-color: rgb(0, 0, 0);'><span style='font-kerning: none'>La invitiamo a stampare questa mail e presentarla presso una cassa per ricevere lo/gli Skipass.<br>Per eventuali domande rimaniamo a Sua completa disposizione.</span></p>
 <p style='margin: 0px 0px 12px; font-stretch: normal; font-size: 12px; line-height: normal; font-family: Trebuchet MS; -webkit-text-stroke-color: rgb(0, 0, 0); min-height: 11px;'><span style='font-kerning: none'></span><br></p>
 <p style='margin: 0px 0px 12px; font-stretch: normal; font-size: 14px; line-height: normal; font-family: Trebuchet MS; -webkit-text-stroke-color: rgb(0, 0, 0);'><span style='font-kerning: none'>Cordiali Saluti,</span></p>
-  <div dir='ltr'><div style='color:rgb(0,0,0);font-family:Trebuchet MS;font-size:medium'><div style='color:rgb(0,0,0);font-family:Trebuchet MS;font-size:medium'><font face='Trebuchet MS' size='2'><img align='bottom' alt='' border='0' height='70' width='142' hspace='0' src='https://ci4.googleusercontent.com/proxy/K1nv2SAYiulGXF2T4oqTQxHMyqvUNPQ_0NIp3AhGTl-ArMvhRnzYT-sMHZal88dKblSEoBDudUIVAmkrYkybYVqRA2CZv2YojxkM=s0-d-e1-ft#http://www.funiviecampiglio.it/email/logo-funivie.png' class='CToWUd'>&nbsp;<img align='bottom' alt='' border='0' height='70' width='93' hspace='0' src='https://ci5.googleusercontent.com/proxy/A041Z0w6qRDD8LJbpyqWhOxW_qe1TBP8XvERZ_2y3td3ZtXOZW7NXmByh3fMJFfF2MCZgTGGvTmMXtj8noeW-kZVZ-bP5J3NfTzT=s0-d-e1-ft#http://www.funiviecampiglio.it/email/logo-skiarea.png' class='CToWUd'></font></div><div style='color:rgb(0,0,0);font-family:Trebuchet MS;font-size:medium'><font face='Trebuchet MS' size='2'>Funivie Madonna di Campiglio S.p.A.</font></div><div style='color:rgb(0,0,0);font-family:Trebuchet MS;font-size:medium'><font face='Trebuchet MS' size='2'><a href='https://maps.google.com/?q=Via+Presanella,+12+%E2%80%A2+38086%C2%A0+Madonna+di+Campiglio%C2%A0+TN&amp;entry=gmail&amp;source=g'>Via Presanella, 12 • 38086&nbsp; Madonna di Campiglio&nbsp; TN</a></font></div><font face='Trebuchet MS' size='2' style='color:rgb(0,0,0)'><img align='bottom' alt='' border='0' height='15' hspace='0' src='https://ci6.googleusercontent.com/proxy/07uDyXeHsfrr2hR81aBv5NhTz6lKIZIoRBId4hn3hogMLN4YjzZEYDuqrmb4iv8ltgYBr_PGGfTRUOWznB1kQSXQSpE=s0-d-e1-ft#http://www.funiviecampiglio.it/email/Phone.png' width='15' class='CToWUd'>&nbsp;+39 0465 447744&nbsp;&nbsp;&nbsp;&nbsp;<img align='bottom' alt='' border='0' height='15' hspace='0' src='https://ci6.googleusercontent.com/proxy/iUgF4p9zj80Fask-JzKUVXyJmKIRIUpgMJqGRLD-n9JCpquetQcpwQwomMtWI1FT9ItquM7RyxdEHY74tDtC9sPt=s0-d-e1-ft#http://www.funiviecampiglio.it/email/Fax.png' width='15' class='CToWUd'>&nbsp;+39 0465 447799<br><hr><div>Informativa - D.lgs. 196/03<br><font face='Trebuchet MS' size='1'>I Suoi dati sono trattati per la finalità di comunicazioni commerciali circa i nostri prodotti anche tramite l'utilizzo delle sue coordinate di posta elettronica; i Suoi dati saranno trattati con modalità manuali, informatiche e/o telematiche, potranno essere comunicati a terzi ma non saranno diffusi. Lei potrà rivolgersi al 'Servizio Privacy' presso il titolare del trattamento per verificare i Suoi dati e farli integrare, aggiornare o rettificare e/o per esercitare gli altri diritti previsti dall'art. 7 del D.lgs 196/03, ). La informiamo che il titolare del trattamento dei dati è la Società Funivie Madonna di Campiglio S.p.A.. L'informativa completa è presente sul sito internet&nbsp;</font><a href='http://www.funiviecampiglio.it/pagcomuni/privacy.htm' target='_blank' data-saferedirecturl='https://www.google.com/url?hl=it&amp;q=http://www.funiviecampiglio.it/pagcomuni/privacy.htm&amp;source=gmail&amp;ust=1529655368556000&amp;usg=AFQjCNH-lbQ_Z0TRofmWMq8u_41UG2Uz8Q'><font size='1'>www.funiviecampiglio.<wbr>it</font></a><font size='1'>&nbsp;o presso i nostri uffici e casse.</font></div></font></div></div>
+  <div dir='ltr'><div style='color:rgb(0,0,0);font-family:Trebuchet MS;font-size:medium'><div style='color:rgb(0,0,0);font-family:Trebuchet MS;font-size:medium'><font face='Trebuchet MS' size='2'><img align='bottom' alt='' border='0' height='70' width='142' hspace='0' src='https://ci4.googleusercontent.com/proxy/K1nv2SAYiulGXF2T4oqTQxHMyqvUNPQ_0NIp3AhGTl-ArMvhRnzYT-sMHZal88dKblSEoBDudUIVAmkrYkybYVqRA2CZv2YojxkM=s0-d-e1-ft#http://www.funiviecampiglio.it/email/logo-funivie.png' class='CToWUd'>&nbsp;<img align='bottom' alt='' border='0' height='70' width='93' hspace='0' src='https://ci5.googleusercontent.com/proxy/A041Z0w6qRDD8LJbpyqWhOxW_qe1TBP8XvERZ_2y3td3ZtXOZW7NXmByh3fMJFfF2MCZgTGGvTmMXtj8noeW-kZVZ-bP5J3NfTzT=s0-d-e1-ft#http://www.funiviecampiglio.it/email/logo-skiarea.png' class='CToWUd'></font></div><div style='color:rgb(0,0,0);font-family:Trebuchet MS;font-size:medium'><font face='Trebuchet MS' size='2'>Funivie Madonna di Campiglio S.p.A.</font></div><div style='color:rgb(0,0,0);font-family:Trebuchet MS;font-size:medium'><font face='Trebuchet MS' size='2'><a href='https://maps.google.com/?q=Via+Presanella,+12+%E2%80%A2+38086%C2%A0+Madonna+di+Campiglio%C2%A0+TN&amp;entry=gmail&amp;source=g'>Via Presanella, 12 • 38086&nbsp; Madonna di Campiglio&nbsp; TN</a></font></div><font face='Trebuchet MS' size='2' style='color:rgb(0,0,0)'><img align='bottom' alt='' border='0' height='15' hspace='0' src='https://ci6.googleusercontent.com/proxy/07uDyXeHsfrr2hR81aBv5NhTz6lKIZIoRBId4hn3hogMLN4YjzZEYDuqrmb4iv8ltgYBr_PGGfTRUOWznB1kQSXQSpE=s0-d-e1-ft#http://www.funiviecampiglio.it/email/Phone.png' width='15' class='CToWUd'>&nbsp;+39 0465 447744&nbsp;&nbsp;&nbsp;&nbsp;<img align='bottom' alt='' border='0' height='15' hspace='0' src='https://ci6.googleusercontent.com/proxy/iUgF4p9zj80Fask-JzKUVXyJmKIRIUpgMJqGRLD-n9JCpquetQcpwQwomMtWI1FT9ItquM7RyxdEHY74tDtC9sPt=s0-d-e1-ft#http://www.funiviecampiglio.it/email/Fax.png' width='15' class='CToWUd'>&nbsp;+39 0465 447799<br><hr><div> Informativa - D.lgs. 196/03 <br><font face='Trebuchet MS' size='1'>I Suoi dati sono trattati per la finalità di comunicazioni commerciali circa i nostri prodotti anche tramite l'utilizzo delle sue coordinate di posta elettronica; i Suoi dati saranno trattati con modalità manuali, informatiche e/o telematiche, potranno essere comunicati a terzi ma non saranno diffusi. Lei potrà rivolgersi al 'Servizio Privacy' presso il titolare del trattamento per verificare i Suoi dati e farli integrare, aggiornare o rettificare e/o per esercitare gli altri diritti previsti dall'art. 7 del D.lgs 196/03, ). La informiamo che il titolare del trattamento dei dati è la Società Funivie Madonna di Campiglio S.p.A.. L'informativa completa è presente sul sito internet&nbsp;</font><a href='http://www.funiviecampiglio.it/pagcomuni/privacy.htm' target='_blank' data-saferedirecturl='https://www.google.com/url?hl=it&amp;q=http://www.funiviecampiglio.it/pagcomuni/privacy.htm&amp;source=gmail&amp;ust=1529655368556000&amp;usg=AFQjCNH-lbQ_Z0TRofmWMq8u_41UG2Uz8Q'><font size='1'>www.funiviecampiglio.<wbr>it</font></a><font size='1'>&nbsp;o presso i nostri uffici e casse.</font></div></font></div></div>
     </center>
 </body>
 </html>" . "\n\n";
       // Invio la mail
-      mail($email, "Conferma ordine n°$ID_ordine", $msg, $headers); //mettere email che si vuole.
+      mail($email, "Conferma ordine n°$ID_ordine", $msg, "From: biglietterie@funiviecampiglio.it\r\n" .
+     "Reply-To: biglietterie@funiviecampiglio.it\r\n" .$headers); //mettere email che si vuole.
         
     }
     

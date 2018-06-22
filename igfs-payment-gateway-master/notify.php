@@ -27,6 +27,11 @@ if($payment_id){
             <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
             <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'> 
             <link href='../Pagina_iniziale/CSS/CSS.css' rel='stylesheet' type='text/css'>
+            <script>
+    window.setTimeout(function() {
+        document.getElementById('sleep').style.display = '';
+    }, 3000);
+    </script>
         </head>
         <body>
         <center>
@@ -35,6 +40,7 @@ if($payment_id){
             <p style='font-size: 25px;'>Il tuo ordine è andato a buon fine! Verrai reindirizzato alla Homepage... <br> A breve riceverai una mail di conferma. <br> 
             </p>
             <p style='font-size: 15px;'>(Se non la visualizzi, controlla tra la posta indesiderata)</p>
+            <a id='sleep' href='../index.php'><p style='font-size: 15px;'>Ritorna alla Homepage</p></a>
         </center>
         </body>
     </html>";
@@ -42,7 +48,7 @@ if($payment_id){
     distruggiSessione();
     
     //reindirizza alla homepage
-    header("refresh:5; url= ../index.php");
+    header("refresh:10; url= ../index.php");
     exit();
 
 }

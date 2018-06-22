@@ -50,14 +50,16 @@ class Igfs
 			$init->shopUserRef 	= $paymentData['email'];
 			$init->trType = "PURCHASE";
 			$init->currencyCode = $this->IgfsCurrencyCode;//iso_code;
-			$init->amount = 1;//$paymentData['amount']*100;
+                        
+			$init->amount = $paymentData['amount']*100;
 			$init->langID = $this->IgfsLangID; //per italiano: "IT"
+                        
 			$init->notifyURL = $this->IgfsNotifyURL;
 			$init->errorURL = $this->IgfsErrorURL;
 			
 			if(!$init->execute()){
 			//assign error 
-			header("location: error.php");
+			//header("location: error.php");
 			}else{
 			//redirect to success page.
 			$payment_id = $init->paymentID;

@@ -15,6 +15,7 @@ class Cliente {
     public $fax;
     public $cellulare;
     public $email;
+    public $codice_fiscale;
     public $sito;
     public $commenti;
     public $is_syncronised = 0;
@@ -43,6 +44,7 @@ class Cliente {
             $this->commenti = htmlspecialchars($_POST["commenti"]);
             $this->newsletter = htmlspecialchars($_POST["checkbox3"]);
             $this->marketing = htmlspecialchars($_POST["checkbox2"]);
+            $this->codice_fiscale = htmlspecialchars($_POST["CF"]);
         }
                 
         $servername = "localhost";
@@ -57,8 +59,8 @@ class Cliente {
             die("Connection failed: " . $conn->connect_error);
         } 
 
-        $sql = "INSERT INTO `Cliente` (`ID_cliente_riferimento`, `ID_cliente`, `titolo`, `nome`, `cognome`, `data_nascita`, `indirizzo`, `city`, `cap`, `provincia`, `telefono`, `fax`, `cellulare`, `email`, `sito`, `commenti`,`is_syncronised`, `is_exported`, `newsletter`, `marketing`) "
-                 ."VALUES ('$this->ID_cliente_riferimento', '$this->ID_cliente', '$this->titolo', '$this->nome', '$this->cognome', '$this->data_nascita', '$this->indirizzo', '$this->city', '$this->cap', '$this->provincia', '$this->telefono', '$this->fax', '$this->cellulare', '$this->email', '$this->sito', '$this->commenti', '$this->is_syncronised', '$this->is_exported', '$this->newsletter', '$this->marketing');";
+        $sql = "INSERT INTO `Cliente` (`ID_cliente_riferimento`, `ID_cliente`, `titolo`, `nome`, `cognome`, `data_nascita`, `indirizzo`, `city`, `cap`, `provincia`, `telefono`, `fax`, `cellulare`, `email`, `Codice_Fiscale`, `sito`, `commenti`,`is_syncronised`, `is_exported`, `newsletter`, `marketing`) "
+                 ."VALUES ('$this->ID_cliente_riferimento', '$this->ID_cliente', '$this->titolo', '$this->nome', '$this->cognome', '$this->data_nascita', '$this->indirizzo', '$this->city', '$this->cap', '$this->provincia', '$this->telefono', '$this->fax', '$this->cellulare', '$this->email', '$this->codice_fiscale', '$this->sito', '$this->commenti', '$this->is_syncronised', '$this->is_exported', '$this->newsletter', '$this->marketing');";
         
 
 

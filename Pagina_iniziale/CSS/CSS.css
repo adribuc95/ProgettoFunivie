@@ -383,6 +383,9 @@ and open the template in the editor.
                 width: 100%;
                 
             }
+            #CFp {
+                 width:80%; 
+            }
 }
 
 .testo {
@@ -656,4 +659,12 @@ background-color: white;
 border: 1px solid white; 
 color: red;
 border-radius: 40px;
+    }
+    
+    #CFp {
+        
+        border-top: #eee 1px solid; 
+        width:70%; 
+        float: right; 
+        margin-top: 5px;
     }

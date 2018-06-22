@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+////////////////////////////////
+AUTHOR: @ADRIANO BUCELLA
+adribuc95@gmail.com
+///////////////////////////////
 -->
 <?php
+//INIZIALIZZAZIONE E GESTIONE DELLE VARIABILI E DEI DATI NECESSARI
 session_start();
 
 
@@ -58,23 +60,24 @@ $importi = $tessera->getImporti();
         }
         return age;
 }
-//funzione che prende come input il numero di anni che si vogliono togliere dalla data attuale e la restituisce.
-function getLimitDate(age) {
-        var date = new Date();
-        var year = date.getFullYear() - age;
-        var month = date.getMonth()+1;
-        var day = date.getDate();
 
-        if (day < 10) {
-            day = '0' + day;
+    //funzione che prende come input il numero di anni che si vogliono togliere dalla data attuale e la restituisce.
+    function getLimitDate(age) {
+            var date = new Date();
+            var year = date.getFullYear() - age;
+            var month = date.getMonth()+1;
+            var day = date.getDate();
+
+            if (day < 10) {
+                day = '0' + day;
+            }
+            if (month < 10) {
+                month = '0' + month;
+            }
+
+        var formattedDate = day + '/' + month + '/' + year;
+        return formattedDate;
         }
-        if (month < 10) {
-            month = '0' + month;
-        }
-        
-    var formattedDate = day + '/' + month + '/' + year;
-    return formattedDate;
-    }
 
     //funzione che va a controllare che la data di nascita inserita sia valida per l'offerta scelta.
     function checkOfferta() {
@@ -190,10 +193,11 @@ function getLimitDate(age) {
     
 </head>
 <body>
- 
+    <!--Bottone del carrello, rimane fisso in una posizione, non è cliccabile se non ci sono ancora prodotti.-->
     <button type="button" onClick="window.location.href='https://www.funiviemadonnacampiglio.it/onlinesale/Pagina_riepilogo/riepilogo_ordine.php'" style=" background-color: white; position: fixed;  float:left; width: 50px; align-content: center; color:#1F3284; font-weight: 800; border-radius: 10px 10px 10px 10px; height: 50px;" <?php if($numero_prodotti==0){echo "disabled";}  ?>>
         <?php echo "$numero_prodotti";?><i style="font-size:25px; color: #1F3284;" class="fa">&#xf07a;</i></button>
   
+        <!--inizio del form principale della pagina-->
     <form method="post" action="" name="dati_utente">
         <center>
         <ul class="price2">
@@ -225,6 +229,7 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
         </center>
         
         <!--container principale, contiene tutte le tessere disponibili all'acquisto. su 2 colonne se schermo grande, altrimenti 1 colonna.-->
+        <!--Tutte le tessere prendono l'importo dal DB in base al value, la data "limite" viene calcolata dinamicamente.-->
         <div class="TESSERE" width='100%'> <!--style='display: none;' per future implementazioni di più prodotti-->
             <!--COLONNA SKIRAMA-->
             <div class="column1" style="text-align: center">
@@ -236,7 +241,6 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                     <div class="columns" >
                     <ul class="price">
                       <li class="header">Superskirama</li>
-                      
                       <li>
                           <div class="tipologia"><b>ADULTI</b><br>Ski pass a cui può essere associato <br>un BAMBINO ACCOMPAGNATO.</div>
                           <div class="prezzo"><?php $importo[0] = implode("", $importi[0]); echo "€ $importo[0],00";?></div>
@@ -262,7 +266,7 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                           <div class="prezzo"><?php $importo[4] = implode("", $importi[4]); echo "€ $importo[4],00";?></div>
                           <input type="radio" name="tessera" value="5" id="bambini_ss" required class="selezione" />
                       </li>
-                      <!--vado a gestire il BAMBINO ACCOMPAGNATO, controllo l'ultima offerta aggiunta e se corrisponde sblocco la possibilità di acquisto. -->
+                      <!--vado a gestire il BAMBINO ACCOMPAGNATO, controllo l'ultimo skipass aggiunto e se corrisponde sblocco la possibilità di acquisto. -->
                       <?php
                         if(isset($_SESSION['numero_riferimento'])) {
                           if ((implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 1) || (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 2) || (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 3)) {
@@ -348,7 +352,7 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                           <div class="prezzo"><?php $importo[10] = implode("", $importi[10]); echo "€ $importo[10],00";?></div>
                           <input type="radio" name="tessera" value="11" id="bambini_ca" required class="selezione" />
                       </li>
-                      <!--vado a gestire il BAMBINO ACCOMPAGNATO, controllo l'ultima offerta aggiunta e se corrisponde sblocco la possibilità di acquisto. -->
+                      <!--vado a gestire il BAMBINO ACCOMPAGNATO, controllo l'ultimo skipass agggiunto e se corrisponde sblocco la possibilità di acquisto. -->
                       <?php
                         if(isset($_SESSION['numero_riferimento'])) {
                           if (implode("", $tipologia_tessere[$_SESSION['numero_riferimento']]) == 7) {
@@ -396,14 +400,16 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                         </center>
                     </div>
                 </div>
-           <!-- FINE -->
+           <!-- FINE MODAL -->
+           
+           <!-- FINE PRODOTTI -->
            
            
            <hr style='border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);'>
            
            
-<!--SECONDO CONTAINER, contiene il FORM per la raccolta dati e la FOTO. su 2 colonne se schermo grande, altrimenti 1 colonna (PER IL FORM), FOTO su 1 colonna.-->
+<!--SECONDO CONTAINER, contiene il FORM per la raccolta dati e la FOTO. su 2 colonne se schermo grande, altrimenti 1 colonna, FOTO su 1 colonna.-->
             <div class="DATI-UTENTE-e-FOTO">
                 
                 <!--PRIMA COLONNA, DATI ANAGRAFICI-->
@@ -609,23 +615,31 @@ consentono corse illimitate su tutti gli impianti della Società Funivie Madonna
                 <!-- riferimento a MODAL2 --> 
                 <a href="#openModal"><i class="fa fa-info-circle" style="font-size:20px"></i></a>   
             </label>
-            <!-- MODAL2 spiegazione assicurazione -->
+            
+            <!-- MODAL spiegazione assicurazione -->
             <div id="openModal" class="modalDialog">
                     <div>
                         <a href="#close" title="Close" class="chiudi">X</a>
                         <ul class="price2">
                         <li class="header2">Assicurazione</li>
                         </ul>
-                        <p>La polizza per lo sciatore abbinata allo skipass stagionale o bi-stagionale (AL COSTO DI 46,00 €) copre non solo lo sci e lo snowboard, ma anche le attività sportive praticate nel Mondo.
+                        <p>Per l'assicurazione è necessario il CODICE FISCALE (C.F.) <br>
+                            La polizza per lo sciatore abbinata allo skipass stagionale o bi-stagionale (AL COSTO DI 46,00 €) copre non solo lo sci e lo snowboard, ma anche le attività sportive praticate nel Mondo.
 La polizza è valida per tutta la durata dello skipass stagionale o bi-stagionale. Stagione sciistica 2018/2019.
 Le garanzie offerte vanno dalla Responsabilità Civile per i danni causati involontariamente a persone o cose, al rimborso delle spese mediche di primo soccorso, dal rimborso in pro-rata degli abbonamenti non utilizzati a seguito di infortunio al rimpatrio sanitario al domicilio.
 Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Informativo del prodotto AIG sNOw Problem – Formula stagionale clicca <a href="https://www.funiviecampiglio.it/43-estate-inverno/287-assicurazione" target="_blank">qui</a> </p></div>
                 </div>
-            Sì <input type="radio" name="assicurazione" value="1" id="agree" required/>
-            No <input type="radio" name="assicurazione" value="0" required/>
-           </fieldset>
-        
-                      
+            <!-- FINE MODAL -->
+            Sì <input type="radio" name="assicurazione" value="1" id="agree" required onclick='mostra("CFp"); document.getElementById("CF").required = true;' />
+            No <input type="radio" name="assicurazione" value="0" required onclick='nascondi("CFp"); document.getElementById("CF").required = false;'/>
+            <br>
+            <div id="CFp" style='display: none;'>
+                
+            <label style='text-align: center;  width: 25%; margin-top: 5px;'>C.F.</label>
+            
+            <input class="input" name="CF" id="CF" type="text" pattern='[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]' placeholder="" style='width: 70%; margin-top: 5px;'/>
+            </div>
+        </fieldset>                      
                     </div>
                     </center>
                 </div>
@@ -637,6 +651,7 @@ Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Info
     <hr style='border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);'>
                 <center>
+                    <!--COLONNA FOTO -->
     <div class="column3">
         <div class="columns2">
         <ul class="price2">
@@ -648,7 +663,7 @@ Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Info
         <button type="button" class="bottone" onclick='mostra("mostra_camera"); nascondi("mostra_camera2"); startWebcam();' id="webcam"> Webcam <i class="fa fa-video-camera" style="font-size:16px"></i></button>
         <button type="button" class="bottone" id ="carica" onclick='mostra("mostra_camera2"); nascondi("mostra_camera");'> Carica <i class="fa fa-camera" style="font-size:16px"></i></button>
         </div>
-        <!--
+        <!-- SE SI VOLESSE FARE IL SUBMIT ANCHE SENZA FOTO BASTA TOGLIERE IL COMMENTO DA QUESTO PEZZO DI CODICE.
         <div id='no_foto1'>
         Ho già la foto dagli anni scorsi.<input type="checkbox" name="checkbox" value="check" id="no_foto" onclick='if(document.getElementById("no_foto").checked == true) {mostra("conferma"); nascondi("mostra_camera2"); nascondi("mostra_camera"); nascondi("webcam"); nascondi("carica");} else {mostra("webcam"); mostra("carica"); nascondi("conferma");}'/>
         <br><button type="button" id="conferma" class="bottone" style="display:none; margin-top: 10px;"> Conferma <i class="fa fa-check" style="font-size:16px"></i></button>
@@ -673,7 +688,7 @@ Per tutti i dettagli sulle coperture offerte, e per consultare il Fascicolo Info
         <span id="uploaded2"  style="display:none; background-color: #00dd00"> <b> Confermato <i class="fa fa-check" style="font-size:16px"></i></b></span>
        
         
-        
+        <!-- SCRIPT CHE GESTISCE IL SALVATAGGIO DELL'IMMAGINE CARICATA (E ANCHE SE SI VOLESSE TOGLIERE L'OBBLIGO DELLA FOTO)-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script>
         function readURL(input) {
@@ -700,6 +715,7 @@ $("#fileUpload").change(function() {
 document.getElementById("upload2").addEventListener("click", function(){
             $("#uploading2").show();
             $("#no-uploading").hide();
+            $("#upload2").hide();
             var images = $('#immagine').attr('src');
             $.ajax({
                 type: "POST",
@@ -711,7 +727,6 @@ document.getElementById("upload2").addEventListener("click", function(){
                 console.log("saved");
                 $("#uploading2").hide();
                 $("#uploaded").show();
-                $("#upload2").hide();
                 $("#webcam").hide();
                 $("#carica").hide();
                 $("#no_foto").hide();
@@ -769,7 +784,7 @@ document.getElementById("upload2").addEventListener("click", function(){
             </div>
  
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    
+    <!-- SCRIPT CHE GESTISCE IL SALVATAGGIO DELL'IMMAGINE E GESTIONE WEBCAM -->
 <script>
  navigator.getUserMedia = ( navigator.getUserMedia ||
                    navigator.webkitGetUserMedia ||
@@ -901,10 +916,11 @@ navigator.mediaDevices.getUserMedia({ audio: false, video: true })
   
 </script>
     </center>
-    
+    <!-- FINE COLONNA FOTO -->
 <hr style='border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);'>
     <center>
+        <!-- COLONNA PRIVACY -->
     <div class="column4" style="margin-top: 20px;">
         <div class="columns2">
         <ul class="price2">
@@ -931,7 +947,7 @@ marketing</label>
 	 </fieldset>
     
          
-        
+        <!-- BOTTONI DI SUBMIT, CONCLUDI ORDINE O AGGIUNGI TESSERA, FANNO UN CONTROLLO PER LA FOTO. -->
             <button class="bottone" onclick="chgAction('Pagina_iniziale/concludi_ordine.php')" onsubmit="return checkFoto();">Concludi Ordine <i class="fa fa-check" style="font-size:16px"></i></button>
             <button  class="bottone" id="final_button" onclick="chgAction('Pagina_iniziale/aggiungi_skipass.php')" onsubmit="return checkFoto();">Aggiungi skipass <i class="fa fa-plus" style="font-size:16px"></i></button>
            
